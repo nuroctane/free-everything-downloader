@@ -35,7 +35,18 @@ for s in [
     "waittoreturn",
     "tvdl.app/upgrade",
     "AMD Key",
+    "Version 1.2",
+    "SoundCloud",
+    "FREE Media Downloader",
 ]:
     print(repr(s), blob.count(s))
+if "Version 1.2" not in blob:
+    raise SystemExit("missing Version 1.2 comment")
+if "SoundCloud" not in blob:
+    raise SystemExit("missing sites list in comment")
+if "FREE Media Downloader" not in blob:
+    raise SystemExit("missing new display name")
+if "Free EVERYTHING Downloader" in blob:
+    raise SystemExit("old display name still in plist")
 if bad:
     raise SystemExit(1)

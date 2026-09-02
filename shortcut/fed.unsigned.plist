@@ -14,11 +14,16 @@
 				<key>UUID</key>
 				<string>3F0DA92D-911A-47B0-B1A6-40AB6C7DB68E</string>
 				<key>WFCommentActionText</key>
-				<string>Free EVERYTHING Downloader
-Share a link. Save the file.
-No key. No paywall. No upgrade nag.
+				<string>FREE Media Downloader
+Version 1.2  (2026-09-02)
+RoutineHub 26384. If the listing is newer than this number, update from there.
+
+Sites: YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
+
 YouTube and Instagram: yt-dlp in a-Shell mini.
 TikTok: no-watermark when the source lets it.
+X / Bluesky / Mastodon: second extractor if the first misses.
+Share a link. Save the file. No key. No paywall. No upgrade nag.
 First Photos, Files, and a-Shell prompts: approve once.
 A sign-in wall opens Safari or the app. Share again after.</string>
 			</dict>
@@ -179,7 +184,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 														<key>Value</key>
 														<dict>
 															<key>string</key>
-															<string>Free EVERYTHING Downloader</string>
+															<string>FREE Media Downloader</string>
 														</dict>
 														<key>WFSerializationType</key>
 														<string>WFTextTokenString</string>
@@ -192,6 +197,30 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFDictionaryFieldValue</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>0</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>version</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>1.2</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
 								</dict>
 							</dict>
 						</array>
@@ -864,7 +893,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFNotificationActionBody</key>
 				<string>Saved TikTok without watermark.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1027,7 +1056,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFNotificationActionBody</key>
 				<string>Saved TikTok photos.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1152,7 +1181,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFNotificationActionBody</key>
 				<string>Saved TikTok.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1355,7 +1384,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFNotificationActionBody</key>
 				<string>YouTube is in a-Shell mini Files, Documents.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1519,7 +1548,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFNotificationActionBody</key>
 				<string>Instagram is in a-Shell mini Files, Documents. Original file, no watermark overlay.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1683,7 +1712,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFNotificationActionBody</key>
 				<string>Instagram is in a-Shell mini Files, Documents. Original file, no watermark overlay.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2753,7 +2782,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>Free EVERYTHING Downloader - ￼ .￼</string>
+						<string>FREE Media Downloader - ￼ .￼</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
@@ -2845,7 +2874,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>AlbumName</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 				<key>UUID</key>
 				<string>EBCA987D-F022-4A8E-999C-8D247574AD64</string>
 				<key>WFInput</key>
@@ -9424,7 +9453,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFNotificationActionBody</key>
 				<string>This post wants a sign-in. Opening it now. Sign in, then share it again.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>
@@ -9474,9 +9503,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>UUID</key>
 				<string>EF2EE840-7A25-442C-8F31-7225CC482C0F</string>
 				<key>WFNotificationActionBody</key>
-				<string>Once you are signed in, share the post to Free EVERYTHING Downloader again.</string>
+				<string>Once you are signed in, share the post to FREE Media Downloader again.</string>
 				<key>WFNotificationActionTitle</key>
-				<string>Free EVERYTHING Downloader</string>
+				<string>FREE Media Downloader</string>
 			</dict>
 		</dict>
 		<dict>

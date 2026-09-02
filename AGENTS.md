@@ -17,4 +17,4 @@ Never bare-push without backup. Report commit + remote + full backup path.
 
 Do **not** publish, version, or rewrite the RoutineHub listing from `ship.ps1` or from a generic ship. RoutineHub (listing copy, HubSign, iCloud share link, versions/create) is a separate, explicit step. Apple will only mint an iCloud share link on a real iPhone or iPad.
 
-The on-device install path is Files → iCloud Drive → Documents → `Free EVERYTHING Downloader.shortcut`.
+The on-device install path is Files → Drive → My Drive → `FREE Media Downloader.shortcut`. HubSign writes that file to `H:\My Drive`. Do not drop it in iCloud Drive.

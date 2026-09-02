@@ -1,8 +1,10 @@
-# ⇩ Free EVERYTHING Downloader
+# FREE Media Downloader
 
 iOS Shortcut. Share a link. Save the file. No key. No paywall. No checkout.
 
-Canonical unsigned source: `shortcut/fed.unsigned.plist`. HubSign produces the `.shortcut` you drop in iCloud Drive → Documents. RoutineHub is a separate publish step, not this repo's ship pipeline.
+Canonical unsigned source: `shortcut/fed.unsigned.plist`. HubSign writes the `.shortcut` to Google Drive (`H:\My Drive`). RoutineHub is a separate publish step, not this repo's ship pipeline.
+
+Version **1.2** lives in the first comment inside the shortcut. Open it in the Shortcuts app to see it. Update from RoutineHub when that page is newer.
 
 ## What it does
 
@@ -10,6 +12,7 @@ Canonical unsigned source: `shortcut/fed.unsigned.plist`. HubSign produces the `
 - **YouTube:** always yt-dlp inside **a-Shell mini**. Lands in a-Shell mini → Files → Documents.
 - **Instagram:** same yt-dlp path. Original file. No watermark overlay.
 - **X / Bluesky / Mastodon:** secondary extractor when the first one fails.
+- **Also:** Facebook, Threads, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud, YouTube Music.
 - **Everything else:** first extractor, then the others. Never a checkout.
 - **Sign-in wall:** opens the post in Safari (or the native app, if that URL hands off). Sign in. Share the post again.
 
@@ -38,7 +41,7 @@ python -X utf8 scripts\validate.py
 python -X utf8 scripts\sign.py
 ```
 
-`scripts/sign.py` writes the signed file to iCloud Drive → Documents as `Free EVERYTHING Downloader.shortcut`. Add it from Files. Do not duplicate the file.
+`scripts/sign.py` writes the signed file to `H:\My Drive` as `FREE Media Downloader.shortcut`. Add it from Files → Drive → My Drive. Do not duplicate the file.
 
 ## RoutineHub
 
@@ -49,8 +52,8 @@ Copy lives in `listing.md`. Updating RoutineHub needs a logged-in session plus a
 ## Install on iPhone or iPad
 
 1. Install a-Shell mini if you want YouTube or Instagram.
-2. Files → iCloud Drive → Documents → **Free EVERYTHING Downloader** → Add Shortcut.
-3. Open a post → Share → Free EVERYTHING Downloader.
+2. Files → Drive → My Drive → **FREE Media Downloader** → Add Shortcut.
+3. Open a post → Share → FREE Media Downloader.
 4. Approve the first Photos / Files / a-Shell prompts.
 
 Paste a URL and run it from Shortcuts the same way.

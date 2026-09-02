@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""HubSign the unsigned plist and write iCloud Drive → Documents."""
+"""HubSign the unsigned plist and write Google Drive → My Drive."""
 import json
 import plistlib
 import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = "Free EVERYTHING Downloader"
-DOCS = Path(r"C:\Users\david\iCloudDrive\Documents")
+NAME = "FREE Media Downloader"
+DOCS = Path(r"H:\My Drive")
 
 xml = (ROOT / "shortcut" / "fed.unsigned.plist").read_bytes()
 # round-trip to prove it still parses
