@@ -35,13 +35,25 @@ for s in [
     "waittoreturn",
     "tvdl.app/upgrade",
     "AMD Key",
-    "Version 1.2",
+    "Version 1.4",
     "SoundCloud",
     "FREE Media Downloader",
+    "yt-dlp-ejs",
+    "yt-dlp-apple-webkit-jsi",
 ]:
     print(repr(s), blob.count(s))
-if "Version 1.2" not in blob:
-    raise SystemExit("missing Version 1.2 comment")
+if "Version 1.4" not in blob:
+    raise SystemExit("missing Version 1.4 comment")
+if "bestvideo+bestaudio" in blob:
+    raise SystemExit("YouTube command still requires an ffmpeg merge")
+if "yt-dlp-apple-webkit-jsi" not in blob:
+    raise SystemExit("missing Apple WebKit JS helper install")
+if "photos.createalbum" in blob:
+    raise SystemExit("Create Album is forbidden; use Save to Camera Roll only")
+if "GetFileIntent" not in blob:
+    raise SystemExit("yt-dlp path never pulls the file back into Shortcuts")
+if "Saved to Photos." not in blob:
+    raise SystemExit("missing Saved to Photos notice")
 if "SoundCloud" not in blob:
     raise SystemExit("missing sites list in comment")
 if "FREE Media Downloader" not in blob:

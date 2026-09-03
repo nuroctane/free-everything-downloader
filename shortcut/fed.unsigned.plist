@@ -15,12 +15,12 @@
 				<string>3F0DA92D-911A-47B0-B1A6-40AB6C7DB68E</string>
 				<key>WFCommentActionText</key>
 				<string>FREE Media Downloader
-Version 1.2  (2026-09-02)
+Version 1.4  (2026-09-03)
 RoutineHub 26384. If the listing is newer than this number, update from there.
 
 Sites: YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-YouTube and Instagram: yt-dlp in a-Shell mini.
+YouTube and Instagram: yt-dlp in a-Shell mini. Video and photos go to Photos. Audio goes to Files.
 TikTok: no-watermark when the source lets it.
 X / Bluesky / Mastodon: second extractor if the first misses.
 Share a link. Save the file. No key. No paywall. No upgrade nag.
@@ -217,7 +217,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>1.2</string>
+										<string>1.4</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -1253,7 +1253,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>UUID</key>
 				<string>3A597AAB-E070-405B-A377-2A7F93379E0D</string>
 				<key>WFCommentActionText</key>
-				<string>YouTube always uses yt-dlp in a-Shell mini. First run may install yt-dlp and ask for permission.</string>
+				<string>YouTube always uses yt-dlp in a-Shell mini. First run may install yt-dlp plus the YouTube JS helper. Video goes to Photos. Audio goes to Files.</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1312,7 +1312,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 					<dict>
 						<key>attachmentsByRange</key>
 						<dict>
-							<key>{296, 1}</key>
+							<key>{3, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
@@ -1321,7 +1321,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>if ! command -v yt-dlp &gt;/dev/null 2&gt;&amp;1; then pip install -U "yt-dlp[default]"; fi; CK=""; if [ -f "$HOME/Documents/cookies.txt" ]; then CK="--cookies $HOME/Documents/cookies.txt"; fi; yt-dlp $CK --embed-thumbnail --embed-chapters -f "bestvideo+bestaudio/best" --no-mtime -P "$HOME/Documents" -- "￼"</string>
+						<string>U="￼"; pip show yt-dlp-ejs yt-dlp-apple-webkit-jsi &gt;/dev/null 2&gt;&amp;1 || pip install -U "yt-dlp[default]" yt-dlp-ejs yt-dlp-apple-webkit-jsi; SC="${SHORTCUTS:-}"; [ -n "$SC" ] || SC=~shortcuts; mkdir -p "$SC"; printf missing &gt; "$SC/fed-kind.txt"; printf txt &gt; "$SC/fed-ext.txt"; touch "$SC/fed-media"; CK=""; if [ -f "$HOME/Documents/cookies.txt" ]; then CK="--cookies $HOME/Documents/cookies.txt"; fi; FMT="b"; EMB=""; AUD=""; if command -v ffmpeg &gt;/dev/null 2&gt;&amp;1; then FMT="bv*+ba/b"; EMB="--embed-thumbnail --embed-chapters"; fi; case "$U" in *music.youtube*|*music.youtu*) AUD="-x --audio-format m4a"; FMT="bestaudio/b"; EMB=""; esac; rm -f "$HOME/Documents"/fed-dl.*; yt-dlp $CK $AUD $EMB -f "$FMT" -S "ext:mp4:m4a" --no-mtime --no-part --force-overwrites -P "$HOME/Documents" -o "fed-dl.%(ext)s" -- "$U"; f=$(ls -t "$HOME/Documents"/fed-dl.* 2&gt;/dev/null | sed -n 1p); if [ -n "$f" ] &amp;&amp; [ -s "$f" ]; then cp "$f" "$SC/fed-media"; ext="${f##*.}"; printf "%s" "$ext" | tr "A-Z" "a-z" &gt; "$SC/fed-ext.txt"; case "$(cat "$SC/fed-ext.txt")" in mp3|m4a|opus|ogg|flac|wav|aac|wma) printf audio &gt; "$SC/fed-kind.txt";; *) printf photo &gt; "$SC/fed-kind.txt";; esac; fi; sleep 0.2; open shortcuts://</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
@@ -1372,6 +1372,154 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenAttachment</string>
 				</dict>
+				<key>keepGoing</key>
+				<true/>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.waittoreturn</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>84136386-1514-4B0A-BFB8-37EA0315DE2F</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>KindFile</string>
+				<key>UUID</key>
+				<string>6F53DED8-27BB-4AF0-AAF7-E7CFA0C96A70</string>
+				<key>fileName</key>
+				<string>fed-kind.txt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>3D1BCF39-97F4-43C3-94F3-C7C74C9A7D90</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>KindFile</string>
+						<key>OutputUUID</key>
+						<string>6F53DED8-27BB-4AF0-AAF7-E7CFA0C96A70</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+						<key>Aggrandizements</key>
+						<array>
+							<dict>
+								<key>CoercionItemClass</key>
+								<string>WFStringContentItem</string>
+								<key>Type</key>
+								<string>WFCoercionVariableAggrandizement</string>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>fedKind</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>ExtFile</string>
+				<key>UUID</key>
+				<string>DB48FEB3-5AAE-47CE-BBB1-10BF43DDF1CC</string>
+				<key>fileName</key>
+				<string>fed-ext.txt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>5EFE3E5B-2B19-415C-9B17-9A85A29814E9</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ExtFile</string>
+						<key>OutputUUID</key>
+						<string>DB48FEB3-5AAE-47CE-BBB1-10BF43DDF1CC</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+						<key>Aggrandizements</key>
+						<array>
+							<dict>
+								<key>CoercionItemClass</key>
+								<string>WFStringContentItem</string>
+								<key>Type</key>
+								<string>WFCoercionVariableAggrandizement</string>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>fedExt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>7DB1F34C-6759-40C5-A66F-3CEAB9407454</string>
+				<key>UUID</key>
+				<string>69A9117E-19CA-41F3-88BA-AE37CFE7D1D5</string>
+				<key>WFCondition</key>
+				<integer>4</integer>
+				<key>WFConditionalActionString</key>
+				<string>missing</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Aggrandizements</key>
+							<array>
+								<dict>
+									<key>CoercionItemClass</key>
+									<string>WFRichTextContentItem</string>
+									<key>Type</key>
+									<string>WFCoercionVariableAggrandizement</string>
+								</dict>
+							</array>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>fedKind</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
 			</dict>
 		</dict>
 		<dict>
@@ -1380,11 +1528,265 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>B064A806-2059-44E0-AB09-5E4E0C1A5806</string>
+				<string>4D12CADC-FD41-4F7B-B76F-74F5BDC9EA48</string>
 				<key>WFNotificationActionBody</key>
-				<string>YouTube is in a-Shell mini Files, Documents.</string>
+				<string>Download failed. Nothing to save.</string>
 				<key>WFNotificationActionTitle</key>
 				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>7DB1F34C-6759-40C5-A66F-3CEAB9407454</string>
+				<key>UUID</key>
+				<string>2EF10C3B-A2B7-4DB6-AB13-260334B8F7A2</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>MediaFile</string>
+				<key>UUID</key>
+				<string>2BF250C9-A8D6-4E7A-81D0-72A38AAF1D1D</string>
+				<key>fileName</key>
+				<string>fed-media</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setitemname</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Renamed media</string>
+				<key>UUID</key>
+				<string>827E1D77-D98A-4065-B2E6-98A0FD66CF33</string>
+				<key>WFDontIncludeFileExtension</key>
+				<false/>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>MediaFile</string>
+						<key>OutputUUID</key>
+						<string>2BF250C9-A8D6-4E7A-81D0-72A38AAF1D1D</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFName</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{24, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>Type</key>
+										<string>WFDateFormatVariableAggrandizement</string>
+										<key>WFDateFormatStyle</key>
+										<string>Long</string>
+										<key>WFISO8601IncludeTime</key>
+										<false/>
+										<key>WFTimeFormatStyle</key>
+										<string>Long</string>
+									</dict>
+								</array>
+								<key>Type</key>
+								<string>CurrentDate</string>
+							</dict>
+							<key>{27, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>CoercionItemClass</key>
+										<string>WFStringContentItem</string>
+										<key>Type</key>
+										<string>WFCoercionVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>Type</key>
+								<string>Variable</string>
+								<key>VariableName</key>
+								<string>fedExt</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>FREE Media Downloader - ￼ .￼</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>8837A5D3-EC12-46CE-92ED-D789B3C38600</string>
+				<key>UUID</key>
+				<string>6986314D-73B3-4E8D-AF96-E25D6A1CD822</string>
+				<key>WFCondition</key>
+				<integer>4</integer>
+				<key>WFConditionalActionString</key>
+				<string>audio</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Aggrandizements</key>
+							<array>
+								<dict>
+									<key>CoercionItemClass</key>
+									<string>WFRichTextContentItem</string>
+									<key>Type</key>
+									<string>WFCoercionVariableAggrandizement</string>
+								</dict>
+							</array>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>fedKind</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.documentpicker.save</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>6EA3A769-F310-4653-9D7D-F14F7F4D68FC</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Renamed media</string>
+						<key>OutputUUID</key>
+						<string>827E1D77-D98A-4065-B2E6-98A0FD66CF33</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>6AC9BA03-4787-4F6E-A9DB-12CCE470DEEE</string>
+				<key>WFNotificationActionBody</key>
+				<string>Saved to Files.</string>
+				<key>WFNotificationActionTitle</key>
+				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>8837A5D3-EC12-46CE-92ED-D789B3C38600</string>
+				<key>UUID</key>
+				<string>FF562A84-1412-4775-9485-634AF0F75DC3</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.savetocameraroll</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>BDA8CD91-818C-404C-AF18-356DFF242071</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Renamed media</string>
+						<key>OutputUUID</key>
+						<string>827E1D77-D98A-4065-B2E6-98A0FD66CF33</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>4650DD39-AF17-4DCD-9AF7-54A3B8ACC13B</string>
+				<key>WFNotificationActionBody</key>
+				<string>Saved to Photos.</string>
+				<key>WFNotificationActionTitle</key>
+				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>8837A5D3-EC12-46CE-92ED-D789B3C38600</string>
+				<key>UUID</key>
+				<string>E99BD28E-1EA0-4118-BAA5-7C1DB4444391</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>7DB1F34C-6759-40C5-A66F-3CEAB9407454</string>
+				<key>UUID</key>
+				<string>E4124088-CA68-4680-BFE7-C67556153930</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -1393,7 +1795,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>4610227C-13B1-4EA6-AEEC-AC700F1F422C</string>
+				<string>0F9DB944-E8B1-49D1-9D40-97CEB43C2661</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1417,7 +1819,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>UUID</key>
 				<string>37FD546D-0BB4-4BE6-A7E7-54628C2DFCD4</string>
 				<key>WFCommentActionText</key>
-				<string>Instagram original file via yt-dlp. No watermark overlay. Needs a-Shell mini.</string>
+				<string>Instagram original file via yt-dlp. No watermark overlay. Needs a-Shell mini. Photos or video go to Photos. Audio goes to Files.</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1476,7 +1878,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 					<dict>
 						<key>attachmentsByRange</key>
 						<dict>
-							<key>{296, 1}</key>
+							<key>{3, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
@@ -1485,7 +1887,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>if ! command -v yt-dlp &gt;/dev/null 2&gt;&amp;1; then pip install -U "yt-dlp[default]"; fi; CK=""; if [ -f "$HOME/Documents/cookies.txt" ]; then CK="--cookies $HOME/Documents/cookies.txt"; fi; yt-dlp $CK --embed-thumbnail --embed-chapters -f "bestvideo+bestaudio/best" --no-mtime -P "$HOME/Documents" -- "￼"</string>
+						<string>U="￼"; pip show yt-dlp-ejs yt-dlp-apple-webkit-jsi &gt;/dev/null 2&gt;&amp;1 || pip install -U "yt-dlp[default]" yt-dlp-ejs yt-dlp-apple-webkit-jsi; SC="${SHORTCUTS:-}"; [ -n "$SC" ] || SC=~shortcuts; mkdir -p "$SC"; printf missing &gt; "$SC/fed-kind.txt"; printf txt &gt; "$SC/fed-ext.txt"; touch "$SC/fed-media"; CK=""; if [ -f "$HOME/Documents/cookies.txt" ]; then CK="--cookies $HOME/Documents/cookies.txt"; fi; FMT="b"; EMB=""; AUD=""; if command -v ffmpeg &gt;/dev/null 2&gt;&amp;1; then FMT="bv*+ba/b"; EMB="--embed-thumbnail --embed-chapters"; fi; case "$U" in *music.youtube*|*music.youtu*) AUD="-x --audio-format m4a"; FMT="bestaudio/b"; EMB=""; esac; rm -f "$HOME/Documents"/fed-dl.*; yt-dlp $CK $AUD $EMB -f "$FMT" -S "ext:mp4:m4a" --no-mtime --no-part --force-overwrites -P "$HOME/Documents" -o "fed-dl.%(ext)s" -- "$U"; f=$(ls -t "$HOME/Documents"/fed-dl.* 2&gt;/dev/null | sed -n 1p); if [ -n "$f" ] &amp;&amp; [ -s "$f" ]; then cp "$f" "$SC/fed-media"; ext="${f##*.}"; printf "%s" "$ext" | tr "A-Z" "a-z" &gt; "$SC/fed-ext.txt"; case "$(cat "$SC/fed-ext.txt")" in mp3|m4a|opus|ogg|flac|wav|aac|wma) printf audio &gt; "$SC/fed-kind.txt";; *) printf photo &gt; "$SC/fed-kind.txt";; esac; fi; sleep 0.2; open shortcuts://</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
@@ -1536,6 +1938,154 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenAttachment</string>
 				</dict>
+				<key>keepGoing</key>
+				<true/>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.waittoreturn</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>A5D01568-3997-4C8C-BC13-F137D98EE34F</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>KindFile</string>
+				<key>UUID</key>
+				<string>2A3D4108-C71F-4BB8-AE04-48528DC88F0B</string>
+				<key>fileName</key>
+				<string>fed-kind.txt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>E72EC3CE-4147-4C3B-925E-0151C90F0D6E</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>KindFile</string>
+						<key>OutputUUID</key>
+						<string>2A3D4108-C71F-4BB8-AE04-48528DC88F0B</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+						<key>Aggrandizements</key>
+						<array>
+							<dict>
+								<key>CoercionItemClass</key>
+								<string>WFStringContentItem</string>
+								<key>Type</key>
+								<string>WFCoercionVariableAggrandizement</string>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>fedKind</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>ExtFile</string>
+				<key>UUID</key>
+				<string>5F848BA3-A1C5-45F1-8CAD-2735D2645302</string>
+				<key>fileName</key>
+				<string>fed-ext.txt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>EDA6AFDF-EE69-4C11-A039-B9A93AA713E7</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ExtFile</string>
+						<key>OutputUUID</key>
+						<string>5F848BA3-A1C5-45F1-8CAD-2735D2645302</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+						<key>Aggrandizements</key>
+						<array>
+							<dict>
+								<key>CoercionItemClass</key>
+								<string>WFStringContentItem</string>
+								<key>Type</key>
+								<string>WFCoercionVariableAggrandizement</string>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>fedExt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>08C029D9-C6F8-45DF-A988-AAB56B833558</string>
+				<key>UUID</key>
+				<string>4C16BE5D-4F8D-4058-B58C-7F7C1D86AE77</string>
+				<key>WFCondition</key>
+				<integer>4</integer>
+				<key>WFConditionalActionString</key>
+				<string>missing</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Aggrandizements</key>
+							<array>
+								<dict>
+									<key>CoercionItemClass</key>
+									<string>WFRichTextContentItem</string>
+									<key>Type</key>
+									<string>WFCoercionVariableAggrandizement</string>
+								</dict>
+							</array>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>fedKind</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
 			</dict>
 		</dict>
 		<dict>
@@ -1544,11 +2094,265 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>90CCCE87-5BE4-423E-8015-518673C8DBB0</string>
+				<string>F194894F-84EC-4A9E-9046-29594B3E80BB</string>
 				<key>WFNotificationActionBody</key>
-				<string>Instagram is in a-Shell mini Files, Documents. Original file, no watermark overlay.</string>
+				<string>Download failed. Nothing to save.</string>
 				<key>WFNotificationActionTitle</key>
 				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>08C029D9-C6F8-45DF-A988-AAB56B833558</string>
+				<key>UUID</key>
+				<string>C3AAD9F0-03F4-407F-B896-AEA9D16055BA</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>MediaFile</string>
+				<key>UUID</key>
+				<string>9B73C199-5712-4388-A8A1-1968C8EAF44A</string>
+				<key>fileName</key>
+				<string>fed-media</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setitemname</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Renamed media</string>
+				<key>UUID</key>
+				<string>48CAD824-F8BF-447E-8E04-A2CF788E3D3A</string>
+				<key>WFDontIncludeFileExtension</key>
+				<false/>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>MediaFile</string>
+						<key>OutputUUID</key>
+						<string>9B73C199-5712-4388-A8A1-1968C8EAF44A</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFName</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{24, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>Type</key>
+										<string>WFDateFormatVariableAggrandizement</string>
+										<key>WFDateFormatStyle</key>
+										<string>Long</string>
+										<key>WFISO8601IncludeTime</key>
+										<false/>
+										<key>WFTimeFormatStyle</key>
+										<string>Long</string>
+									</dict>
+								</array>
+								<key>Type</key>
+								<string>CurrentDate</string>
+							</dict>
+							<key>{27, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>CoercionItemClass</key>
+										<string>WFStringContentItem</string>
+										<key>Type</key>
+										<string>WFCoercionVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>Type</key>
+								<string>Variable</string>
+								<key>VariableName</key>
+								<string>fedExt</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>FREE Media Downloader - ￼ .￼</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>242F2FD1-5952-45C1-8954-DB45C4DF06A5</string>
+				<key>UUID</key>
+				<string>79AB71B6-5BF2-4C1B-85F1-3D3903F79523</string>
+				<key>WFCondition</key>
+				<integer>4</integer>
+				<key>WFConditionalActionString</key>
+				<string>audio</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Aggrandizements</key>
+							<array>
+								<dict>
+									<key>CoercionItemClass</key>
+									<string>WFRichTextContentItem</string>
+									<key>Type</key>
+									<string>WFCoercionVariableAggrandizement</string>
+								</dict>
+							</array>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>fedKind</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.documentpicker.save</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>C5B0BED8-B1FA-4BA6-AC9F-931AEF9A8172</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Renamed media</string>
+						<key>OutputUUID</key>
+						<string>48CAD824-F8BF-447E-8E04-A2CF788E3D3A</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>228B4020-DB72-4937-95D2-52DACD3FC2E1</string>
+				<key>WFNotificationActionBody</key>
+				<string>Saved to Files.</string>
+				<key>WFNotificationActionTitle</key>
+				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>242F2FD1-5952-45C1-8954-DB45C4DF06A5</string>
+				<key>UUID</key>
+				<string>2F0546BB-E6FA-4814-B66B-7C7D001C0DCE</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.savetocameraroll</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>F4EC5C93-C1C3-4804-9E81-F6318AB499F4</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Renamed media</string>
+						<key>OutputUUID</key>
+						<string>48CAD824-F8BF-447E-8E04-A2CF788E3D3A</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>33DF328E-685E-4E39-984B-C10FE3027456</string>
+				<key>WFNotificationActionBody</key>
+				<string>Saved to Photos.</string>
+				<key>WFNotificationActionTitle</key>
+				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>242F2FD1-5952-45C1-8954-DB45C4DF06A5</string>
+				<key>UUID</key>
+				<string>157B7EED-9775-4EF5-9710-A8807B9A0025</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>08C029D9-C6F8-45DF-A988-AAB56B833558</string>
+				<key>UUID</key>
+				<string>1D03A4C1-585D-4F25-8C7F-B9DD0D5F88DC</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -1557,7 +2361,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>3DF7DF20-F093-49EC-A852-4935E2967B68</string>
+				<string>5119446F-F522-4D92-B650-75F65E519BE3</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1581,7 +2385,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>UUID</key>
 				<string>1051D63F-0EE4-4A90-8024-BC85BB55D1A1</string>
 				<key>WFCommentActionText</key>
-				<string>Instagram short link. Same yt-dlp path.</string>
+				<string>Instagram short link. Same yt-dlp path. Photos or video go to Photos. Audio goes to Files.</string>
 			</dict>
 		</dict>
 		<dict>
@@ -1640,7 +2444,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 					<dict>
 						<key>attachmentsByRange</key>
 						<dict>
-							<key>{296, 1}</key>
+							<key>{3, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
@@ -1649,7 +2453,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>if ! command -v yt-dlp &gt;/dev/null 2&gt;&amp;1; then pip install -U "yt-dlp[default]"; fi; CK=""; if [ -f "$HOME/Documents/cookies.txt" ]; then CK="--cookies $HOME/Documents/cookies.txt"; fi; yt-dlp $CK --embed-thumbnail --embed-chapters -f "bestvideo+bestaudio/best" --no-mtime -P "$HOME/Documents" -- "￼"</string>
+						<string>U="￼"; pip show yt-dlp-ejs yt-dlp-apple-webkit-jsi &gt;/dev/null 2&gt;&amp;1 || pip install -U "yt-dlp[default]" yt-dlp-ejs yt-dlp-apple-webkit-jsi; SC="${SHORTCUTS:-}"; [ -n "$SC" ] || SC=~shortcuts; mkdir -p "$SC"; printf missing &gt; "$SC/fed-kind.txt"; printf txt &gt; "$SC/fed-ext.txt"; touch "$SC/fed-media"; CK=""; if [ -f "$HOME/Documents/cookies.txt" ]; then CK="--cookies $HOME/Documents/cookies.txt"; fi; FMT="b"; EMB=""; AUD=""; if command -v ffmpeg &gt;/dev/null 2&gt;&amp;1; then FMT="bv*+ba/b"; EMB="--embed-thumbnail --embed-chapters"; fi; case "$U" in *music.youtube*|*music.youtu*) AUD="-x --audio-format m4a"; FMT="bestaudio/b"; EMB=""; esac; rm -f "$HOME/Documents"/fed-dl.*; yt-dlp $CK $AUD $EMB -f "$FMT" -S "ext:mp4:m4a" --no-mtime --no-part --force-overwrites -P "$HOME/Documents" -o "fed-dl.%(ext)s" -- "$U"; f=$(ls -t "$HOME/Documents"/fed-dl.* 2&gt;/dev/null | sed -n 1p); if [ -n "$f" ] &amp;&amp; [ -s "$f" ]; then cp "$f" "$SC/fed-media"; ext="${f##*.}"; printf "%s" "$ext" | tr "A-Z" "a-z" &gt; "$SC/fed-ext.txt"; case "$(cat "$SC/fed-ext.txt")" in mp3|m4a|opus|ogg|flac|wav|aac|wma) printf audio &gt; "$SC/fed-kind.txt";; *) printf photo &gt; "$SC/fed-kind.txt";; esac; fi; sleep 0.2; open shortcuts://</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
@@ -1700,6 +2504,154 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenAttachment</string>
 				</dict>
+				<key>keepGoing</key>
+				<true/>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.waittoreturn</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>5A75AB26-515B-42A3-8497-729CA5EB779F</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>KindFile</string>
+				<key>UUID</key>
+				<string>5688D723-9CD9-4E61-9413-E155DEBA13B2</string>
+				<key>fileName</key>
+				<string>fed-kind.txt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>EEB7F6E0-52D1-4D83-ABB9-522BB36908D5</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>KindFile</string>
+						<key>OutputUUID</key>
+						<string>5688D723-9CD9-4E61-9413-E155DEBA13B2</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+						<key>Aggrandizements</key>
+						<array>
+							<dict>
+								<key>CoercionItemClass</key>
+								<string>WFStringContentItem</string>
+								<key>Type</key>
+								<string>WFCoercionVariableAggrandizement</string>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>fedKind</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>ExtFile</string>
+				<key>UUID</key>
+				<string>29AF1B77-9D1A-44EA-B8DF-E5A8EBBBCDAE</string>
+				<key>fileName</key>
+				<string>fed-ext.txt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>9BE289FA-8318-4E50-967B-8A499CD3D824</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ExtFile</string>
+						<key>OutputUUID</key>
+						<string>29AF1B77-9D1A-44EA-B8DF-E5A8EBBBCDAE</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+						<key>Aggrandizements</key>
+						<array>
+							<dict>
+								<key>CoercionItemClass</key>
+								<string>WFStringContentItem</string>
+								<key>Type</key>
+								<string>WFCoercionVariableAggrandizement</string>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>fedExt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>54F675F5-2318-49C5-BC35-008E23BC9AF7</string>
+				<key>UUID</key>
+				<string>381F40A0-3893-4324-BCC5-CEA829E00240</string>
+				<key>WFCondition</key>
+				<integer>4</integer>
+				<key>WFConditionalActionString</key>
+				<string>missing</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Aggrandizements</key>
+							<array>
+								<dict>
+									<key>CoercionItemClass</key>
+									<string>WFRichTextContentItem</string>
+									<key>Type</key>
+									<string>WFCoercionVariableAggrandizement</string>
+								</dict>
+							</array>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>fedKind</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
 			</dict>
 		</dict>
 		<dict>
@@ -1708,11 +2660,265 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>0FC5F2BD-DBF5-4055-88EC-E27E2EAA640F</string>
+				<string>F7A486DE-ECAA-4D3B-B017-3553A3E590E8</string>
 				<key>WFNotificationActionBody</key>
-				<string>Instagram is in a-Shell mini Files, Documents. Original file, no watermark overlay.</string>
+				<string>Download failed. Nothing to save.</string>
 				<key>WFNotificationActionTitle</key>
 				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>54F675F5-2318-49C5-BC35-008E23BC9AF7</string>
+				<key>UUID</key>
+				<string>F6754F39-B208-4702-850F-CD214E07EB57</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell-mini.GetFileIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>MediaFile</string>
+				<key>UUID</key>
+				<string>0B6D9108-78F5-4BD0-AA79-EF2122E611D9</string>
+				<key>fileName</key>
+				<string>fed-media</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setitemname</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Renamed media</string>
+				<key>UUID</key>
+				<string>70AB7994-25B5-417B-BDD0-6C7AADC132A8</string>
+				<key>WFDontIncludeFileExtension</key>
+				<false/>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>MediaFile</string>
+						<key>OutputUUID</key>
+						<string>0B6D9108-78F5-4BD0-AA79-EF2122E611D9</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFName</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{24, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>Type</key>
+										<string>WFDateFormatVariableAggrandizement</string>
+										<key>WFDateFormatStyle</key>
+										<string>Long</string>
+										<key>WFISO8601IncludeTime</key>
+										<false/>
+										<key>WFTimeFormatStyle</key>
+										<string>Long</string>
+									</dict>
+								</array>
+								<key>Type</key>
+								<string>CurrentDate</string>
+							</dict>
+							<key>{27, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>CoercionItemClass</key>
+										<string>WFStringContentItem</string>
+										<key>Type</key>
+										<string>WFCoercionVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>Type</key>
+								<string>Variable</string>
+								<key>VariableName</key>
+								<string>fedExt</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>FREE Media Downloader - ￼ .￼</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>81718FF3-CBD1-4BAC-8406-60A156030AC6</string>
+				<key>UUID</key>
+				<string>9443FBCB-EDFF-4C5E-8C63-EC727FD99A4C</string>
+				<key>WFCondition</key>
+				<integer>4</integer>
+				<key>WFConditionalActionString</key>
+				<string>audio</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Aggrandizements</key>
+							<array>
+								<dict>
+									<key>CoercionItemClass</key>
+									<string>WFRichTextContentItem</string>
+									<key>Type</key>
+									<string>WFCoercionVariableAggrandizement</string>
+								</dict>
+							</array>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>fedKind</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.documentpicker.save</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>50C64817-A464-4D6C-BDFA-85BA71468738</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Renamed media</string>
+						<key>OutputUUID</key>
+						<string>70AB7994-25B5-417B-BDD0-6C7AADC132A8</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>8C1FD57D-E1D6-4A28-B518-C97D51445114</string>
+				<key>WFNotificationActionBody</key>
+				<string>Saved to Files.</string>
+				<key>WFNotificationActionTitle</key>
+				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>81718FF3-CBD1-4BAC-8406-60A156030AC6</string>
+				<key>UUID</key>
+				<string>58716226-A349-461A-ADE6-8DCAC546FDFE</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.savetocameraroll</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>96C7383D-476E-457A-BB7D-4004222962E0</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Renamed media</string>
+						<key>OutputUUID</key>
+						<string>70AB7994-25B5-417B-BDD0-6C7AADC132A8</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>9DDA33E5-F8BD-420A-8997-D04C4CC32ADC</string>
+				<key>WFNotificationActionBody</key>
+				<string>Saved to Photos.</string>
+				<key>WFNotificationActionTitle</key>
+				<string>FREE Media Downloader</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>81718FF3-CBD1-4BAC-8406-60A156030AC6</string>
+				<key>UUID</key>
+				<string>83CA0937-FEB7-4502-8EDC-880E4668858E</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>54F675F5-2318-49C5-BC35-008E23BC9AF7</string>
+				<key>UUID</key>
+				<string>06A9C25A-7874-4AEB-B92E-B6D7ED0FB476</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -1721,7 +2927,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>37CAC2B6-DB5C-43BA-B258-F6093051DB7F</string>
+				<string>11CBEE89-2400-428C-B4DF-0545A8324DFF</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2870,11 +4076,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.photos.createalbum</string>
+			<string>is.workflow.actions.savetocameraroll</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
-				<key>AlbumName</key>
-				<string>FREE Media Downloader</string>
 				<key>UUID</key>
 				<string>EBCA987D-F022-4A8E-999C-8D247574AD64</string>
 				<key>WFInput</key>

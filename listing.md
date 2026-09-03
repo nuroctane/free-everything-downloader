@@ -18,7 +18,7 @@ YouTube and Instagram always go through yt-dlp in a-Shell mini. TikTok comes off
 
 ## Version
 
-This build is **1.2**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
+This build is **1.4**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
 
 ## How to use
 

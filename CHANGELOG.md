@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4
+
+- Video and images always Save to Camera Roll. Audio always Save to Files. YouTube and Instagram included. No album.
+- After yt-dlp finishes in a-Shell mini, the shortcut pulls the file back and saves it the same way as every other site.
+
+## 1.3
+
+- YouTube on a-Shell mini asked yt-dlp to merge separate video and audio with ffmpeg. a-Shell mini does not ship ffmpeg, so no playable file was written. The command now takes a single already-mixed file unless ffmpeg is actually there.
+- First YouTube or Instagram run also installs yt-dlp-ejs and the Apple WebKit JS helper YouTube requires now. Without that, yt-dlp dies with a bot check or "file not found".
+
 ## 1.2
 
 - Renamed to FREE Media Downloader.

@@ -4,13 +4,13 @@ iOS Shortcut. Share a link. Save the file. No key. No paywall. No checkout.
 
 Canonical unsigned source: `shortcut/fed.unsigned.plist`. HubSign writes the `.shortcut` to Google Drive (`H:\My Drive`). RoutineHub is a separate publish step, not this repo's ship pipeline.
 
-Version **1.2** lives in the first comment inside the shortcut. Open it in the Shortcuts app to see it. Update from RoutineHub when that page is newer.
+Version **1.4** lives in the first comment inside the shortcut. Open it in the Shortcuts app to see it. Update from RoutineHub when that page is newer.
 
 ## What it does
 
 - **TikTok:** no-watermark file when the source lets it. Straight to Photos.
-- **YouTube:** always yt-dlp inside **a-Shell mini**. Lands in a-Shell mini → Files → Documents.
-- **Instagram:** same yt-dlp path. Original file. No watermark overlay.
+- **YouTube:** always yt-dlp inside **a-Shell mini**. Video goes to Camera Roll. Audio goes to Files. The first run may install extra Python packages YouTube now needs.
+- **Instagram:** same yt-dlp path. Original file. No watermark overlay. Same Camera Roll / Files split.
 - **X / Bluesky / Mastodon:** secondary extractor when the first one fails.
 - **Also:** Facebook, Threads, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud, YouTube Music.
 - **Everything else:** first extractor, then the others. Never a checkout.
@@ -23,8 +23,8 @@ Version **1.2** lives in the first comment inside the shortcut. Open it in the S
 | **a-Shell mini** | YouTube and Instagram. The shortcut calls this app, not full a-Shell. [App Store](https://apps.apple.com/app/a-shell-mini/id1543537943) |
 | **Safari** | Built in. Used when a post wants a session. |
 | **YouTube / Instagram / TikTok / X** (optional) | Sign in there if you already use those apps. The share sheet can hand the URL to the app. |
-| **Photos** | TikTok (and other stills/video the first extractor saves to Camera Roll). |
-| **Files** | Audio from the first extractor; yt-dlp output lives under a-Shell mini. |
+| **Photos** | Video and images. Save to Camera Roll. No album. |
+| **Files** | Audio only. |
 
 Full **a-Shell** is a different app (`a-Shell`, not `a-Shell mini`). This shortcut does not call it. You do not need both.
 
