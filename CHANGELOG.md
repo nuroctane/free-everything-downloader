@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5
+
+- **Facebook is fast now.** Reels and videos resolve from Facebook's own video player (`video/embed`) instead of a server-side job. Three requests, ~0.4–0.8 s, no polling, no sign-in.
+- **Facebook photos work now.** They used to fail on the backend with `invalid media url`, which the shortcut misread as a login wall: it opened Safari and saved nothing. Photos and multi-photo posts now come from the public post embed (~0.5 s). The crawler user agent is required on both requests.
+- **New direct paths**, one request each: X (`api.fxtwitter.com` — video, GIF and all photos, including 4-photo posts), Bluesky (public `getPostThread`, video pulled as the original MP4 blob rather than the HLS playlist), Mastodon (the instance's own API, boosting handled), Pinterest (public pin widget, 720p mp4 for video pins).
+- **The server fallback stops hogging the wait.** Poll cadence 3 s → 1 s and 500 polls → 60, so the worst case is a minute instead of 25 minutes.
+- **Honest failures.** A real extraction failure now says so instead of dumping raw JSON, and the Safari sign-in path is a last resort rather than the first thing a Facebook photo hit.
+- Housekeeping: build tooling in `scripts/` (`wf.py` action-graph kit, `build_v15.py`, `dump.py`, `test_extractors.py`), and `validate.py` now checks control-flow nesting, UUID uniqueness, the 9.0.0 client gate, and that every site path is still present.
+
 ## 1.4
 
 - Video and images always Save to Camera Roll. Audio always Save to Files. YouTube and Instagram included. No album.

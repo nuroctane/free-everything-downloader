@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Validate unsigned shortcut grouping and required strings."""
+"""Validate the unsigned shortcut: structure, version gates and required strings.
+
+This is the guard rail for hand- or script-generated action graphs. It fails on
+grouping imbalance, duplicate UUIDs, malformed control flow, the aggregator's
+client-version gate moving, and any site path going missing.
+"""
 from collections import defaultdict
 from pathlib import Path
 import plistlib
@@ -8,7 +13,12 @@ import plistlib
 ROOT = Path(__file__).resolve().parents[1]
 p = plistlib.loads((ROOT / "shortcut" / "fed.unsigned.plist").read_bytes())
 actions = p["WFWorkflowActions"]
+
+bad = 0
+
+# --- 1. control-flow grouping balance (order sensitive) ------------------
 stack = defaultdict(list)
+order = []
 for i, a in enumerate(actions):
     prm = a.get("WFWorkflowActionParameters") or {}
     g = prm.get("GroupingIdentifier")
@@ -17,48 +27,208 @@ for i, a in enumerate(actions):
         continue
     if mode == 0:
         stack[g].append("open")
+        order.append([g, i])
+    elif mode == 1:
+        if not order or order[-1][0] != g:
+            bad += 1
+            print("OTHERWISE does not match the open branch at", i, g[:8])
     elif mode == 2:
         stack[g].append("end")
-bad = 0
+        if not order or order[-1][0] != g:
+            bad += 1
+            print("END does not match the open branch at", i, g[:8])
+        else:
+            order.pop()
+if order:
+    bad += 1
+    print("UNCLOSED control flow at end of shortcut:", [(g[:8], i) for g, i in order])
 for g, ev in stack.items():
     if ev.count("open") != ev.count("end"):
         bad += 1
         print("UNBALANCED", g[:8], ev)
+
+# --- 2. duplicate uuids ---------------------------------------------------
+seen = defaultdict(int)
+for a in actions:
+    u = (a.get("WFWorkflowActionParameters") or {}).get("UUID")
+    if u:
+        seen[u] += 1
+dupes = [u for u, n in seen.items() if n > 1]
+if dupes:
+    bad += 1
+    print("DUPLICATE UUIDs", dupes[:5])
+
+# --- 3. actions must be well formed --------------------------------------
+for i, a in enumerate(actions):
+    ident = a.get("WFWorkflowActionIdentifier")
+    prm = a.get("WFWorkflowActionParameters")
+    if not ident or not isinstance(prm, dict):
+        bad += 1
+        print("MALFORMED ACTION", i, ident)
+        continue
+    if ident == "is.workflow.actions.text.match" and "WFMatchTextPattern" not in prm:
+        bad += 1
+        print("MATCH without pattern at", i)
+    if ident == "is.workflow.actions.text.match.getgroup":
+        if prm.get("WFGetGroupType") not in ("Group At Index", "All Groups"):
+            bad += 1
+            print("GETGROUP without type at", i)
+    if ident == "is.workflow.actions.text.replace":
+        for k in ("WFReplaceTextFind", "WFReplaceTextReplace", "WFInput"):
+            if k not in prm:
+                bad += 1
+                print("REPLACE missing", k, "at", i)
+    if ident == "is.workflow.actions.conditional":
+        if "WFControlFlowMode" not in prm or "GroupingIdentifier" not in prm:
+            bad += 1
+            print("CONDITIONAL missing flow keys at", i)
+        elif prm["WFControlFlowMode"] == 0:
+            inp = prm.get("WFInput")
+            if not (isinstance(inp, dict) and inp.get("Type") == "Variable"
+                    and "Variable" in inp):
+                bad += 1
+                print("CONDITIONAL input is not the app's variable wrapper at", i)
+    if ident == "is.workflow.actions.getvalueforkey":
+        inp = prm.get("WFInput")
+        if not (isinstance(inp, dict) and inp.get("WFSerializationType")
+                == "WFTextTokenAttachment"):
+            bad += 1
+            print("GETVALUE input is not a plain attachment at", i)
+        if "WFDictionaryKey" not in prm:
+            bad += 1
+            print("GETVALUE without key at", i)
+    if ident == "is.workflow.actions.repeat.each":
+        if "WFControlFlowMode" not in prm or "GroupingIdentifier" not in prm:
+            bad += 1
+            print("REPEAT missing flow keys at", i)
+
+# --- 4. version gates ----------------------------------------------------
+def settings_dict():
+    for a in actions:
+        prm = a.get("WFWorkflowActionParameters") or {}
+        if (a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.dictionary"
+                and prm.get("CustomOutputName") == "Settings"):
+            return prm
+    return None
+
+
+def token_text(v):
+    if isinstance(v, str):
+        return v
+    if isinstance(v, dict) and isinstance(v.get("Value"), dict):
+        return v["Value"].get("string")
+    return None
+
+
+def sub_items(item):
+    """Items of a nested WFDictionaryFieldValue, however deep the wrapper is."""
+    v = item.get("WFValue")
+    for _ in range(4):
+        if not isinstance(v, dict):
+            return []
+        if "WFDictionaryFieldValueItems" in v:
+            return v["WFDictionaryFieldValueItems"]
+        v = v.get("Value")
+    return []
+
+
+sets = settings_dict()
+if sets is None:
+    raise SystemExit("missing Settings dictionary")
+gate = None
+user_version = None
+for it in sets["WFItems"]["Value"]["WFDictionaryFieldValueItems"]:
+    k = token_text(it.get("WFKey"))
+    if k == "version":
+        user_version = token_text(it.get("WFValue"))
+    elif k == "shortcut":
+        for it2 in sub_items(it):
+            if token_text(it2.get("WFKey")) == "version":
+                gate = token_text(it2.get("WFValue"))
+if gate != "9.0.0":
+    bad += 1
+    print("AGGREGATOR GATE MOVED: shortcut.version =", gate,
+          "(must stay 9.0.0 or every server extraction returns HTTP 426)")
+if user_version != "1.5":
+    bad += 1
+    print("Settings.version should read 1.5, got", user_version)
+
 blob = str(actions)
-print("n", len(actions), "groups", len(stack), "unbalanced", bad)
-for s in [
-    "yt-dlp",
-    "a-Shell mini",
-    "instagram.com",
-    "youtu",
-    "tikwm",
-    "waittoreturn",
-    "tvdl.app/upgrade",
-    "AMD Key",
-    "Version 1.4",
-    "SoundCloud",
-    "FREE Media Downloader",
-    "yt-dlp-ejs",
-    "yt-dlp-apple-webkit-jsi",
-]:
-    print(repr(s), blob.count(s))
-if "Version 1.4" not in blob:
-    raise SystemExit("missing Version 1.4 comment")
-if "bestvideo+bestaudio" in blob:
-    raise SystemExit("YouTube command still requires an ffmpeg merge")
-if "yt-dlp-apple-webkit-jsi" not in blob:
-    raise SystemExit("missing Apple WebKit JS helper install")
-if "photos.createalbum" in blob:
-    raise SystemExit("Create Album is forbidden; use Save to Camera Roll only")
-if "GetFileIntent" not in blob:
-    raise SystemExit("yt-dlp path never pulls the file back into Shortcuts")
-if "Saved to Photos." not in blob:
-    raise SystemExit("missing Saved to Photos notice")
-if "SoundCloud" not in blob:
-    raise SystemExit("missing sites list in comment")
-if "FREE Media Downloader" not in blob:
-    raise SystemExit("missing new display name")
-if "Free EVERYTHING Downloader" in blob:
-    raise SystemExit("old display name still in plist")
+if "Version 1.5" not in blob:
+    bad += 1
+    print("missing Version 1.5 comment")
+if "Version 1.4" in blob:
+    bad += 1
+    print("stale Version 1.4 string still in the plist")
+
+# --- 5. required content per site path -----------------------------------
+required = {
+    # app + engine
+    "a-Shell mini": "yt-dlp app name",
+    "yt-dlp": "engine",
+    "yt-dlp-ejs": "YouTube JS helper install",
+    "yt-dlp-apple-webkit-jsi": "Apple WebKit JS helper install",
+    "AsheKube.app.a-Shell-mini.GetFileIntent": "pull the file back into Shortcuts",
+    # per-site fast paths
+    "facebookexternalhit": "Facebook crawler UA",
+    "video/embed?video_id=": "Facebook player fast path",
+    "plugins/post.php": "Facebook photo fast path",
+    "api.fxtwitter.com": "X fast path",
+    "api/v1/statuses/": "Mastodon fast path",
+    "com.atproto.sync.getBlob": "Bluesky video blob",
+    "getPostThread": "Bluesky fast path",
+    "pin_ids=": "Pinterest widget",
+    "tikwm": "TikTok",
+    "instagram.com": "Instagram",
+    "youtu": "YouTube",
+    # aggregator fallback
+    "allmediadownloader": "server extractor fallback",
+    "api.twirrl.app": "X/Bluesky/Mastodon last-resort backend",
+    # notices
+    "Saved to Photos.": "photos notice",
+    "Saved from Facebook.": "Facebook notice",
+    "Saved from X.": "X notice",
+    "Saved from Mastodon.": "Mastodon notice",
+    "Saved from Bluesky.": "Bluesky notice",
+    "Saved from Pinterest.": "Pinterest notice",
+    "Couldn't grab a file from that link": "honest failure notice",
+    # listing copy
+    "FREE Media Downloader": "display name",
+    "SoundCloud": "sites list in comment",
+}
+for needle, why in required.items():
+    if needle not in blob:
+        bad += 1
+        print("MISSING %-42s (%s)" % (needle, why))
+
+forbidden = {
+    "Free EVERYTHING Downloader": "old display name",
+    "bestvideo+bestaudio": "YouTube merge that needs ffmpeg",
+    "photos.createalbum": "Create Album is forbidden; Save to Camera Roll only",
+    "tvdl.app/upgrade": "pro nag",
+}
+for needle, why in forbidden.items():
+    if needle in blob:
+        bad += 1
+        print("FORBIDDEN %-40s (%s)" % (needle, why))
+
+# --- 6. fallback tuning --------------------------------------------------
+delays = [str((a.get("WFWorkflowActionParameters") or {}).get("WFDelayTime"))
+          for a in actions if a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.delay"]
+numbers = [str((a.get("WFWorkflowActionParameters") or {}).get("WFNumberActionNumber"))
+           for a in actions if a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.number"]
+if delays != ["1.0"]:
+    bad += 1
+    print("expected a single 1.0 s poll delay, got", delays)
+if "60" not in numbers:
+    bad += 1
+    print("expected the poll ceiling of 60, got numbers", numbers)
+if "3.0" in delays or "500" in numbers:
+    bad += 1
+    print("old 3 s / 500-poll cadence still present")
+
+print("actions %d | groups %d | unbalanced %d | problems %d"
+      % (len(actions), len(stack), sum(1 for e in stack.values() if e.count("open") != e.count("end")), bad))
 if bad:
     raise SystemExit(1)
+print("OK")

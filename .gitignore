@@ -7,6 +7,9 @@ venv/
 .env
 .env.*
 
+# Generated action-graph dump (scripts/dump.py --out)
+.analysis-actions.txt
+
 # Signed binaries (rebuild via scripts/sign.py)
 dist/
 *.shortcut

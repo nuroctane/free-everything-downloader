@@ -14,11 +14,15 @@ If you have been paying rent on a button that literally anyone can make today wi
 
 YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-YouTube and Instagram always go through yt-dlp in a-Shell mini. TikTok comes off the watermark when the source lets it. X, Bluesky, and Mastodon get a second try if the first extractor misses. The rest on that list go through the first extractor.
+**Facebook, X, Bluesky, Mastodon, Pinterest and TikTok resolve on your phone in one request.** No server queue, no waiting. A Facebook Reel is about half a second. Facebook photos work now too, single or multi.
+
+YouTube and Instagram go through yt-dlp in a-Shell mini. TikTok comes off the watermark when the source lets it. The rest on that list use the server extractor, and it gives up after a minute instead of leaving you hanging.
 
 ## Version
 
-This build is **1.4**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
+This build is **1.5**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
+
+1.5 is mostly about Facebook: Reels come straight from Facebook's own video player now (they used to crawl through a server job), and Facebook photos are fixed - the old build handed photo links to a backend that answers "invalid media url", treated that as "this post needs a login", opened Safari and saved nothing. That is why signing in never helped. It does not need a login.
 
 ## How to use
 
@@ -30,7 +34,7 @@ You can copy a URL and run it from Shortcuts the same way
 
 ## Apps
 
-❕ Install **a-Shell mini** from the App Store before you share a YouTube or Instagram link. That is the app this shortcut calls. Full a-Shell is a different app and is not used.
+❕ Install **a-Shell mini** from the App Store before you share a YouTube or Instagram link. That is the app this shortcut calls. Full a-Shell is a different app and is not used. Facebook, X, Bluesky, Mastodon, Pinterest and TikTok never touch it.
 
 Safari is already on the phone. YouTube, Instagram, TikTok, and X are optional; use them when you already sign in there.
 
