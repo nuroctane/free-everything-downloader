@@ -52,6 +52,8 @@ REQUIRED = {
     "is.workflow.actions.setitemname": {"WFName": ((dict, str), True)},
     "AsheKube.app.a-Shell-mini.ExecuteCommandIntent": {"command": ((dict, str), True)},
     "AsheKube.app.a-Shell-mini.GetFileIntent": {"fileName": ((str,), True)},
+    "AsheKube.app.a-Shell.ExecuteCommandIntent": {"command": ((dict, str), True)},
+    "AsheKube.app.a-Shell.GetFileIntent": {"fileName": ((str,), True)},
 }
 # parameter types Apple writes for the actions this repo generates that the 1.4
 # base does not contain
@@ -118,6 +120,9 @@ def audit_structure(acts, problems, base_acts=None):
              for a in (base_acts if base_acts is not None else acts)} | {
         "is.workflow.actions.text.match", "is.workflow.actions.text.match.getgroup",
         "is.workflow.actions.text.replace",
+        # full a-Shell fallback (same intents as mini, different bundle id)
+        "AsheKube.app.a-Shell.ExecuteCommandIntent",
+        "AsheKube.app.a-Shell.GetFileIntent",
     }
     for i, a in enumerate(acts):
         if a.get("WFWorkflowActionIdentifier") not in known:

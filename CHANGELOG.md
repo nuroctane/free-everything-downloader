@@ -2,6 +2,7 @@
 
 ## 1.5.1 (candidate, not published)
 
+- Full a-Shell now works too. Both apps expose the same Execute command / Get file intents under different bundle ids, and the shortcut only ever addressed a-Shell mini, so the full app silently could not run the yt-dlp path. Mini still runs first; full a-Shell is only used when mini leaves the result marker at "missing". Install either app - not both.
 - Facebook video id regex rewritten for ICU. The old form matched in Python and failed on /reel/ and /videos/ in the engine Shortcuts actually uses, so a Reel would have skipped the fast path and gone back to the slow server job. Group 1 now captures reel, reels, video, videos, watch?v=, and video.php. Photos still do not match it.
 - scripts/test_extractors.py --regexes now runs every stored pattern in Node ICU and requires group 1. A Python-only pass is no longer enough.
 - Facebook only: Reels/videos from the video player, photos from the public post embed, plus a 1 s x 60 fallback poll.

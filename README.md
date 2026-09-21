@@ -42,13 +42,13 @@ Sign-in walls only apply to genuinely private posts now: if a post is private or
 
 | App | Why |
 | --- | --- |
-| **a-Shell mini** | YouTube and Instagram only. The shortcut calls this app, not full a-Shell. [App Store](https://apps.apple.com/app/a-shell-mini/id1543537943) |
+| **a-Shell mini** or **a-Shell** (either one) | YouTube and Instagram only. Same actions in both apps. [a-Shell mini](https://apps.apple.com/app/a-shell-mini/id1543537943) · [a-Shell](https://apps.apple.com/app/a-shell/id1473805438) |
 | **Safari** | Built in. Used when a post wants a session. |
 | **YouTube / Instagram / TikTok / X** (optional) | Sign in there if you already use those apps. The share sheet can hand the URL to the app. |
 | **Photos** | Video and images. Save to Camera Roll. No album. |
 | **Files** | Audio only. |
 
-Full **a-Shell** is a different app (`a-Shell`, not `a-Shell mini`). This shortcut does not call it. You do not need both.
+Full **a-Shell** and **a-Shell mini** both work. The shortcut runs a-Shell mini first and falls back to full a-Shell only if mini left nothing behind, so install either one - not both required.
 
 Facebook, X, Bluesky, Mastodon, Pinterest and TikTok never touch a-Shell mini.
 
