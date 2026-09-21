@@ -11,7 +11,7 @@ When the user says **ship**, **push**, **deploy**, **put on main**, **release**,
 python -X utf8 $env:USERPROFILE\.agents\shortcut-rh.py --repo free-everything-downloader --link <icloud-url> --version <X.Y> --changes "<no emojis>"
 ```
 
-That creates the version and POSTs `listing.md`, including `This build is **X.Y**` on the live page.
+That creates the version first. Get Shortcut must already be that version before any listing copy is posted. Never listing-only. Never leave users on an older download while the page claims a newer build.
 
 3. Then GitHub: `powershell -File $env:USERPROFILE\.agents\ship.ps1 -Repo free-everything-downloader -SkipRh [-Message "..."]` (or pass `-ICloudLink` if RH is not done yet so step 0 runs inside the script)
 
