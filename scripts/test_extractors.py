@@ -338,9 +338,14 @@ def check_regexes(plist_path):
         ("bsky did", bskyp, "https://bsky.app/profile/did:plc:abc/post/3mvvdpby3x22t", True),
         ("bsky lookalike REJECT", bskyp, "https://notbsky.app/profile/x/post/3mvvdpby3x22t", False),
         ("fb reel", fbid, "https://www.facebook.com/reel/815233250817277", True),
+        ("fb reels", fbid, "https://www.facebook.com/reels/815233250817277/", True),
         ("fb videos", fbid, "https://www.facebook.com/NASA/videos/815233250817277/", True),
         ("fb watch", fbid, "https://www.facebook.com/watch/?v=815233250817277", True),
+        ("fb watch no slash", fbid, "https://www.facebook.com/watch?v=815233250817277", True),
+        ("fb video.php", fbid, "https://www.facebook.com/video.php?v=815233250817277", True),
+        ("fb mobile reel", fbid, "https://m.facebook.com/reel/815233250817277", True),
         ("fb photo REJECT", fbid, "https://www.facebook.com/photo?fbid=1426466698848702", False),
+        ("fb short REJECT", fbid, "https://fb.watch/abcDEF/", False),
         ("fb photo regex",
          fbphoto,
          '<a href="https://www.facebook.com/photo.php?fbid=1&amp;set=a.2&amp;ref=embed_post" '
@@ -371,7 +376,57 @@ def check_regexes(plist_path):
             print("REGEX FAIL %-26s want=%s got=%s  %s" % (label, want, got, url))
     print("regex matrix: %d cases, %d failures, %d skipped (pattern absent from this build)"
           % (len(cases), fails, skipped))
-    return fails
+    # Shortcuts Match Text is ICU, not Python. A pattern can pass re.search and
+    # still capture nothing on device (the Reel id regex did exactly that).
+    icu = check_icu(plist_path)
+    return fails + icu
+
+
+def check_icu(plist_path):
+    """Run every stored pattern in Node's ICU engine and require group 1."""
+    import subprocess
+    pats = []
+    for a in plistlib.load(open(plist_path, "rb"))["WFWorkflowActions"]:
+        p = (a.get("WFWorkflowActionParameters") or {}).get("WFMatchTextPattern")
+        if isinstance(p, str) and p not in pats:
+            pats.append(p)
+    script = r"""
+const fs = require('fs');
+const spec = JSON.parse(fs.readFileSync(0, 'utf8'));
+let fails = 0;
+for (const row of spec) {
+  let re;
+  try { re = new RegExp(row.pat); }
+  catch (e) { console.log('ICU FAIL compile', row.label, e.message); fails++; continue; }
+  const m = re.exec(row.url);
+  const got = m && m[1] ? m[1] : '';
+  if (!got) { console.log('ICU FAIL', row.label, row.url); fails++; }
+  else { console.log('ICU OK  ', row.label, got); }
+}
+process.exit(fails ? 1 : 0);
+"""
+    rows = []
+    samples = {
+        "reels?": ("fb reel", "https://www.facebook.com/reel/815233250817277"),
+        "reel|reels": ("fb reel", "https://www.facebook.com/reel/815233250817277"),
+        "hd_src": ("fb embed", r'"hd_src":"https:\/\/video.example\/a.mp4"'),
+        "_1p6f": ("fb photo html",
+                  '<img class="_1p6f _1p6g img" src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1426466698848702"'),
+    }
+    for p in pats:
+        for marker, (label, url) in samples.items():
+            if marker in p:
+                rows.append({"pat": p, "label": label, "url": url})
+                break
+    if not rows:
+        print("ICU: no patterns to check")
+        return 0
+    proc = subprocess.run(["node", "-e", script], input=json.dumps(rows),
+                          text=True, capture_output=True, timeout=20)
+    print(proc.stdout.strip())
+    if proc.returncode:
+        print(proc.stderr.strip())
+    return 0 if proc.returncode == 0 else 1
 
 
 def main():

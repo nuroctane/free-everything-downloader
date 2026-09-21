@@ -2,6 +2,8 @@
 
 ## 1.5.1 (candidate, not published)
 
+- Facebook video id regex rewritten for ICU. The old form matched in Python and failed on /reel/ and /videos/ in the engine Shortcuts actually uses, so a Reel would have skipped the fast path and gone back to the slow server job. Group 1 now captures reel, reels, video, videos, watch?v=, and video.php. Photos still do not match it.
+- scripts/test_extractors.py --regexes now runs every stored pattern in Node ICU and requires group 1. A Python-only pass is no longer enough.
 - Facebook only: Reels/videos from the video player, photos from the public post embed, plus a 1 s x 60 fallback poll.
 - X, Bluesky, Mastodon and Pinterest are left exactly as 1.4. Their 1.5 on-device fast paths were removed after the X path regressed share-sheet runs.
 - Fixes the regression itself. The Wait duration inside the poll loop was written as the string "1.0" instead of the number 1.0. iOS blanks a string in that field, so the shipped 1.5 had a required value empty on every run - which is what made the shortcut stop and prompt instead of taking the shared post. The 1.4 file had a real number (3.0). It is a real number again (1.0).

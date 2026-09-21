@@ -2950,7 +2950,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>5A8EAA2F-2344-4D21-AD4D-3E8C6F711B5E</string>
+				<string>9A0C8755-2581-40C8-AE1B-0F991991FE86</string>
 				<key>WFCommentActionText</key>
 				<string>Facebook: video and Reels come straight from the video player; photos come from the public post embed. One request each, no server job, no sign-in. Anything that misses falls through to the extractor below.</string>
 			</dict>
@@ -2961,9 +2961,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>A7086E42-47AE-4BFD-BBFE-AA6F04147276</string>
+				<string>4A5F4A0D-F85A-4A2C-BDCF-F5DDE80A5756</string>
 				<key>UUID</key>
-				<string>093E9D07-8C82-43CF-8FE6-E0013A4E71B7</string>
+				<string>9B379993-94CC-4A6B-9064-8D5E4DD19664</string>
 				<key>WFCondition</key>
 				<integer>8</integer>
 				<key>WFConditionalActionString</key>
@@ -2995,7 +2995,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>DF21D986-9C0B-4BC2-8ED8-BCD228441A66</string>
+				<string>EFA34E92-5D81-4D32-A112-EBBA94D6AEC1</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3011,7 +3011,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>WFMatchTextCaseSensitive</key>
 				<false/>
 				<key>WFMatchTextPattern</key>
-				<string>(?:reels?/|/videos?/|watch/?\?v=|video\.php\?v=|[?&amp;]v=)(\d{6,})</string>
+				<string>(?:(?:reel|reels|videos|video)/|[?&amp;]v=|video\.php\?v=)(\d{6,})</string>
 			</dict>
 		</dict>
 		<dict>
@@ -3020,9 +3020,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>CCBA6964-5B78-4E3C-A736-0F572073C164</string>
+				<string>9788E711-4818-4396-A4C5-3C6B1AB8C0FE</string>
 				<key>UUID</key>
-				<string>228F95AD-C313-499C-A1FC-5A5AF0DBBC4A</string>
+				<string>4FE5E76D-5FC0-421E-A3A2-D73FC9A42671</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3038,7 +3038,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							<key>OutputName</key>
 							<string>FacebookVideoID</string>
 							<key>OutputUUID</key>
-							<string>DF21D986-9C0B-4BC2-8ED8-BCD228441A66</string>
+							<string>EFA34E92-5D81-4D32-A112-EBBA94D6AEC1</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3054,7 +3054,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>F515B78E-22C5-494B-B93A-1AA4EB2F3F9E</string>
+				<string>2EE6E12E-D95D-4C36-A2E1-F91F57690A12</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3066,7 +3066,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookVideoID</string>
 						<key>OutputUUID</key>
-						<string>DF21D986-9C0B-4BC2-8ED8-BCD228441A66</string>
+						<string>EFA34E92-5D81-4D32-A112-EBBA94D6AEC1</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3083,7 +3083,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>A8D05B91-7EA4-494C-B45D-CA0B3D041003</string>
+				<string>CB8D0794-6CD5-4315-AAAE-2B91E9C313FF</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3134,7 +3134,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 									<key>OutputName</key>
 									<string>FacebookVideoNumber</string>
 									<key>OutputUUID</key>
-									<string>F515B78E-22C5-494B-B93A-1AA4EB2F3F9E</string>
+									<string>2EE6E12E-D95D-4C36-A2E1-F91F57690A12</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -3156,7 +3156,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>FAEF24AD-3C02-4C29-A01B-EAAAB4C2A35F</string>
+				<string>39A28CFC-A0AD-4B2F-B327-002D37A6F1A5</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3164,7 +3164,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPlayer</string>
 						<key>OutputUUID</key>
-						<string>A8D05B91-7EA4-494C-B45D-CA0B3D041003</string>
+						<string>CB8D0794-6CD5-4315-AAAE-2B91E9C313FF</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3183,9 +3183,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>6C99DD28-BA1C-4D83-9CBE-E84E89CA423E</string>
+				<string>17BDF11B-CE6E-4150-A56A-922DBC5ADB6A</string>
 				<key>UUID</key>
-				<string>BA323396-5497-4AAA-9F09-42B6FD1E0934</string>
+				<string>F1499CA5-F5D2-49B0-90CA-42BAFB3F4CE9</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3201,7 +3201,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							<key>OutputName</key>
 							<string>FacebookMediaURL</string>
 							<key>OutputUUID</key>
-							<string>FAEF24AD-3C02-4C29-A01B-EAAAB4C2A35F</string>
+							<string>39A28CFC-A0AD-4B2F-B327-002D37A6F1A5</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3217,7 +3217,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>89132CE5-A766-46A4-A301-78416800EC83</string>
+				<string>FDD0A66A-38D9-4C8F-90CA-842746E40B45</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3229,7 +3229,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaURL</string>
 						<key>OutputUUID</key>
-						<string>FAEF24AD-3C02-4C29-A01B-EAAAB4C2A35F</string>
+						<string>39A28CFC-A0AD-4B2F-B327-002D37A6F1A5</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3244,7 +3244,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>537D8B47-8A13-454D-82FA-ED4A8471E556</string>
+				<string>D79434B7-2C2A-4A78-8B26-435BD9799207</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3252,7 +3252,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaGroup</string>
 						<key>OutputUUID</key>
-						<string>89132CE5-A766-46A4-A301-78416800EC83</string>
+						<string>FDD0A66A-38D9-4C8F-90CA-842746E40B45</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3275,7 +3275,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>E53159B8-CF21-4A79-A1A1-2D8CB4763F6E</string>
+				<string>5DD82196-9303-4BD8-9682-2EDC1D244AA4</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3283,7 +3283,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaLink</string>
 						<key>OutputUUID</key>
-						<string>537D8B47-8A13-454D-82FA-ED4A8471E556</string>
+						<string>D79434B7-2C2A-4A78-8B26-435BD9799207</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3306,7 +3306,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>4D5F1A8C-9D11-4792-A0AF-9A4F4B278711</string>
+				<string>E88A18E6-43D0-474D-BA44-F595E8F94A4A</string>
 				<key>WFURL</key>
 				<dict>
 					<key>Value</key>
@@ -3314,7 +3314,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaLink2</string>
 						<key>OutputUUID</key>
-						<string>E53159B8-CF21-4A79-A1A1-2D8CB4763F6E</string>
+						<string>5DD82196-9303-4BD8-9682-2EDC1D244AA4</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3329,7 +3329,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>E4810792-01B4-4AD4-88C2-AACFA1043668</string>
+				<string>F054E58D-098F-42B0-AAB3-E38435AFC946</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -3340,7 +3340,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>589BD5F0-4739-4F82-9953-806E990A029F</string>
+				<string>8E850F20-4AFC-40F8-96E4-1E9AEFD6E51B</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -3359,7 +3359,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>8BB70897-1C07-4C3A-8E41-DC0759124F78</string>
+				<string>497E8E77-8907-49CB-8454-A795D5921C78</string>
 			</dict>
 		</dict>
 		<dict>
@@ -3368,9 +3368,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>6C99DD28-BA1C-4D83-9CBE-E84E89CA423E</string>
+				<string>17BDF11B-CE6E-4150-A56A-922DBC5ADB6A</string>
 				<key>UUID</key>
-				<string>CEA2CF87-358C-45DD-AFBA-918D155F145E</string>
+				<string>E3ACAC76-FB9E-44FD-8332-84AC110ABD0B</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3381,9 +3381,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>CCBA6964-5B78-4E3C-A736-0F572073C164</string>
+				<string>9788E711-4818-4396-A4C5-3C6B1AB8C0FE</string>
 				<key>UUID</key>
-				<string>FAD7B1B4-2BF1-45FE-8C6B-EA1CA409E166</string>
+				<string>E9EEC486-3F46-4646-B428-C07AC37CA590</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3394,7 +3394,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>5190DEAA-07C8-4500-999C-A7476011189C</string>
+				<string>BC279D2C-047D-4004-BD30-E222B5CC3324</string>
 				<key>WFEncodeMode</key>
 				<string>Encode</string>
 				<key>WFInput</key>
@@ -3419,7 +3419,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>146A875A-8762-461E-A8BC-32893DC290E5</string>
+				<string>0A1D651F-9540-4045-A5EB-F8664E17FF70</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3470,7 +3470,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 									<key>OutputName</key>
 									<string>URL Encoded Text</string>
 									<key>OutputUUID</key>
-									<string>5190DEAA-07C8-4500-999C-A7476011189C</string>
+									<string>BC279D2C-047D-4004-BD30-E222B5CC3324</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -3492,7 +3492,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>C1D7F863-000B-47D7-AABB-410409971AD9</string>
+				<string>5ADAF276-6666-47F6-B82A-1F42A355FE08</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3500,7 +3500,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookEmbed</string>
 						<key>OutputUUID</key>
-						<string>146A875A-8762-461E-A8BC-32893DC290E5</string>
+						<string>0A1D651F-9540-4045-A5EB-F8664E17FF70</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3519,9 +3519,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>E59ADE7A-3419-498A-AAD4-0AF8FCFCE516</string>
+				<string>042085D9-D59D-4ECD-BDDD-9D0369161AEB</string>
 				<key>UUID</key>
-				<string>FC14CD28-8662-43CC-BC02-E566B185067F</string>
+				<string>A90C612D-A89E-4D12-840F-883889230542</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3537,7 +3537,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							<key>OutputName</key>
 							<string>FacebookPhotos</string>
 							<key>OutputUUID</key>
-							<string>C1D7F863-000B-47D7-AABB-410409971AD9</string>
+							<string>5ADAF276-6666-47F6-B82A-1F42A355FE08</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3553,9 +3553,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>30B255CF-C409-4482-B2B1-A5F321B491D8</string>
+				<string>7F153C31-FFC3-4942-AC93-C6A5580F342D</string>
 				<key>UUID</key>
-				<string>AD4A07CC-8065-4C83-933E-86D2127F4203</string>
+				<string>0E4EAF4C-2395-4CB5-A66D-80D2AB2FFB4B</string>
 				<key>WFControlFlowMode</key>
 				<integer>0</integer>
 				<key>WFInput</key>
@@ -3565,7 +3565,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPhotos</string>
 						<key>OutputUUID</key>
-						<string>C1D7F863-000B-47D7-AABB-410409971AD9</string>
+						<string>5ADAF276-6666-47F6-B82A-1F42A355FE08</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3580,7 +3580,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>55F5C151-F931-4298-A974-446F5A2B0AA3</string>
+				<string>198C50C1-371A-49C3-A5EB-8F8B67E72D70</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3605,7 +3605,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>09444610-4037-4518-AE18-C2545B64D7D4</string>
+				<string>784EFC93-B7B1-4BDC-844A-481722BAC9D8</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3613,7 +3613,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPhotoURL</string>
 						<key>OutputUUID</key>
-						<string>55F5C151-F931-4298-A974-446F5A2B0AA3</string>
+						<string>198C50C1-371A-49C3-A5EB-8F8B67E72D70</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3638,7 +3638,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>F80752F3-72D8-4020-BE7F-A60C76985F94</string>
+				<string>A90249A4-5934-41FA-BDCB-DB8D1EA48FEB</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3683,7 +3683,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPhotoLink</string>
 						<key>OutputUUID</key>
-						<string>09444610-4037-4518-AE18-C2545B64D7D4</string>
+						<string>784EFC93-B7B1-4BDC-844A-481722BAC9D8</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3698,7 +3698,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>7B1A14C1-8336-440B-97F4-3AAEA84A3CF5</string>
+				<string>A25D0833-4CFB-4A26-B8C1-0EFC0CA2DB38</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -3709,9 +3709,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>30B255CF-C409-4482-B2B1-A5F321B491D8</string>
+				<string>7F153C31-FFC3-4942-AC93-C6A5580F342D</string>
 				<key>UUID</key>
-				<string>309FA6C9-94EB-4AB8-8720-FD0AAD2A97EF</string>
+				<string>4CD078CA-1957-4EA0-9C85-BA5F23A871A5</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3722,7 +3722,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>22DCC30B-FCFD-45C8-A1C5-2050C7675547</string>
+				<string>37180DED-6399-465A-B6E2-816599369D48</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -3741,7 +3741,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>34D29899-9E26-4FE0-8771-E285C53EFC17</string>
+				<string>FBEBAE15-D29C-4FEF-9B46-A63C752512B7</string>
 			</dict>
 		</dict>
 		<dict>
@@ -3750,9 +3750,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>E59ADE7A-3419-498A-AAD4-0AF8FCFCE516</string>
+				<string>042085D9-D59D-4ECD-BDDD-9D0369161AEB</string>
 				<key>UUID</key>
-				<string>95A19EBE-C924-4502-8AD3-866B4398B8FF</string>
+				<string>C43D23D5-6AEA-4DC5-ACF1-F71C2D836573</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3763,9 +3763,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>A7086E42-47AE-4BFD-BBFE-AA6F04147276</string>
+				<string>4A5F4A0D-F85A-4A2C-BDCF-F5DDE80A5756</string>
 				<key>UUID</key>
-				<string>39EAEFB7-CEB3-47DE-BFA1-0510FADAD71F</string>
+				<string>CE36495B-D6B3-4F3C-970D-FDF58043410D</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>

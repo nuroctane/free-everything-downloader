@@ -38,7 +38,10 @@ VERSION = "1.5"
 VERSION_DATE = "2026-09-20"
 
 # --- regexes (all verified live by scripts/test_extractors.py) --------------
-FB_VIDEO_ID = r"(?:reels?/|/videos?/|watch/?\?v=|video\.php\?v=|[?&]v=)(\d{6,})"
+# One capture group, no optional slash inside an alternation. Shortcuts Match
+# Text is ICU, and the old reels?/ form matched in Python but captured nothing
+# on /reel/ and /videos/ in ICU — so the Reel fast path never ran.
+FB_VIDEO_ID = r"(?:(?:reel|reels|videos|video)/|[?&]v=|video\.php\?v=)(\d{6,})"
 FB_EMBED_SRC = (r'"(?:hd_src|sd_src|browser_native_hd_url'
                 r'|browser_native_sd_url|playable_url)":"([^"]+)"')
 FB_PHOTO = (r'(?:class="_1p6f[^"]*"[^>]*src'
