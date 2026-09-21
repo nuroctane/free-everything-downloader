@@ -81,6 +81,30 @@ the release number. Bumping it down makes every server extraction return HTTP 42
 The user-facing release number is `Settings.version`, and `validate.py` fails if the
 two get mixed up.
 
+## Audit before signing
+
+`scripts/audit.py` is the gate before `sign.py`. It checks the defect classes
+that a structural check cannot, each proven by a self-test:
+
+| check | what it catches |
+| --- | --- |
+| A structure | unknown action ids, broken control-flow nesting, duplicate UUIDs |
+| B type fidelity | any parameter whose python type differs from the known-good base - e.g. the Wait duration as a string, which iOS stores as blank |
+| C required values | missing / empty / mistyped parameters per action |
+| D wiring | ActionOutput references to actions that do not exist, variables that are never set |
+| E routes | every site url form reached its branch or fell through, derived from the guards actually present |
+| F entry points | share sheet (ActionExtension + input classes) and pasted link (clipboard fallback, Detect Link, Expand URL) |
+| G device fidelity | optional: diff a payload downloaded back from a phone against the local build, and report every value the device blanked |
+
+```powershell
+python -X utf8 scriptsudit.py --base testsixturesase-1.4.plist --selftest
+python -X utf8 scriptsudit.py --base testsixturesase-1.4.plist
+python -X utf8 scriptsudit.py --base testsixturesase-1.4.plist --device <payload-from-phone.plist>
+```
+
+`scripts/probe_extractor.py` reports which sites the server-extractor route
+actually serves, with the query strings a pasted link carries.
+
 ## RoutineHub
 
 Listing: https://routinehub.co/shortcut/26384/
