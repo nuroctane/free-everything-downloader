@@ -374,7 +374,9 @@ def patch_poll(acts):
         ident = a.get("WFWorkflowActionIdentifier")
         p = a.get("WFWorkflowActionParameters") or {}
         if ident == "is.workflow.actions.delay" and str(p.get("WFDelayTime")) == "3.0":
-            p["WFDelayTime"] = "1.0"
+            # must stay a NUMBER: iOS blanks a string in this field, which leaves
+            # the Wait action with an empty (prompting) duration
+            p["WFDelayTime"] = 1.0
             changed["delay"] = True
         if ident == "is.workflow.actions.number" and str(p.get("WFNumberActionNumber")) == "500":
             p["WFNumberActionNumber"] = "60"

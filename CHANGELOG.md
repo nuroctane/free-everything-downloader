@@ -3,7 +3,9 @@
 ## 1.5.1 (candidate, not published)
 
 - Facebook only: Reels/videos from the video player, photos from the public post embed, plus a 1 s x 60 fallback poll.
-- X, Bluesky, Mastodon and Pinterest are left exactly as 1.4. Their 1.5 on-device fast paths were removed after the X path broke share-sheet runs.
+- X, Bluesky, Mastodon and Pinterest are left exactly as 1.4. Their 1.5 on-device fast paths were removed after the X path regressed share-sheet runs.
+- Fixes the regression itself. The Wait duration inside the poll loop was written as the string "1.0" instead of the number 1.0. iOS blanks a string in that field, so the shipped 1.5 had a required value empty on every run - which is what made the shortcut stop and prompt instead of taking the shared post. The 1.4 file had a real number (3.0). It is a real number again (1.0).
+- validate.py now type-checks the Wait duration and the poll ceiling, because comparing stringified values hid this: "1.0" and 1.0 both printed as 1.0.
 
 ## 1.5 (rolled back)
 

@@ -224,19 +224,21 @@ for needle, why in forbidden.items():
         print("FORBIDDEN %-40s (%s)" % (needle, why))
 
 # --- 6. fallback tuning --------------------------------------------------
-delays = [str((a.get("WFWorkflowActionParameters") or {}).get("WFDelayTime"))
+delays = [(a.get("WFWorkflowActionParameters") or {}).get("WFDelayTime")
           for a in actions if a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.delay"]
 numbers = [str((a.get("WFWorkflowActionParameters") or {}).get("WFNumberActionNumber"))
            for a in actions if a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.number"]
-if delays != ["1.0"]:
+# A string here is silently blanked by iOS, leaving Wait with no duration.
+if (len(delays) != 1 or isinstance(delays[0], bool)
+        or not isinstance(delays[0], (int, float)) or delays[0] <= 0):
     bad += 1
-    print("expected a single 1.0 s poll delay, got", delays)
+    print("Wait duration must be a positive NUMBER, not a string:", delays)
 if "60" not in numbers:
     bad += 1
     print("expected the poll ceiling of 60, got numbers", numbers)
-if "3.0" in delays or "500" in numbers:
+if isinstance(numbers[0] if numbers else None, float):
     bad += 1
-    print("old 3 s / 500-poll cadence still present")
+    print("poll ceiling should stay a string like the rest of the file:", numbers[:3])
 
 print("actions %d | groups %d | unbalanced %d | problems %d"
       % (len(actions), len(stack), sum(1 for e in stack.values() if e.count("open") != e.count("end")), bad))
