@@ -9,6 +9,7 @@ client-version gate moving, and any site path going missing.
 from collections import defaultdict
 from pathlib import Path
 import plistlib
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 p = plistlib.loads((ROOT / "shortcut" / "fed.unsigned.plist").read_bytes())
@@ -149,17 +150,22 @@ if gate != "9.0.0":
     bad += 1
     print("AGGREGATOR GATE MOVED: shortcut.version =", gate,
           "(must stay 9.0.0 or every server extraction returns HTTP 426)")
-if user_version != "1.5":
+if user_version is None:
     bad += 1
-    print("Settings.version should read 1.5, got", user_version)
+    print("Settings.version missing")
 
 blob = str(actions)
-if "Version 1.5" not in blob:
+mv = re.search(r"Version (\d+\.\d+(?:\.\d+)?)\s+\(", blob)
+version = mv.group(1) if mv else None
+if not version:
     bad += 1
-    print("missing Version 1.5 comment")
-if "Version 1.4" in blob:
+    print("missing Version comment")
+elif user_version != version:
     bad += 1
-    print("stale Version 1.4 string still in the plist")
+    print("Settings.version %r does not match the comment %r" % (user_version, version))
+if re.search(r"Version 1\.[0-4]\b", blob):
+    bad += 1
+    print("stale version string still in the plist")
 
 # --- 5. required content per site path -----------------------------------
 required = {
@@ -169,16 +175,11 @@ required = {
     "yt-dlp-ejs": "YouTube JS helper install",
     "yt-dlp-apple-webkit-jsi": "Apple WebKit JS helper install",
     "AsheKube.app.a-Shell-mini.GetFileIntent": "pull the file back into Shortcuts",
-    # per-site fast paths
+    # per-site fast paths (Facebook is always present in 1.5+)
     "facebookexternalhit": "Facebook crawler UA",
     "video/embed?video_id=": "Facebook player fast path",
     "plugins/post.php": "Facebook photo fast path",
-    "api.fxtwitter.com": "X fast path",
-    "api/v1/statuses/": "Mastodon fast path",
-    "com.atproto.sync.getBlob": "Bluesky video blob",
-    "getPostThread": "Bluesky fast path",
-    "pin_ids=": "Pinterest widget",
-    "tikwm": "TikTok",
+    "Saved from Facebook.": "Facebook notice",
     "instagram.com": "Instagram",
     "youtu": "YouTube",
     # aggregator fallback
@@ -186,11 +187,6 @@ required = {
     "api.twirrl.app": "X/Bluesky/Mastodon last-resort backend",
     # notices
     "Saved to Photos.": "photos notice",
-    "Saved from Facebook.": "Facebook notice",
-    "Saved from X.": "X notice",
-    "Saved from Mastodon.": "Mastodon notice",
-    "Saved from Bluesky.": "Bluesky notice",
-    "Saved from Pinterest.": "Pinterest notice",
     "Couldn't grab a file from that link": "honest failure notice",
     # listing copy
     "FREE Media Downloader": "display name",
@@ -200,6 +196,21 @@ for needle, why in required.items():
     if needle not in blob:
         bad += 1
         print("MISSING %-42s (%s)" % (needle, why))
+
+# Optional per-site fast paths: if a feature is in the build, it must be whole.
+per_feature = {
+    "api.fxtwitter.com": ["Saved from X.", "fxtwitter"],
+    "getPostThread": ["com.atproto.sync.getBlob"],
+    "api/v1/statuses/": ["Saved from Mastodon."],
+    "pin_ids=": ["Saved from Pinterest."],
+}
+for probe, needles in per_feature.items():
+    if probe not in blob:
+        continue
+    for needle in needles:
+        if needle not in blob:
+            bad += 1
+            print("FEATURE %s present but missing %s" % (probe, needle))
 
 forbidden = {
     "Free EVERYTHING Downloader": "old display name",

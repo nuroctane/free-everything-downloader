@@ -1,5 +1,16 @@
 # FREE Media Downloader
 
+> **Status 2026-09-21: RoutineHub serves 1.4.1 (the 1.4 build).**
+> 1.5 added four on-device fast paths (X, Bluesky, Mastodon, Pinterest) on top of
+> the Facebook fixes. The X one regressed share-sheet runs on device - the
+> shortcut asked for the link instead of taking the shared post - so 1.5 was
+> rolled back to the last known-good build. `shortcut/fed.unsigned.plist` in this
+> commit is the 1.4 graph; the Facebook-only candidate is reproducible with
+> `python -X utf8 scripts/build.py --base <1.4 plist> --version 1.5.1 --sites facebook --out shortcut/fed.unsigned.plist`.
+> Anyone re-adding a fast path must test it from the share sheet on a real
+> device before it ships.
+
+
 iOS Shortcut. Share a link. Save the file. No key. No paywall. No checkout.
 
 Canonical unsigned source: `shortcut/fed.unsigned.plist`. HubSign writes the `.shortcut` to Google Drive (`H:\My Drive`). RoutineHub is a separate publish step, not this repo's ship pipeline.

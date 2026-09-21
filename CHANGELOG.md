@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.1 (candidate, not published)
+
+- Facebook only: Reels/videos from the video player, photos from the public post embed, plus a 1 s x 60 fallback poll.
+- X, Bluesky, Mastodon and Pinterest are left exactly as 1.4. Their 1.5 on-device fast paths were removed after the X path broke share-sheet runs.
+
+## 1.5 (rolled back)
+
+- Added on-device fast paths for X, Bluesky, Mastodon and Pinterest, and the two Facebook fixes.
+- **Regression:** on a real device the X fast path made the shortcut ask for the link instead of using the shared post. Rolled back to 1.4 as version 1.4.1 on RoutineHub. The Facebook fixes are unaffected and return in 1.5.1.
+
 ## 1.5
 
 - **Facebook is fast now.** Reels and videos resolve from Facebook's own video player (`video/embed`) instead of a server-side job. Three requests, ~0.4–0.8 s, no polling, no sign-in.
