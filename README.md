@@ -50,7 +50,7 @@ Sign-in walls only apply to genuinely private posts now: if a post is private or
 
 Full **a-Shell** and **a-Shell mini** both work. The shortcut runs a-Shell mini first and falls back to full a-Shell only if mini left nothing behind, so install either one - not both required.
 
-Facebook, X, Bluesky, Mastodon, Pinterest and TikTok never touch a-Shell mini.
+Facebook, X, Bluesky, Mastodon, Pinterest and TikTok never touch either one.
 
 ## One-time permissions
 

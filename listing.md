@@ -12,7 +12,7 @@ If you have been paying rent on a button that literally anyone can make today wi
 
 ## Version notes
 
-Facebook reels and videos resolve on the phone now, straight from the Facebook video player - about half a second instead of waiting on a server queue - and Facebook photos save again. Photo links used to fail with an error the shortcut read as a login wall, which is why signing in never helped. X, Bluesky, Mastodon, Pinterest and everything else behave exactly as they did in 1.4.
+Facebook reels and videos resolve on the phone now, straight from the Facebook video player - about half a second instead of waiting on a server queue - and Facebook photos save again. Photo links used to fail with an error the shortcut read as a login wall, which is why signing in never helped. YouTube and Instagram run in either a-Shell mini or full a-Shell now. X, Bluesky, Mastodon, Pinterest and everything else behave exactly as they did in 1.4.
 
 ## Sites
 
@@ -20,7 +20,7 @@ Facebook reels and videos resolve on the phone now, straight from the Facebook v
 
 YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-YouTube and Instagram always go through yt-dlp in a-Shell mini. TikTok comes off the watermark when the source lets it. X, Bluesky, and Mastodon get a second try if the first extractor misses. The rest on that list go through the first extractor.
+YouTube and Instagram always go through yt-dlp in a-Shell mini or full a-Shell - either one works. TikTok comes off the watermark when the source lets it. X, Bluesky, and Mastodon get a second try if the first extractor misses. The rest on that list go through the first extractor.
 
 ## Version
 
@@ -36,7 +36,7 @@ You can copy a URL and run it from Shortcuts the same way
 
 ## Apps
 
-❕ Install **a-Shell mini** from the App Store before you share a YouTube or Instagram link. That is the app this shortcut calls. Full a-Shell is a different app and is not used.
+❕ Install **a-Shell mini** or **a-Shell** before you share a YouTube or Instagram link - either one works, the actions are the same.
 
 Safari is already on the phone. YouTube, Instagram, TikTok, and X are optional; use them when you already sign in there.
 
