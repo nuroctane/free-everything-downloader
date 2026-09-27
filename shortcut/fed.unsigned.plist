@@ -15,18 +15,19 @@
 				<string>3F0DA92D-911A-47B0-B1A6-40AB6C7DB68E</string>
 				<key>WFCommentActionText</key>
 				<string>FREE Media Downloader
-Version 1.5.1  (2026-09-21)
+Version 1.6  (2026-09-26)
 RoutineHub 26384. If the listing is newer than this number, update from there.
 
 Sites: YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-Facebook resolves on the phone in one request: videos and Reels from the video player, photos from the public post embed.
+Facebook and Threads public media resolve on the phone without a server job. Facebook videos and Reels come from the video player; photos come from the public post embed.
+Threads public videos and images come from the post page. Private or login-gated posts open Threads or the default browser with a clear retry instruction.
 
 YouTube and Instagram: yt-dlp in a-Shell mini. Video and photos go to Photos. Audio goes to Files.
 TikTok: no-watermark when the source lets it. X, Bluesky, Mastodon and Pinterest use the server extractor and the other free backends.
 Share a link. Save the file. No key. No paywall. No upgrade nag.
 First Photos, Files, and a-Shell prompts: approve once.
-A sign-in wall opens Safari or the app. Share again after.</string>
+If a post is private, the shortcut opens Threads when installed, or your default browser. Sign in there, then share the post again.</string>
 			</dict>
 		</dict>
 		<dict>
@@ -218,7 +219,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>1.5.1</string>
+										<string>1.6</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -1486,161 +1487,6 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>09E3C293-2DC1-437C-A00B-2B8D218F8E25</string>
-				<key>UUID</key>
-				<string>720E9C42-B2CC-4CF6-BB99-F1A429099095</string>
-				<key>WFCondition</key>
-				<integer>4</integer>
-				<key>WFConditionalActionString</key>
-				<string>missing</string>
-				<key>WFControlFlowMode</key>
-				<integer>0</integer>
-				<key>WFInput</key>
-				<dict>
-					<key>Type</key>
-					<string>Variable</string>
-					<key>Variable</key>
-					<dict>
-						<key>Value</key>
-						<dict>
-							<key>Type</key>
-							<string>Variable</string>
-							<key>VariableName</key>
-							<string>fedKind</string>
-						</dict>
-						<key>WFSerializationType</key>
-						<string>WFTextTokenAttachment</string>
-					</dict>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.ExecuteCommandIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>98F80151-987A-4C58-A47F-994511739A25</string>
-				<key>command</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>Type</key>
-						<string>Variable</string>
-						<key>VariableName</key>
-						<string>command</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>keepGoing</key>
-				<true/>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.waittoreturn</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>65774968-D851-4F79-ADC1-918654685AF8</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.GetFileIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>FullKindFile</string>
-				<key>UUID</key>
-				<string>DD67FADB-FB1E-480D-945C-7D9365178E04</string>
-				<key>fileName</key>
-				<string>fed-kind.txt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>0EAEA223-AF64-4B37-ADB1-DFA5F96322D0</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>FullKindFile</string>
-						<key>OutputUUID</key>
-						<string>DD67FADB-FB1E-480D-945C-7D9365178E04</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>fedKind</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.GetFileIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>FullExtFile</string>
-				<key>UUID</key>
-				<string>E5FC9862-A7E3-4C6E-AF59-B55971731F0D</string>
-				<key>fileName</key>
-				<string>fed-ext.txt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>B1355F5F-60C4-4A7B-A1D3-F415A45A383D</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>FullExtFile</string>
-						<key>OutputUUID</key>
-						<string>E5FC9862-A7E3-4C6E-AF59-B55971731F0D</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>fedExt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>09E3C293-2DC1-437C-A00B-2B8D218F8E25</string>
-				<key>UUID</key>
-				<string>290CFF7C-3C19-4514-89A0-76B3F9392BEA</string>
-				<key>WFControlFlowMode</key>
-				<integer>2</integer>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
 				<string>7DB1F34C-6759-40C5-A66F-3CEAB9407454</string>
 				<key>UUID</key>
 				<string>69A9117E-19CA-41F3-88BA-AE37CFE7D1D5</string>
@@ -2199,161 +2045,6 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				</dict>
 				<key>WFVariableName</key>
 				<string>fedExt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>1C2C2DA2-A1BA-4D44-9C96-B47819E64722</string>
-				<key>UUID</key>
-				<string>EA6420C4-227C-4466-AE6A-8EB63CB72ED6</string>
-				<key>WFCondition</key>
-				<integer>4</integer>
-				<key>WFConditionalActionString</key>
-				<string>missing</string>
-				<key>WFControlFlowMode</key>
-				<integer>0</integer>
-				<key>WFInput</key>
-				<dict>
-					<key>Type</key>
-					<string>Variable</string>
-					<key>Variable</key>
-					<dict>
-						<key>Value</key>
-						<dict>
-							<key>Type</key>
-							<string>Variable</string>
-							<key>VariableName</key>
-							<string>fedKind</string>
-						</dict>
-						<key>WFSerializationType</key>
-						<string>WFTextTokenAttachment</string>
-					</dict>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.ExecuteCommandIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>4F60522C-E6A5-44E5-8AA1-66D9407654CE</string>
-				<key>command</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>Type</key>
-						<string>Variable</string>
-						<key>VariableName</key>
-						<string>command</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>keepGoing</key>
-				<true/>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.waittoreturn</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>33204C10-5B92-4643-A75F-A26F98A6EC6C</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.GetFileIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>FullKindFile</string>
-				<key>UUID</key>
-				<string>32D613BD-D5D5-4210-83CB-2C798D00741E</string>
-				<key>fileName</key>
-				<string>fed-kind.txt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>21ED809C-1947-46F3-AB5B-B6A059C80290</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>FullKindFile</string>
-						<key>OutputUUID</key>
-						<string>32D613BD-D5D5-4210-83CB-2C798D00741E</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>fedKind</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.GetFileIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>FullExtFile</string>
-				<key>UUID</key>
-				<string>CE9BC379-E1AA-4DA6-ADC1-58A748B62A29</string>
-				<key>fileName</key>
-				<string>fed-ext.txt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>1F48E6C0-8F14-4A1A-A309-43DEB5AC98AB</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>FullExtFile</string>
-						<key>OutputUUID</key>
-						<string>CE9BC379-E1AA-4DA6-ADC1-58A748B62A29</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>fedExt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>1C2C2DA2-A1BA-4D44-9C96-B47819E64722</string>
-				<key>UUID</key>
-				<string>841B9576-7F58-4A43-9538-4A718F2D2B03</string>
-				<key>WFControlFlowMode</key>
-				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -2928,161 +2619,6 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>9A891926-9508-44FB-B10E-5F743BE6F81F</string>
-				<key>UUID</key>
-				<string>1C0A19B8-2F63-4881-AB02-AC89E7739F86</string>
-				<key>WFCondition</key>
-				<integer>4</integer>
-				<key>WFConditionalActionString</key>
-				<string>missing</string>
-				<key>WFControlFlowMode</key>
-				<integer>0</integer>
-				<key>WFInput</key>
-				<dict>
-					<key>Type</key>
-					<string>Variable</string>
-					<key>Variable</key>
-					<dict>
-						<key>Value</key>
-						<dict>
-							<key>Type</key>
-							<string>Variable</string>
-							<key>VariableName</key>
-							<string>fedKind</string>
-						</dict>
-						<key>WFSerializationType</key>
-						<string>WFTextTokenAttachment</string>
-					</dict>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.ExecuteCommandIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>0CA9EBDA-D91D-4F8A-86DC-B13C83C1D4D8</string>
-				<key>command</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>Type</key>
-						<string>Variable</string>
-						<key>VariableName</key>
-						<string>command</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>keepGoing</key>
-				<true/>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.waittoreturn</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>D9DEC364-B07B-4A1C-9E29-637E429B617D</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.GetFileIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>FullKindFile</string>
-				<key>UUID</key>
-				<string>DD0D345D-0BE9-43C4-B36C-1E07E84F0EC4</string>
-				<key>fileName</key>
-				<string>fed-kind.txt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>160622B7-DB11-4D6C-8FB3-3E3D6891C922</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>FullKindFile</string>
-						<key>OutputUUID</key>
-						<string>DD0D345D-0BE9-43C4-B36C-1E07E84F0EC4</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>fedKind</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell.GetFileIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>FullExtFile</string>
-				<key>UUID</key>
-				<string>47EC2CE8-D8A5-43E2-A543-FECE44BC1472</string>
-				<key>fileName</key>
-				<string>fed-ext.txt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>0AA352E6-5FE0-4062-985B-71C5D720D05C</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>FullExtFile</string>
-						<key>OutputUUID</key>
-						<string>47EC2CE8-D8A5-43E2-A543-FECE44BC1472</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>fedExt</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>9A891926-9508-44FB-B10E-5F743BE6F81F</string>
-				<key>UUID</key>
-				<string>A9947783-1067-43A0-82BA-4BD896DCBE84</string>
-				<key>WFControlFlowMode</key>
-				<integer>2</integer>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
 				<string>54F675F5-2318-49C5-BC35-008E23BC9AF7</string>
 				<key>UUID</key>
 				<string>381F40A0-3893-4324-BCC5-CEA829E00240</string>
@@ -3415,7 +2951,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>9A0C8755-2581-40C8-AE1B-0F991991FE86</string>
+				<string>07C3A829-8F6F-4DFA-9A3C-887C1BC20FF0</string>
 				<key>WFCommentActionText</key>
 				<string>Facebook: video and Reels come straight from the video player; photos come from the public post embed. One request each, no server job, no sign-in. Anything that misses falls through to the extractor below.</string>
 			</dict>
@@ -3426,9 +2962,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>4A5F4A0D-F85A-4A2C-BDCF-F5DDE80A5756</string>
+				<string>61B3FE61-F90C-400C-A913-C29D14567E1C</string>
 				<key>UUID</key>
-				<string>9B379993-94CC-4A6B-9064-8D5E4DD19664</string>
+				<string>4D2A03C6-3825-4D1A-9A68-C42CA64E5B3A</string>
 				<key>WFCondition</key>
 				<integer>8</integer>
 				<key>WFConditionalActionString</key>
@@ -3460,7 +2996,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>EFA34E92-5D81-4D32-A112-EBBA94D6AEC1</string>
+				<string>3A8903D8-5E5F-43E6-8299-573E6D4808D3</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3485,9 +3021,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>9788E711-4818-4396-A4C5-3C6B1AB8C0FE</string>
+				<string>5C5A946A-A902-4C25-B2CA-AA8ACE406D02</string>
 				<key>UUID</key>
-				<string>4FE5E76D-5FC0-421E-A3A2-D73FC9A42671</string>
+				<string>5EECC460-265C-4AF0-9C52-816C3DB631CA</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3503,7 +3039,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							<key>OutputName</key>
 							<string>FacebookVideoID</string>
 							<key>OutputUUID</key>
-							<string>EFA34E92-5D81-4D32-A112-EBBA94D6AEC1</string>
+							<string>3A8903D8-5E5F-43E6-8299-573E6D4808D3</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3519,7 +3055,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>2EE6E12E-D95D-4C36-A2E1-F91F57690A12</string>
+				<string>A89925D8-77A4-48CA-86CA-ED1208B1450A</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3531,7 +3067,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookVideoID</string>
 						<key>OutputUUID</key>
-						<string>EFA34E92-5D81-4D32-A112-EBBA94D6AEC1</string>
+						<string>3A8903D8-5E5F-43E6-8299-573E6D4808D3</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3548,7 +3084,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>CB8D0794-6CD5-4315-AAAE-2B91E9C313FF</string>
+				<string>DB355C6D-E94F-44DA-93FC-DF7899414CF2</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3599,7 +3135,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 									<key>OutputName</key>
 									<string>FacebookVideoNumber</string>
 									<key>OutputUUID</key>
-									<string>2EE6E12E-D95D-4C36-A2E1-F91F57690A12</string>
+									<string>A89925D8-77A4-48CA-86CA-ED1208B1450A</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -3621,7 +3157,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>39A28CFC-A0AD-4B2F-B327-002D37A6F1A5</string>
+				<string>C3B47539-EC72-4709-BFFA-05A980FF537D</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3629,7 +3165,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPlayer</string>
 						<key>OutputUUID</key>
-						<string>CB8D0794-6CD5-4315-AAAE-2B91E9C313FF</string>
+						<string>DB355C6D-E94F-44DA-93FC-DF7899414CF2</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3648,9 +3184,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>17BDF11B-CE6E-4150-A56A-922DBC5ADB6A</string>
+				<string>B0E0F7BE-0AD5-4D17-9AA3-ACD4DB5CA6CF</string>
 				<key>UUID</key>
-				<string>F1499CA5-F5D2-49B0-90CA-42BAFB3F4CE9</string>
+				<string>900C1AAA-6B18-430F-BB1D-8B063546F176</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3666,7 +3202,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							<key>OutputName</key>
 							<string>FacebookMediaURL</string>
 							<key>OutputUUID</key>
-							<string>39A28CFC-A0AD-4B2F-B327-002D37A6F1A5</string>
+							<string>C3B47539-EC72-4709-BFFA-05A980FF537D</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3682,7 +3218,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>FDD0A66A-38D9-4C8F-90CA-842746E40B45</string>
+				<string>000526D3-6C26-44E3-A55F-ADA7AE48C395</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3694,7 +3230,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaURL</string>
 						<key>OutputUUID</key>
-						<string>39A28CFC-A0AD-4B2F-B327-002D37A6F1A5</string>
+						<string>C3B47539-EC72-4709-BFFA-05A980FF537D</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3709,7 +3245,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>D79434B7-2C2A-4A78-8B26-435BD9799207</string>
+				<string>5A1429F4-AD9C-410F-AE97-DE5DAB6FB913</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3717,7 +3253,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaGroup</string>
 						<key>OutputUUID</key>
-						<string>FDD0A66A-38D9-4C8F-90CA-842746E40B45</string>
+						<string>000526D3-6C26-44E3-A55F-ADA7AE48C395</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3740,7 +3276,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>5DD82196-9303-4BD8-9682-2EDC1D244AA4</string>
+				<string>FE9B8E19-70C6-435A-AF60-4A3CD5DDE2CD</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3748,7 +3284,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaLink</string>
 						<key>OutputUUID</key>
-						<string>D79434B7-2C2A-4A78-8B26-435BD9799207</string>
+						<string>5A1429F4-AD9C-410F-AE97-DE5DAB6FB913</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3771,7 +3307,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>E88A18E6-43D0-474D-BA44-F595E8F94A4A</string>
+				<string>7FCF7262-F3BC-426B-823C-DB09FD213E3C</string>
 				<key>WFURL</key>
 				<dict>
 					<key>Value</key>
@@ -3779,7 +3315,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookMediaLink2</string>
 						<key>OutputUUID</key>
-						<string>5DD82196-9303-4BD8-9682-2EDC1D244AA4</string>
+						<string>FE9B8E19-70C6-435A-AF60-4A3CD5DDE2CD</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3794,7 +3330,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>F054E58D-098F-42B0-AAB3-E38435AFC946</string>
+				<string>D9F65E67-0184-49FC-A959-04424BD5D82F</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -3805,7 +3341,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>8E850F20-4AFC-40F8-96E4-1E9AEFD6E51B</string>
+				<string>548E07D9-3614-4E9F-887E-16B308E91B31</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -3824,7 +3360,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>497E8E77-8907-49CB-8454-A795D5921C78</string>
+				<string>3521C541-F7EE-43C3-8444-0031E1B4E738</string>
 			</dict>
 		</dict>
 		<dict>
@@ -3833,9 +3369,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>17BDF11B-CE6E-4150-A56A-922DBC5ADB6A</string>
+				<string>B0E0F7BE-0AD5-4D17-9AA3-ACD4DB5CA6CF</string>
 				<key>UUID</key>
-				<string>E3ACAC76-FB9E-44FD-8332-84AC110ABD0B</string>
+				<string>1141C3E8-98E6-4368-8104-143ED182ACEC</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3846,9 +3382,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>9788E711-4818-4396-A4C5-3C6B1AB8C0FE</string>
+				<string>5C5A946A-A902-4C25-B2CA-AA8ACE406D02</string>
 				<key>UUID</key>
-				<string>E9EEC486-3F46-4646-B428-C07AC37CA590</string>
+				<string>C144A009-418F-4D8B-9578-A94471C8E1C4</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3859,7 +3395,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>BC279D2C-047D-4004-BD30-E222B5CC3324</string>
+				<string>5794CB79-4453-45E2-941D-00D3044DC13D</string>
 				<key>WFEncodeMode</key>
 				<string>Encode</string>
 				<key>WFInput</key>
@@ -3884,7 +3420,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>0A1D651F-9540-4045-A5EB-F8664E17FF70</string>
+				<string>8958AD76-04BB-4297-871C-ABFCDE399F06</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3935,7 +3471,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 									<key>OutputName</key>
 									<string>URL Encoded Text</string>
 									<key>OutputUUID</key>
-									<string>BC279D2C-047D-4004-BD30-E222B5CC3324</string>
+									<string>5794CB79-4453-45E2-941D-00D3044DC13D</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -3957,7 +3493,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>5ADAF276-6666-47F6-B82A-1F42A355FE08</string>
+				<string>EE8B69F3-CCD9-464F-9F55-FF70858C571C</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3965,7 +3501,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookEmbed</string>
 						<key>OutputUUID</key>
-						<string>0A1D651F-9540-4045-A5EB-F8664E17FF70</string>
+						<string>8958AD76-04BB-4297-871C-ABFCDE399F06</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3984,9 +3520,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>042085D9-D59D-4ECD-BDDD-9D0369161AEB</string>
+				<string>C0FE0FD6-1915-4D50-AA8E-0CA991C18341</string>
 				<key>UUID</key>
-				<string>A90C612D-A89E-4D12-840F-883889230542</string>
+				<string>DD84B63D-9280-4F4D-B0EC-A3B6E0BCEAE9</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -4002,7 +3538,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 							<key>OutputName</key>
 							<string>FacebookPhotos</string>
 							<key>OutputUUID</key>
-							<string>5ADAF276-6666-47F6-B82A-1F42A355FE08</string>
+							<string>EE8B69F3-CCD9-464F-9F55-FF70858C571C</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -4018,9 +3554,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>7F153C31-FFC3-4942-AC93-C6A5580F342D</string>
+				<string>30ABB323-E433-451C-8659-1416BA9019AB</string>
 				<key>UUID</key>
-				<string>0E4EAF4C-2395-4CB5-A66D-80D2AB2FFB4B</string>
+				<string>2F284626-3378-4C96-82CE-F441C70EBA96</string>
 				<key>WFControlFlowMode</key>
 				<integer>0</integer>
 				<key>WFInput</key>
@@ -4030,7 +3566,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPhotos</string>
 						<key>OutputUUID</key>
-						<string>5ADAF276-6666-47F6-B82A-1F42A355FE08</string>
+						<string>EE8B69F3-CCD9-464F-9F55-FF70858C571C</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4045,7 +3581,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>198C50C1-371A-49C3-A5EB-8F8B67E72D70</string>
+				<string>0E6A4236-0F60-4322-94CD-46873840E16F</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -4070,7 +3606,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>784EFC93-B7B1-4BDC-844A-481722BAC9D8</string>
+				<string>C1B224EB-13CD-452C-B3FF-59938E6B9043</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4078,7 +3614,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPhotoURL</string>
 						<key>OutputUUID</key>
-						<string>198C50C1-371A-49C3-A5EB-8F8B67E72D70</string>
+						<string>0E6A4236-0F60-4322-94CD-46873840E16F</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4103,7 +3639,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>A90249A4-5934-41FA-BDCB-DB8D1EA48FEB</string>
+				<string>6416EC44-23BA-499D-8837-03A73553B234</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -4148,7 +3684,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 						<key>OutputName</key>
 						<string>FacebookPhotoLink</string>
 						<key>OutputUUID</key>
-						<string>784EFC93-B7B1-4BDC-844A-481722BAC9D8</string>
+						<string>C1B224EB-13CD-452C-B3FF-59938E6B9043</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4163,7 +3699,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>A25D0833-4CFB-4A26-B8C1-0EFC0CA2DB38</string>
+				<string>8F11B23C-ADEB-417D-945D-E418D57704E7</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -4174,9 +3710,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>7F153C31-FFC3-4942-AC93-C6A5580F342D</string>
+				<string>30ABB323-E433-451C-8659-1416BA9019AB</string>
 				<key>UUID</key>
-				<string>4CD078CA-1957-4EA0-9C85-BA5F23A871A5</string>
+				<string>89083CAE-6D42-40EF-9688-FAF668A20827</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -4187,7 +3723,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>37180DED-6399-465A-B6E2-816599369D48</string>
+				<string>32288579-18A1-4CA6-A764-44C16DB8ED95</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -4206,7 +3742,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>FBEBAE15-D29C-4FEF-9B46-A63C752512B7</string>
+				<string>75A6B932-73F9-4537-8FA8-B1BA554FF483</string>
 			</dict>
 		</dict>
 		<dict>
@@ -4215,9 +3751,9 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>042085D9-D59D-4ECD-BDDD-9D0369161AEB</string>
+				<string>C0FE0FD6-1915-4D50-AA8E-0CA991C18341</string>
 				<key>UUID</key>
-				<string>C43D23D5-6AEA-4DC5-ACF1-F71C2D836573</string>
+				<string>FD98C6D6-4A88-44EF-908F-D40E534E8C4C</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -4228,9 +3764,1127 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>4A5F4A0D-F85A-4A2C-BDCF-F5DDE80A5756</string>
+				<string>61B3FE61-F90C-400C-A913-C29D14567E1C</string>
 				<key>UUID</key>
-				<string>CE36495B-D6B3-4F3C-970D-FDF58043410D</string>
+				<string>102056CB-4DC6-4C3B-BDC6-210245BDEA20</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.comment</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>18EB722D-3678-4C99-94B4-C82637799D4B</string>
+				<key>WFCommentActionText</key>
+				<string>Threads: public posts use crawler-rendered page data and signed CDN URLs. Private or login-gated posts open Threads or the default browser.</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.match</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>5DB8D5F5-CA58-4D33-BCCB-5F934A0ECB9E</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>Type</key>
+						<string>Variable</string>
+						<key>VariableName</key>
+						<string>userLink</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFMatchTextCaseSensitive</key>
+				<false/>
+				<key>WFMatchTextPattern</key>
+				<string>(?:^|//)(?:www\.)?threads\.(?:net|com)/(?:@[^/\s]+/post/|t/)([A-Za-z0-9_-]+)</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>9DF2DD0D-7086-4803-83E3-017711E889AD</string>
+				<key>UUID</key>
+				<string>F250B458-E084-4349-A6BA-5C5B8E770C6A</string>
+				<key>WFCondition</key>
+				<integer>100</integer>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>OutputName</key>
+							<string>ThreadsPostID</string>
+							<key>OutputUUID</key>
+							<string>5DB8D5F5-CA58-4D33-BCCB-5F934A0ECB9E</string>
+							<key>Type</key>
+							<string>ActionOutput</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.match.getgroup</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>D91FC193-A07F-4ED9-B8D2-E65D3F51D9C8</string>
+				<key>WFGetGroupType</key>
+				<string>Group At Index</string>
+				<key>WFGroupIndex</key>
+				<integer>1</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsPostID</string>
+						<key>OutputUUID</key>
+						<string>5DB8D5F5-CA58-4D33-BCCB-5F934A0ECB9E</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.downloadurl</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>ShowHeaders</key>
+				<true/>
+				<key>UUID</key>
+				<string>2948EFB0-A1D3-488E-93AD-CFDB7B0E2F10</string>
+				<key>WFHTTPHeaders</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>WFDictionaryFieldValueItems</key>
+						<array>
+							<dict>
+								<key>WFItemType</key>
+								<integer>0</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>User-Agent</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFDictionaryFieldValue</string>
+				</dict>
+				<key>WFHTTPMethod</key>
+				<string>GET</string>
+				<key>WFURL</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>Type</key>
+						<string>Variable</string>
+						<key>VariableName</key>
+						<string>userLink</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.match</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>C6858070-EAE9-44B7-886E-D4AE6DDE9D72</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsPostPage</string>
+						<key>OutputUUID</key>
+						<string>2948EFB0-A1D3-488E-93AD-CFDB7B0E2F10</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFMatchTextCaseSensitive</key>
+				<false/>
+				<key>WFMatchTextPattern</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{8, 1}</key>
+							<dict>
+								<key>Value</key>
+								<dict>
+									<key>OutputName</key>
+									<string>ThreadsPostCode</string>
+									<key>OutputUUID</key>
+									<string>D91FC193-A07F-4ED9-B8D2-E65D3F51D9C8</string>
+									<key>Type</key>
+									<string>ActionOutput</string>
+								</dict>
+								<key>WFSerializationType</key>
+								<string>WFTextTokenAttachment</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>"code":"￼"(?:(?!"code":).){0,50000}?"video_versions":\[\{(?:(?!"url":).){0,500}?"url":"(https:[^"]+?\.mp4(?:\?[^"]*)?)"</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>674C384F-5841-4AAF-9989-5E68B9889718</string>
+				<key>UUID</key>
+				<string>3A32551B-8C58-4F15-ADA1-325AAB8B451E</string>
+				<key>WFCondition</key>
+				<integer>100</integer>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>OutputName</key>
+							<string>ThreadsVideoURLs</string>
+							<key>OutputUUID</key>
+							<string>C6858070-EAE9-44B7-886E-D4AE6DDE9D72</string>
+							<key>Type</key>
+							<string>ActionOutput</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.repeat.each</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>1CFF0B03-B771-405F-A415-C216F27AFDFD</string>
+				<key>UUID</key>
+				<string>75FCEBEB-B145-4FD6-A7BB-4AA13A4C26E5</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsVideoURLs</string>
+						<key>OutputUUID</key>
+						<string>C6858070-EAE9-44B7-886E-D4AE6DDE9D72</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.match.getgroup</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>733838CE-1131-4E3D-B7AF-02E4D7F10AC9</string>
+				<key>WFGetGroupType</key>
+				<string>Group At Index</string>
+				<key>WFGroupIndex</key>
+				<integer>1</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>Type</key>
+						<string>Variable</string>
+						<key>VariableName</key>
+						<string>Repeat Item</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>8BADB25B-26A2-405D-92CA-689942CE7EA6</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsVideoURL</string>
+						<key>OutputUUID</key>
+						<string>733838CE-1131-4E3D-B7AF-02E4D7F10AC9</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\/</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>/</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>2E3D6800-914D-4B09-B28E-1AC61070C48C</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsVideoURLSlashes</string>
+						<key>OutputUUID</key>
+						<string>8BADB25B-26A2-405D-92CA-689942CE7EA6</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u002F</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>/</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>FAB13071-EB77-42D3-AD44-ED64F5A1C8FF</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsVideoURLUnicodeSlashes</string>
+						<key>OutputUUID</key>
+						<string>2E3D6800-914D-4B09-B28E-1AC61070C48C</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u0026</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>&amp;</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>600DDDF2-2A74-4452-90A5-CC9832239795</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsVideoURLAmpersands</string>
+						<key>OutputUUID</key>
+						<string>FAB13071-EB77-42D3-AD44-ED64F5A1C8FF</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u003D</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>=</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>24ECCDC3-7999-4C6E-AC42-73A578D07B1E</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsVideoURLEquals</string>
+						<key>OutputUUID</key>
+						<string>600DDDF2-2A74-4452-90A5-CC9832239795</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u0025</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>%</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.downloadurl</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>ShowHeaders</key>
+				<true/>
+				<key>UUID</key>
+				<string>E1CA8F34-85AF-4538-8AE8-21626300D91A</string>
+				<key>WFHTTPHeaders</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>WFDictionaryFieldValueItems</key>
+						<array>
+							<dict>
+								<key>WFItemType</key>
+								<integer>0</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>Referer</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>https://www.threads.com/</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFDictionaryFieldValue</string>
+				</dict>
+				<key>WFURL</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsVideoURLPercent</string>
+						<key>OutputUUID</key>
+						<string>24ECCDC3-7999-4C6E-AC42-73A578D07B1E</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.savetocameraroll</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>89192389-7FC5-4F09-B053-CCFE645906C6</string>
+				<key>WFPhotoAlbumName</key>
+				<string></string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.repeat.each</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>1CFF0B03-B771-405F-A415-C216F27AFDFD</string>
+				<key>UUID</key>
+				<string>6D7B8FB2-AE41-4C20-BDB1-905009F69A06</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>B9EB2301-27F4-47AD-8D2E-1F715623D01E</string>
+				<key>WFNotificationActionBody</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>string</key>
+						<string>Saved from Threads.</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.exit</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>C833F551-A5D2-4BAD-85AD-4FFD644F6650</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>674C384F-5841-4AAF-9989-5E68B9889718</string>
+				<key>UUID</key>
+				<string>055A63DC-D588-4FB6-A795-4A669EBC5AD0</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.match</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>F4A4C7DC-0459-430A-9A13-DA484E09801E</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsPostPage</string>
+						<key>OutputUUID</key>
+						<string>2948EFB0-A1D3-488E-93AD-CFDB7B0E2F10</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFMatchTextCaseSensitive</key>
+				<false/>
+				<key>WFMatchTextPattern</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{8, 1}</key>
+							<dict>
+								<key>Value</key>
+								<dict>
+									<key>OutputName</key>
+									<string>ThreadsPostCode</string>
+									<key>OutputUUID</key>
+									<string>D91FC193-A07F-4ED9-B8D2-E65D3F51D9C8</string>
+									<key>Type</key>
+									<string>ActionOutput</string>
+								</dict>
+								<key>WFSerializationType</key>
+								<string>WFTextTokenAttachment</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>"code":"￼"(?:(?!"code":).){0,50000}?"image_versions2":\{"candidates":\[\{(?:(?!"url":).){0,500}?"url":"(https:[^"]+)"</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>E5E425B0-6292-4F29-91AA-48BDBFC30436</string>
+				<key>UUID</key>
+				<string>32BCAD84-0F13-4160-8203-D42487982C51</string>
+				<key>WFCondition</key>
+				<integer>100</integer>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>OutputName</key>
+							<string>ThreadsImageURLs</string>
+							<key>OutputUUID</key>
+							<string>F4A4C7DC-0459-430A-9A13-DA484E09801E</string>
+							<key>Type</key>
+							<string>ActionOutput</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.repeat.each</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>2534BE85-B7DF-4728-8EBD-5E4B4F31AAE1</string>
+				<key>UUID</key>
+				<string>B9A6F35B-4EDB-487B-89DF-CD57C2062653</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsImageURLs</string>
+						<key>OutputUUID</key>
+						<string>F4A4C7DC-0459-430A-9A13-DA484E09801E</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.match.getgroup</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>97114EA4-1296-4B4F-B3E0-C1C93E93793E</string>
+				<key>WFGetGroupType</key>
+				<string>Group At Index</string>
+				<key>WFGroupIndex</key>
+				<integer>1</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>Type</key>
+						<string>Variable</string>
+						<key>VariableName</key>
+						<string>Repeat Item</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>61D0A06A-AB99-47B6-B8F1-A139DC4545CF</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsImageURL</string>
+						<key>OutputUUID</key>
+						<string>97114EA4-1296-4B4F-B3E0-C1C93E93793E</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\/</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>/</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>BC6F8C7B-12DA-4763-AA5C-D03406C6282C</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsImageURLSlashes</string>
+						<key>OutputUUID</key>
+						<string>61D0A06A-AB99-47B6-B8F1-A139DC4545CF</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u002F</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>/</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>E664CF96-1A0C-4E07-98FB-71F05EF689F8</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsImageURLUnicodeSlashes</string>
+						<key>OutputUUID</key>
+						<string>BC6F8C7B-12DA-4763-AA5C-D03406C6282C</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u0026</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>&amp;</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>7FBEFD81-8043-47B1-BD4D-5AB3B0F24379</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsImageURLAmpersands</string>
+						<key>OutputUUID</key>
+						<string>E664CF96-1A0C-4E07-98FB-71F05EF689F8</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u003D</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>=</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.text.replace</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>F5D12F6A-569C-4425-B33A-C39EC79429C0</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsImageURLEquals</string>
+						<key>OutputUUID</key>
+						<string>7FBEFD81-8043-47B1-BD4D-5AB3B0F24379</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
+				<key>WFReplaceTextFind</key>
+				<string>\u0025</string>
+				<key>WFReplaceTextRegularExpression</key>
+				<false/>
+				<key>WFReplaceTextReplace</key>
+				<string>%</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.downloadurl</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>ShowHeaders</key>
+				<true/>
+				<key>UUID</key>
+				<string>007809B4-2F20-4A8B-A3C3-39B25DDC6BFA</string>
+				<key>WFHTTPHeaders</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>WFDictionaryFieldValueItems</key>
+						<array>
+							<dict>
+								<key>WFItemType</key>
+								<integer>0</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>Referer</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>https://www.threads.com/</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFDictionaryFieldValue</string>
+				</dict>
+				<key>WFURL</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>ThreadsImageURLPercent</string>
+						<key>OutputUUID</key>
+						<string>F5D12F6A-569C-4425-B33A-C39EC79429C0</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.savetocameraroll</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>6D4E8CA0-97F9-4717-99BF-43166C5C0796</string>
+				<key>WFPhotoAlbumName</key>
+				<string></string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.repeat.each</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>2534BE85-B7DF-4728-8EBD-5E4B4F31AAE1</string>
+				<key>UUID</key>
+				<string>4BF061A1-E547-408A-A659-F1CACF2E7FBD</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>285E5F97-B753-4916-9611-EE20D654172E</string>
+				<key>WFNotificationActionBody</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>string</key>
+						<string>Saved from Threads.</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.exit</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>7D318CC5-B007-4C14-9D3D-9E32A545DD17</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>E5E425B0-6292-4F29-91AA-48BDBFC30436</string>
+				<key>UUID</key>
+				<string>A7D152BF-08C8-48B6-A0E0-993E99726455</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>4E8FD829-E185-497D-B160-06C105B5C72C</string>
+				<key>WFNotificationActionBody</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>string</key>
+						<string>Threads hid this post from public download. Opening Threads or your default browser. Sign in if asked, then share the post again.</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.openurl</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>6A162B1C-CC7B-4355-AC15-AA36C94EF477</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>Aggrandizements</key>
+						<array>
+							<dict>
+								<key>CoercionItemClass</key>
+								<string>WFURLContentItem</string>
+								<key>Type</key>
+								<string>WFCoercionVariableAggrandizement</string>
+							</dict>
+						</array>
+						<key>Type</key>
+						<string>Variable</string>
+						<key>VariableName</key>
+						<string>userLink</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.waittoreturn</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>C4ABEA14-3CBF-47A5-BCC9-162EC8B28275</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>543DACF4-D927-4F5E-A992-CE7B238FEC2C</string>
+				<key>WFNotificationActionBody</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>string</key>
+						<string>Share the visible Threads post to FREE Media Downloader again.</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.exit</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>CBC29B90-9BE0-4556-AB62-5EA759053D43</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>E5E425B0-6292-4F29-91AA-48BDBFC30436</string>
+				<key>UUID</key>
+				<string>197259F6-E192-4CEF-9FAB-2C144ABC104F</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>674C384F-5841-4AAF-9989-5E68B9889718</string>
+				<key>UUID</key>
+				<string>AB667C99-F8D5-4E27-BDBD-088D20A618C9</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>9DF2DD0D-7086-4803-83E3-017711E889AD</string>
+				<key>UUID</key>
+				<string>57561A1B-718B-4837-A165-698C745F8720</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -11917,7 +12571,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>UUID</key>
 				<string>7C0DB421-F6AD-4797-8E8D-40251166D6D9</string>
 				<key>WFCommentActionText</key>
-				<string>Session needed: open the post in Safari or the native app. Sign in. Come back. Share the post again.</string>
+				<string>Session needed: opening the post in its app or your default browser. Sign in there, then share the post again.</string>
 			</dict>
 		</dict>
 		<dict>
@@ -11928,7 +12582,7 @@ A sign-in wall opens Safari or the app. Share again after.</string>
 				<key>UUID</key>
 				<string>F113D37D-F272-412D-85C1-0218FA50F60E</string>
 				<key>WFNotificationActionBody</key>
-				<string>This post wants a sign-in. Opening it now. Sign in, then share it again.</string>
+				<string>This post wants a sign-in. Opening the post in its app or your default browser now. Sign in there, then share it again.</string>
 				<key>WFNotificationActionTitle</key>
 				<string>FREE Media Downloader</string>
 			</dict>

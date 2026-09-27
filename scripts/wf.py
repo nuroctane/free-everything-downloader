@@ -194,6 +194,19 @@ class Graph:
                    {"WFNotificationActionBody": tstr(*parts)}, "Show Notification")
         return self._push(a)
 
+    def open_url(self, src):
+        """Open a URL through iOS universal-link routing.
+
+        A Threads/Facebook/etc. URL opens the native app when installed and
+        otherwise falls through to the user's default browser. This keeps the
+        shortcut from assuming Safari exists.
+        """
+        return self._push(Action("is.workflow.actions.openurl", {"WFInput": src}, "Open URL"))
+
+    def wait_to_return(self):
+        """Pause until the app/browser opened by ``open_url`` returns."""
+        return self._push(Action("is.workflow.actions.waittoreturn", {}, "Wait to Return"))
+
     def stop(self):
         return self._push(Action("is.workflow.actions.exit", {}, "Stop"))
 

@@ -1,12 +1,12 @@
 # FREE Media Downloader
 
-> **Status 2026-09-21: RoutineHub serves 1.4.1 (the 1.4 build).**
+> **Status 2026-09-26: RoutineHub serves 1.4.1 (the 1.4 build).**
 > 1.5 added four on-device fast paths (X, Bluesky, Mastodon, Pinterest) on top of
 > the Facebook fixes. The X one regressed share-sheet runs on device - the
 > shortcut asked for the link instead of taking the shared post - so 1.5 was
 > rolled back to the last known-good build. `shortcut/fed.unsigned.plist` in this
 > commit is the 1.4 graph; the Facebook-only candidate is reproducible with
-> `python -X utf8 scripts/build.py --base <1.4 plist> --version 1.5.1 --sites facebook --out shortcut/fed.unsigned.plist`.
+> `python -X utf8 scripts/build.py --base <1.4 plist> --version 1.6 --sites facebook,threads --out shortcut/fed.unsigned.plist`.
 > Anyone re-adding a fast path must test it from the share sheet on a real
 > device before it ships.
 
@@ -15,7 +15,7 @@ iOS Shortcut. Share a link. Save the file. No key. No paywall. No checkout.
 
 Canonical unsigned source: `shortcut/fed.unsigned.plist`. HubSign writes the `.shortcut` to Google Drive (`H:\My Drive`). RoutineHub is a separate publish step, not this repo's ship pipeline.
 
-Version **1.5** lives in the first comment inside the shortcut. Open it in the Shortcuts app to see it. Update from RoutineHub when that page is newer.
+The working tree contains candidate **1.6** output. RoutineHub still serves 1.4.1 until a fresh device-exported iCloud link is published. Open the shortcut in the Shortcuts app to see the version in its first comment.
 
 ## What it does
 
@@ -32,19 +32,20 @@ Most sites now resolve **on the phone in one or two requests**. Only a miss fall
 | **TikTok** | tikwm — no-watermark file when the source lets it | ~0.1–0.6 s |
 | **YouTube / YouTube Music** | yt-dlp in **a-Shell mini** — video to Camera Roll, audio to Files | app switch |
 | **Instagram** | yt-dlp in a-Shell mini — original file, no watermark overlay | app switch |
-| **Threads, Reddit, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud** | server extractor, then the other free backends | ~1–8 s |
+| **Threads** | public video/image posts resolve from the post page; private posts open the Threads app or your default browser | ~1–3 s |
+| **Reddit, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud** | server extractor, then the other free backends | ~1–8 s |
 
 Video and photos go to Camera Roll. Audio goes to Files. No album.
 
-Sign-in walls only apply to genuinely private posts now: if a post is private or age-restricted the shortcut opens it in Safari (or the native app), you sign in, you share it again.
+Sign-in walls only apply to genuinely private posts now: if a post is private or age-restricted the shortcut opens it in the native app when installed, or your default browser. Sign in there, then share it again.
 
 ## Apps you need
 
 | App | Why |
 | --- | --- |
 | **a-Shell mini** or **a-Shell** (either one) | YouTube and Instagram only. Same actions in both apps. [a-Shell mini](https://apps.apple.com/app/a-shell-mini/id1543537943) · [a-Shell](https://apps.apple.com/app/a-shell/id1473805438) |
-| **Safari** | Built in. Used when a post wants a session. |
-| **YouTube / Instagram / TikTok / X** (optional) | Sign in there if you already use those apps. The share sheet can hand the URL to the app. |
+| **Your default browser** | Used only when a post wants a session and no installed app claims its universal link. |
+| **YouTube / Instagram / TikTok / X / Threads** (optional) | Sign in there if you already use those apps. The share sheet can hand the URL to the app. |
 | **Photos** | Video and images. Save to Camera Roll. No album. |
 | **Files** | Audio only. |
 

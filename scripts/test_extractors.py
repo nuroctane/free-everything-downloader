@@ -22,6 +22,7 @@ import urllib.parse
 import urllib.request
 
 CRAWLER_UA = "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
+THREADS_UA = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 MOBILE_UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
              "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
 
@@ -272,6 +273,42 @@ def pinterest(url):
     return []
 
 
+# ------------------------------------------------------------------- Threads
+THREADS_ID = re.compile(
+    r"(?:^|//)(?:www\.)?threads\.(?:net|com)/"
+    r"(?:@[^/\s]+/post/|t/)([A-Za-z0-9_-]+)"
+)
+
+
+def _threads_unescape(url):
+    return (url.replace(r"\/", "/")
+               .replace(r"\u002F", "/")
+               .replace(r"\u0026", "&")
+               .replace(r"\u003D", "=")
+               .replace(r"\u0025", "%"))
+
+
+def _threads_media_from_html(html, code):
+    """Apply the same exact-code media selection used by the shortcut."""
+    code = re.escape(code)
+    boundary = r'"code":"' + code + r'"(?:(?!"code":).){0,50000}?'
+    vp = boundary + r'"video_versions":\[\{(?:(?!"url":).){0,500}?"url":"(https:[^"]+?\.mp4(?:\?[^"]*)?)"'
+    out = [_threads_unescape(x) for x in re.findall(vp, html)]
+    if out:
+        return out
+    ip = boundary + r'"image_versions2":\{"candidates":\[\{(?:(?!"url":).){0,500}?"url":"(https:[^"]+)"'
+    return [_threads_unescape(x) for x in re.findall(ip, html)]
+
+
+def threads(url):
+    """Public Threads post: crawler page JSON -> signed CDN media URL."""
+    m = THREADS_ID.search(url)
+    if not m:
+        return []
+    html = get(url, ua=THREADS_UA)["text"] or ""
+    return _threads_media_from_html(html, m.group(1))
+
+
 RECIPES = {
     "fb": ("Facebook", fb),
     "x": ("X / Twitter", x_media),
@@ -279,6 +316,7 @@ RECIPES = {
     "mastodon": ("Mastodon", mastodon),
     "bluesky": ("Bluesky", bluesky),
     "pinterest": ("Pinterest", pinterest),
+    "threads": ("Threads", threads),
 }
 
 # (recipe, label, url, required)
@@ -300,6 +338,7 @@ CASES = [
     ("bluesky", "bluesky video", "https://bsky.app/profile/jay.bsky.team/post/3mvorbgjaks24", True),
     ("bluesky", "bluesky handle-as-did", "https://bsky.app/profile/bsky.app/post/3mv3shqdfuc2e", False),
     ("pinterest", "pin (image)", "https://www.pinterest.com/pin/93660867247422713/", True),
+    ("threads", "public video", "https://www.threads.com/@kfury/post/DaGcWDwj8tW", True),
 ]
 
 
@@ -323,6 +362,7 @@ def check_regexes(plist_path):
     fbid = one("reels?")
     fbphoto = one("_1p6f")
     mast = one("users/")
+    threadsp = one("threads\\.")
 
     cases = [
         ("X plain", xp, "https://x.com/NASA/status/1732824684683784516", True),
@@ -361,6 +401,9 @@ def check_regexes(plist_path):
         ("mastodon web", mast, "https://mastodon.social/web/statuses/117303445557305921", True),
         ("mastodon short id REJECT", mast, "https://mastodon.social/@user/12345", False),
         ("threads REJECT", mast, "https://www.threads.net/@user/post/ABCdef123", False),
+        ("threads net", threadsp, "https://www.threads.net/@user/post/Cabc", True),
+        ("threads com", threadsp, "https://www.threads.com/t/Cabc", True),
+        ("threads lookalike REJECT", threadsp, "https://notthreads.com/@user/post/Cabc", False),
         ("tiktok REJECT", mast, "https://www.tiktok.com/@scout2015/video/6718335390845095173", False),
         ("tiktok trailing digits REJECT", mast, "https://www.tiktok.com/@user123456/video/6718335390845095173", False),
     ]
@@ -376,6 +419,13 @@ def check_regexes(plist_path):
             print("REGEX FAIL %-26s want=%s got=%s  %s" % (label, want, got, url))
     print("regex matrix: %d cases, %d failures, %d skipped (pattern absent from this build)"
           % (len(cases), fails, skipped))
+    image_fixture = (
+        '"code":"ABC"..."image_versions2":{"candidates":['
+        '{"width":100,"height":100,"url":"https:\\/\\/cdn.example\\/a.jpg?x=1\\u0026y=2"}]}'
+    )
+    if not _threads_media_from_html(image_fixture, "ABC"):
+        print("REGEX FAIL Threads image fixture did not produce a media URL")
+        fails += 1
     # Shortcuts Match Text is ICU, not Python. A pattern can pass re.search and
     # still capture nothing on device (the Reel id regex did exactly that).
     icu = check_icu(plist_path)
@@ -412,6 +462,7 @@ process.exit(fails ? 1 : 0);
         "hd_src": ("fb embed", r'"hd_src":"https:\/\/video.example\/a.mp4"'),
         "_1p6f": ("fb photo html",
                   '<img class="_1p6f _1p6g img" src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1426466698848702"'),
+        "threads\\.": ("threads post", "https://www.threads.com/@user/post/Cabc"),
     }
     for p in pats:
         for marker, (label, url) in samples.items():

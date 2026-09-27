@@ -58,10 +58,12 @@ REQUIRED = {
 # parameter types Apple writes for the actions this repo generates that the 1.4
 # base does not contain
 EXPECTED_TYPES = {
-    "WFMatchTextPattern": str, "WFMatchTextCaseSensitive": bool,
-    "WFGroupIndex": int, "WFGetGroupType": str, "WFReplaceTextFind": str,
-    "WFReplaceTextReplace": str, "WFReplaceTextCaseSensitive": bool,
-    "WFReplaceTextRegularExpression": bool,
+    # A literal pattern is a string; a pattern assembled from an action output
+    # is Apple's WFTextTokenString dictionary. Both are valid on device.
+    "WFMatchTextPattern": (str, dict), "WFMatchTextCaseSensitive": (bool,),
+    "WFGroupIndex": (int,), "WFGetGroupType": (str,), "WFReplaceTextFind": (str,),
+    "WFReplaceTextReplace": (str,), "WFReplaceTextCaseSensitive": (bool,),
+    "WFReplaceTextRegularExpression": (bool,),
 }
 MAGIC_VARS = {"Repeat Item", "Repeat Item 2", "CurrentDate", "DeviceDetails",
               "Clipboard", "Repeat Index", "ExtensionInput", "Shortcut Input",
@@ -168,9 +170,10 @@ def audit_types(acts, base_acts, problems):
                     problems.append(("B", "%s.%s is %s, base uses %s"
                                      % (ident.split('.')[-1], k, tn,
                                         "/".join(sorted(base[(ident, k)])))))
-            elif k in EXPECTED_TYPES and tn != EXPECTED_TYPES[k].__name__:
+            elif k in EXPECTED_TYPES and not isinstance(v, EXPECTED_TYPES[k]):
+                expected = "/".join(t.__name__ for t in EXPECTED_TYPES[k])
                 problems.append(("B", "%s.%s is %s, expected %s"
-                                 % (ident.split('.')[-1], k, tn, EXPECTED_TYPES[k].__name__)))
+                                 % (ident.split('.')[-1], k, tn, expected)))
     # the specific regression: a string in the Wait field
     for a in acts:
         if a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.delay":
@@ -244,7 +247,7 @@ ROUTES = [
                      "https://twitter.com/u/status/123456789/photo/1",
                      "https://mobile.twitter.com/u/status/123456789"], "server extractor"),
     ("Reddit", ["https://www.reddit.com/r/x/comments/abc/title/", "https://redd.it/abc"], "server extractor"),
-    ("Threads", ["https://www.threads.net/@u/post/Cabc", "https://www.threads.com/t/Cabc"], "server extractor"),
+    ("Threads", ["https://www.threads.net/@u/post/Cabc", "https://www.threads.com/t/Cabc"], "threads"),
     ("Pinterest", ["https://www.pinterest.com/pin/93660867247422713/", "https://pin.it/abcDEF"], "server extractor"),
     ("Bluesky", ["https://bsky.app/profile/jay.bsky.team/post/3mvvdpby3x22t"], "server extractor"),
     ("Mastodon", ["https://mastodon.social/@mastodon/117303445557305921"], "server extractor"),
@@ -268,7 +271,7 @@ SITE_GUARDS = {
     "Pinterest": ["pin_ids=", ["pinterest.", "pin.it/"]],
     "Bluesky": ["getPostThread", ["bsky.app"]],
     "Mastodon": ["api/v1/statuses/", ["/status/", "/statuses/"]],
-    "Reddit": None, "Threads": None, "Vimeo": None, "DailyMotion": None,
+    "Reddit": None, "Threads": ["ThreadsPostPage", ["threads.net/", "threads.com/"]], "Vimeo": None, "DailyMotion": None,
     "SoundCloud": None, "LinkedIn": None, "Snapchat": None,
 }
 
@@ -418,7 +421,7 @@ def main():
     rows = audit_routes(acts, problems, warnings)
     print("   tested %d url forms across %d sites" % (len(rows), len({r[0] for r in rows})))
     if not args.quiet_routes:
-        for label, u, hit, _ in rows:
+        for label, u, hit in rows:
             print("   %-16s %-56s -> %s" % (label, u[:56], hit))
     print("== F entry points (share sheet + pasted link) ==")
     nok = audit_input(cur, problems)

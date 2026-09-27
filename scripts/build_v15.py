@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Build FREE Media Downloader 1.5 from 1.4.
+"""Build FREE Media Downloader 1.6 from 1.4.
 
 Adds direct, single-request fast paths ahead of the server-side aggregator:
 
@@ -10,12 +10,13 @@ Adds direct, single-request fast paths ahead of the server-side aggregator:
   Mastodon   post        -> <instance>/api/v1/statuses/<id>
   Bluesky    post        -> public.api.bsky.app getPostThread (+ getBlob for video)
   Pinterest  pin         -> widgets.pinterest.com v3/pidgets pins/info
+  Threads    public post -> crawler-rendered media JSON (video/image)
 
 and tunes the aggregator fallback: 1 s poll cadence, 60 s ceiling, and an
 honest failure message instead of a raw JSON dump.
 
 The template `Settings.shortcut.version` (9.0.0) is the aggregator's client
-gate and MUST NOT change; only the user-facing `Settings.version` moves to 1.5.
+gate and MUST NOT change; only the user-facing `Settings.version` moves to 1.6.
 
     python -X utf8 scripts/build_v15.py [--check] [--out FILE]
 """
@@ -26,7 +27,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from wf import (Graph, tstr, var, out, COND_CONTAINS, COND_HAS_VALUE,  # noqa: E402
+from wf import (Graph, tstr, var, out, coerce, COND_CONTAINS, COND_HAS_VALUE,  # noqa: E402
                 dict_field)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,8 +35,8 @@ SRC = os.path.join(ROOT, "shortcut", "fed.unsigned.plist")
 
 CRAWLER_UA = "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
 
-VERSION = "1.5"
-VERSION_DATE = "2026-09-20"
+VERSION = "1.6"
+VERSION_DATE = "2026-09-26"
 
 # --- regexes (all verified live by scripts/test_extractors.py) --------------
 # One capture group, no optional slash inside an alternation. Shortcuts Match
@@ -53,6 +54,9 @@ MASTODON = (r"https?://([^/\s]+)/(?:@[^/\s]+|users/[^/\s]+|web)"
             r"(?:/status(?:es)?)?/(\d{6,})")
 BSKY = r"(?:^|//)bsky\.app/profile/([^/\s]+)/post/([A-Za-z0-9]+)"
 PIN = r"(?:^|//)(?:[a-z0-9-]+\.)*pinterest\.[a-z.]{2,6}/pin/(\d+)"
+THREADS_ID = (r"(?:^|//)(?:www\.)?threads\.(?:net|com)/"
+             r"(?:@[^/\s]+/post/|t/)([A-Za-z0-9_-]+)")
+THREADS_UA = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 
 NEW_COMMENT = """FREE Media Downloader
 Version {v}  ({d})
@@ -60,14 +64,15 @@ RoutineHub 26384. If the listing is newer than this number, update from there.
 
 Sites: YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-Facebook, X, Bluesky, Mastodon and Pinterest resolve in one request - no waiting on a server job.
+Facebook, Threads, X, Bluesky, Mastodon and Pinterest resolve on the phone - no waiting on a server job for public media.
 Facebook videos and Reels come from the video player. Facebook photos come from the public post embed.
+Threads public videos and images come from the post page. Private or login-gated posts open Threads or the default browser with a clear retry instruction.
 YouTube and Instagram: yt-dlp in a-Shell mini. Video and photos go to Photos. Audio goes to Files.
 TikTok: no-watermark when the source lets it.
 The remaining sites use the server extractor, then the other free backends.
 Share a link. Save the file. No key. No paywall. No upgrade nag.
 First Photos, Files, and a-Shell prompts: approve once.
-A sign-in wall opens Safari or the app. Share again after.""".format(v=VERSION, d=VERSION_DATE)
+If a post is private, the shortcut opens Threads when installed, or your default browser. Sign in there, then share the post again.""".format(v=VERSION, d=VERSION_DATE)
 
 
 def json_pairs(pairs):
@@ -123,6 +128,81 @@ def facebook(g):
     g.stop()
     g.endif()
 
+    g.endif()
+    return g
+
+
+# ------------------------------------------------------------------- Threads
+def threads(g):
+    """Resolve public Threads posts from Meta's crawler-rendered page data."""
+    g.comment(
+        "Threads: public posts use crawler-rendered page data and signed CDN "
+        "URLs. Private or login-gated posts open Threads or the default browser."
+    )
+    m = g.match(THREADS_ID, var("userLink"), name="ThreadsPostID")
+    g.if_(COND_HAS_VALUE, out(m))
+    tid = g.group(1, out(m), "ThreadsPostCode")
+    page = g.download(
+        var("userLink"), method="GET",
+        headers=[("User-Agent", THREADS_UA)], name="ThreadsPostPage"
+    )
+
+    # A post page embeds many post objects. Stop at the next code field so a
+    # recommendation or reply cannot be mistaken for the shared post.
+    video_pattern = tstr(
+        r'"code":"', out(tid),
+        r'"(?:(?!"code":).){0,50000}?"video_versions":\[\{(?:(?!"url":).){0,500}?"url":"'
+        r'(https:[^"]+?\.mp4(?:\?[^"]*)?)"'
+    )
+    videos = g.match(video_pattern, out(page), name="ThreadsVideoURLs")
+    g.if_(COND_HAS_VALUE, out(videos))
+    g.repeat_each(out(videos))
+    vu = g.group(1, var("Repeat Item"), "ThreadsVideoURL")
+    vu1 = g.replace(r"\/", "/", out(vu), regex=False, name="ThreadsVideoURLSlashes")
+    vu2 = g.replace(r"\u002F", "/", out(vu1), regex=False, name="ThreadsVideoURLUnicodeSlashes")
+    vu3 = g.replace(r"\u0026", "&", out(vu2), regex=False, name="ThreadsVideoURLAmpersands")
+    vu4 = g.replace(r"\u003D", "=", out(vu3), regex=False, name="ThreadsVideoURLEquals")
+    vu5 = g.replace(r"\u0025", "%", out(vu4), regex=False, name="ThreadsVideoURLPercent")
+    g.download(out(vu5), headers=[("Referer", "https://www.threads.com/")], name="ThreadsVideo")
+    g.save_camera_roll()
+    g.endrepeat()
+    g.notify("Saved from Threads.")
+    g.stop()
+    g.else_()
+
+    image_pattern = tstr(
+        r'"code":"', out(tid),
+        r'"(?:(?!"code":).){0,50000}?"image_versions2":\{"candidates":\['
+        r'\{(?:(?!"url":).){0,500}?"url":"(https:[^"]+)"'
+    )
+    images = g.match(image_pattern, out(page), name="ThreadsImageURLs")
+    g.if_(COND_HAS_VALUE, out(images))
+    g.repeat_each(out(images))
+    iu = g.group(1, var("Repeat Item"), "ThreadsImageURL")
+    iu1 = g.replace(r"\/", "/", out(iu), regex=False, name="ThreadsImageURLSlashes")
+    iu2 = g.replace(r"\u002F", "/", out(iu1), regex=False, name="ThreadsImageURLUnicodeSlashes")
+    iu3 = g.replace(r"\u0026", "&", out(iu2), regex=False, name="ThreadsImageURLAmpersands")
+    iu4 = g.replace(r"\u003D", "=", out(iu3), regex=False, name="ThreadsImageURLEquals")
+    iu5 = g.replace(r"\u0025", "%", out(iu4), regex=False, name="ThreadsImageURLPercent")
+    g.download(out(iu5), headers=[("Referer", "https://www.threads.com/")], name="ThreadsImage")
+    g.save_camera_roll()
+    g.endrepeat()
+    g.notify("Saved from Threads.")
+    g.stop()
+    g.else_()
+
+    # Universal links route to the Threads app when installed, otherwise to
+    # the user's default browser. Safari is never assumed.
+    g.notify(
+        "Threads hid this post from public download. Opening Threads or your "
+        "default browser. Sign in if asked, then share the post again."
+    )
+    g.open_url(var("userLink", [coerce("WFURLContentItem")]))
+    g.wait_to_return()
+    g.notify("Share the visible Threads post to FREE Media Downloader again.")
+    g.stop()
+    g.endif()
+    g.endif()
     g.endif()
     return g
 
@@ -262,6 +342,7 @@ def pinterest(g):
 def build():
     g = Graph()
     facebook(g)
+    threads(g)
     x_branch(g)
     mastodon(g)
     bluesky(g)
@@ -407,6 +488,37 @@ def patch_failure_notice(acts):
     return False
 
 
+def patch_signin_copy(acts):
+    """Make the shared sign-in branch describe universal-link routing.
+
+    The 1.4 base already opens ``userLink`` and waits for it to return. Its
+    copy said Safari, which is misleading when iOS hands the URL to an
+    installed native app or another default browser.
+    """
+    replacements = {
+        "Session needed: open the post in Safari or the native app. Sign in. Come back. Share the post again.":
+            "Session needed: opening the post in its app or your default browser. Sign in there, then share the post again.",
+        "This post wants a sign-in. Opening it now. Sign in, then share it again.":
+            "This post wants a sign-in. Opening the post in its app or your default browser now. Sign in there, then share it again.",
+    }
+    changed = False
+    for a in acts:
+        p = a.get("WFWorkflowActionParameters") or {}
+        if a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.comment":
+            old = p.get("WFCommentActionText")
+            old_text = token_text(old)
+            if old_text in replacements:
+                p["WFCommentActionText"] = set_token_text(old, replacements[old_text])
+                changed = True
+        elif a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.notification":
+            old = p.get("WFNotificationActionBody")
+            old_text = token_text(old)
+            if old_text in replacements:
+                p["WFNotificationActionBody"] = set_token_text(old, replacements[old_text])
+                changed = True
+    return changed
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", help="write here instead of overwriting the source")
@@ -419,9 +531,9 @@ def main():
     acts = p["WFWorkflowActions"]
     blob = str(acts)
 
-    applied = "api.fxtwitter.com" in blob
+    applied = "ThreadsPostPage" in blob
     if a.check:
-        print("actions:", len(acts), "| v1.5 fast paths present:", applied)
+        print("actions:", len(acts), "| v1.6 fast paths present:", applied)
         return 0
     if applied:
         raise SystemExit("refusing to build twice: fast paths already in the plist")
@@ -434,8 +546,10 @@ def main():
     patch_comment(acts)
     changed = patch_poll(acts)
     notice = patch_failure_notice(acts)
+    signin = patch_signin_copy(acts)
     assert changed["delay"] and changed["number"], "poll cadence not found"
     assert notice, "failure notice not found"
+    assert signin, "sign-in copy not found"
 
     out_path = a.out or SRC
     tmp = out_path + ".tmp"

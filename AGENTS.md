@@ -15,6 +15,19 @@ That creates the version first. Get Shortcut must already be that version before
 
 3. Then GitHub: `powershell -File $env:USERPROFILE\.agents\ship.ps1 -Repo free-everything-downloader -SkipRh [-Message "..."]` (or pass `-ICloudLink` if RH is not done yet so step 0 runs inside the script)
 
+## Shortcut release prep (do this automatically)
+
+For every release candidate, before asking the user for an iCloud link:
+
+1. Run the local validation, audit, and extractor test gates.
+2. Run `python -X utf8 scripts\sign.py`.
+3. Verify `H:\My Drive\FREE Media Downloader.shortcut` exists and starts with the `AEA1` HubSign header.
+4. Tell the user to install it from Files → Drive → My Drive, then copy a fresh iCloud link from the installed shortcut.
+
+The signed Drive artifact is the handoff for device testing. Do not ask the user to upload files or search iCloud Documents. Do not inspect Cursor sessions, transcripts, or Cursor state unless the user explicitly asks for that.
+
+If no fresh iCloud link exists yet, stop after the Drive handoff; do not commit, push, create a RoutineHub version, or claim the release is shipped. Once the user supplies the link, run the RoutineHub-first flow above, then GitHub and backup.
+
 **Pipeline after RH:** Commit on Laboratory → Push `origin main` → Backup 7z to `D:\BACKUP\CODE Backups\free-everything-downloader\`  
 Pattern: `free-everything-downloader_YYYY-MM-DD_<sha>_<slug>.7z` (exclude target, .git, node_modules, dist, .next)
 

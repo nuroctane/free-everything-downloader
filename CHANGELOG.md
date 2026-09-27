@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6 (candidate)
+
+- **Threads now has an on-device public-post path.** The shortcut fetches the crawler-rendered post data, extracts the signed video or image URL, and saves it directly to Photos without sending the post through the generic server extractor.
+- **Private Threads posts have a clearer recovery path.** When public media is unavailable, the shortcut opens the Threads app through its universal link when installed, or the user’s default browser, then explains that the post should be shared again after signing in.
+- Added live and offline checks for Threads URL routing, crawler media extraction, URL unescaping, and the native-app/default-browser fallback.
+
 ## 1.5.1 (candidate, not published)
 
 - Full a-Shell now works too. Both apps expose the same Execute command / Get file intents under different bundle ids, and the shortcut only ever addressed a-Shell mini, so the full app silently could not run the yt-dlp path. Mini still runs first; full a-Shell is only used when mini leaves the result marker at "missing". Install either app - not both.

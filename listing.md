@@ -6,7 +6,7 @@ They ask for a key, a subscription, a speech about supporting the developer. Yad
 
 **FREE Media Downloader** isn't and won’t be that, ever 🚫, while still being maintained as long as I live :). Open the Share Sheet, or paste a URL. Video and photos land in Photos. Audio lands in Files. TikTok comes off the watermark when the source lets it. YouTube always goes through yt-dlp. Instagram is the original file, no watermark overlay. No account. No donation e-begging spam. No key file. No Pro screen. A dead link dies in place. Nothing opens a checkout. **No bs** 🚫.
 
-If a post sits behind a sign-in, the shortcut opens it in Safari or the native app. Sign in there. Share the post again.
+Public Threads videos and images resolve on-device. If a post is private or login-gated, the shortcut opens Threads when installed or your default browser. Sign in there, then share the post again.
 
 If you have been paying rent on a button that literally anyone can make today with minimal effort (this took me 2 hours), stop... Lord have mercy.
 
@@ -20,11 +20,11 @@ Facebook reels and videos resolve on the phone now, straight from the Facebook v
 
 YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-YouTube and Instagram always go through yt-dlp in a-Shell mini or full a-Shell - either one works. TikTok comes off the watermark when the source lets it. X, Bluesky, and Mastodon get a second try if the first extractor misses. The rest on that list go through the first extractor.
+YouTube and Instagram always go through yt-dlp in a-Shell mini or full a-Shell - either one works. TikTok comes off the watermark when the source lets it. Threads public videos and images resolve from the post page; private posts open Threads or your default browser. X, Bluesky, and Mastodon get a second try if the first extractor misses. The remaining sites go through the first extractor.
 
 ## Version
 
-This build is **1.5.1**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
+This build is **1.6**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
 
 ## How to use
 
@@ -38,7 +38,7 @@ You can copy a URL and run it from Shortcuts the same way
 
 ❕ Install **a-Shell mini** or **a-Shell** before you share a YouTube or Instagram link - either one works, the actions are the same.
 
-Safari is already on the phone. YouTube, Instagram, TikTok, and X are optional; use them when you already sign in there.
+Your default browser handles a sign-in only when no installed app claims the link. YouTube, Instagram, TikTok, X, and Threads are optional; use them when you already sign in there.
 
 ## One-time permissions
 
@@ -46,7 +46,7 @@ The first Photos save asks. The first Files save asks. The first a-Shell mini ru
 
 ## Sign-in walls
 
-Private and deleted pages fail when the site refuses the file. A login wall opens in Safari or the app. Sign in. Share the post again. If you keep a Netscape `cookies.txt` in a-Shell mini's Documents folder, yt-dlp will use it.
+Private and deleted pages fail when the site refuses the file. A login wall opens in the native app when installed, or your default browser. Sign in there. Share the post again. If you keep a Netscape `cookies.txt` in a-Shell mini's Documents folder, yt-dlp will use it.
 
 *If a site you want supported isn't supported here for whatever reason, ping me on* **X** `@nuroctane` *and I'll get it taken care of in a jiffy.* **X** *is the fastest way to get in contact with me.*
 

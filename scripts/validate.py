@@ -180,6 +180,9 @@ required = {
     "video/embed?video_id=": "Facebook player fast path",
     "plugins/post.php": "Facebook photo fast path",
     "Saved from Facebook.": "Facebook notice",
+    "ThreadsPostPage": "Threads crawler page fast path",
+    "Saved from Threads.": "Threads notice",
+    "Googlebot/2.1": "Threads crawler user agent",
     "instagram.com": "Instagram",
     "youtu": "YouTube",
     # aggregator fallback
@@ -203,6 +206,7 @@ per_feature = {
     "getPostThread": ["com.atproto.sync.getBlob"],
     "api/v1/statuses/": ["Saved from Mastodon."],
     "pin_ids=": ["Saved from Pinterest."],
+    "ThreadsPostPage": ["ThreadsVideoURLs", "ThreadsImageURLs", "is.workflow.actions.openurl"],
 }
 for probe, needles in per_feature.items():
     if probe not in blob:

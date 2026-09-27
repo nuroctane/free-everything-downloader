@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 """Build fed.unsigned.plist from a known-good base with a chosen feature set.
 
-Why this exists: 1.5 shipped four new on-device fast paths (X, Bluesky,
-Mastodon, Pinterest) on top of the two Facebook fixes. The X one regressed
-share-sheet runs on a real device, and a fix has to be able to remove a feature
-without unpicking the rest by hand.
+Why this exists: build a selected set of on-device fast paths from the clean
+1.4 graph. Keeping the site list explicit makes it possible to ship and test a
+single platform without reintroducing a regression in another branch.
 
-    python -X utf8 scripts/build.py --base <plist> --version 1.5.1 \
-        --sites facebook --out shortcut/fed.unsigned.plist
+    python -X utf8 scripts/build.py --base <plist> --version 1.6 \
+        --sites facebook,threads --out shortcut/fed.unsigned.plist
 """
 import argparse
 import os
@@ -21,6 +20,7 @@ from wf import Graph  # noqa: E402
 
 SITE_BUILDERS = {
     "facebook": B.facebook,
+    "threads": B.threads,
     "x": B.x_branch,
     "mastodon": B.mastodon,
     "bluesky": B.bluesky,
@@ -33,13 +33,14 @@ RoutineHub 26384. If the listing is newer than this number, update from there.
 
 Sites: YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-Facebook resolves on the phone in one request: videos and Reels from the video player, photos from the public post embed.
+Facebook and Threads public media resolve on the phone without a server job. Facebook videos and Reels come from the video player; photos come from the public post embed.
+Threads public videos and images come from the post page. Private or login-gated posts open Threads or the default browser with a clear retry instruction.
 {extras}
 YouTube and Instagram: yt-dlp in a-Shell mini. Video and photos go to Photos. Audio goes to Files.
 TikTok: no-watermark when the source lets it. X, Bluesky, Mastodon and Pinterest use the server extractor and the other free backends.
 Share a link. Save the file. No key. No paywall. No upgrade nag.
 First Photos, Files, and a-Shell prompts: approve once.
-A sign-in wall opens Safari or the app. Share again after."""
+If a post is private, the shortcut opens Threads when installed, or your default browser. Sign in there, then share the post again."""
 
 EXTRA = {
     "x": "X, Bluesky, Mastodon and Pinterest also resolve on the phone in one request.",
@@ -62,8 +63,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", required=True, help="plist to start from (known-good)")
     ap.add_argument("--version", required=True)
-    ap.add_argument("--date", default="2026-09-21")
-    ap.add_argument("--sites", required=True, help="comma list: facebook,x,mastodon,bluesky,pinterest")
+    ap.add_argument("--date", default="2026-09-26")
+    ap.add_argument("--sites", required=True, help="comma list: facebook,threads,x,mastodon,bluesky,pinterest")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
 
@@ -93,8 +94,10 @@ def main():
     B.patch_comment(acts)
     changed = B.patch_poll(acts)
     notice = B.patch_failure_notice(acts)
+    signin = B.patch_signin_copy(acts)
     assert changed["delay"] and changed["number"], "poll cadence not found"
     assert notice, "failure notice not found"
+    assert signin, "sign-in copy not found"
 
     tmp = a.out + ".tmp"
     with open(tmp, "wb") as fh:
