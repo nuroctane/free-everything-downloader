@@ -80,6 +80,82 @@ def json_pairs(pairs):
     return dict_field(pairs)
 
 
+# ---------------------------------------------------------- share-sheet input
+def patch_input_normalization(acts):
+    """Normalize URL input from Safari, Brave, and other browser share sheets.
+
+    Browser extensions do not all send the same Shortcuts content item. Safari
+    and browsers that advertise a webpage hand over a ``Safari Web Page``
+    object; other browsers send a URL, text, or rich text containing one or
+    more URLs. The old graph passed the complete URL list straight into
+    ``Expand URL``. That is fragile when a webpage contains several links and
+    can leave yt-dlp with a list/object instead of one URL.
+
+    Prefer the page's canonical URL for webpage inputs. For every other input,
+    extract URLs and keep the first one. Expansion then runs on that scalar,
+    and an empty share item gets a useful message instead of falling through
+    to the server extractor with an empty link.
+    """
+    idx = None
+    for i, a in enumerate(acts):
+        if a.get("WFWorkflowActionIdentifier") != "is.workflow.actions.detect.link":
+            continue
+        if i + 2 >= len(acts):
+            continue
+        if (acts[i + 1].get("WFWorkflowActionIdentifier") == "is.workflow.actions.url.expand"
+                and acts[i + 2].get("WFWorkflowActionIdentifier") == "is.workflow.actions.setvariable"
+                and (acts[i + 2].get("WFWorkflowActionParameters") or {}).get("WFVariableName") == "userLink"):
+            idx = i
+            break
+    if idx is None:
+        raise SystemExit("share-sheet input normalization block not found")
+
+    g = Graph()
+    extension_input = tstr({"Type": "ExtensionInput"})
+
+    input_type = g.get_type(extension_input, name="Input Type")
+    g.if_(COND_CONTAINS, out(input_type), "Safari Web")
+    page_url = g.safari_page_property("Page URL", extension_input, name="Browser Page URL")
+    page_url_first = g.get_item_first(out(page_url), name="Shared URL")
+    g.setvar("rawLink", out(page_url_first))
+    g.else_()
+    urls = g.detect_links(extension_input, name="Detected URLs")
+    shared_url = g.get_item_first(out(urls), name="Shared URL")
+    g.setvar("rawLink", out(shared_url))
+    g.endif()
+
+    # Some browser extensions advertise a webpage item but leave its page URL
+    # property empty. Fall back to the same link extractor used for URL/text
+    # shares before declaring the share invalid.
+    g.if_(COND_HAS_VALUE, var("rawLink"))
+    g.else_()
+    fallback_text = g.text_from_input(extension_input, name="Shared Text")
+    fallback_urls = g.detect_links(out(fallback_text), name="Fallback URLs")
+    fallback_url = g.get_item_first(out(fallback_urls), name="Fallback URL")
+    g.setvar("rawLink", out(fallback_url))
+    g.endif()
+
+    g.if_(COND_HAS_VALUE, var("rawLink"))
+    # URL fields are text-token fields in the Shortcuts plist; wrap the scalar
+    # variable the same way the editor serializes an action-output URL.
+    expanded = g.expand_url(tstr({"Type": "Variable", "VariableName": "rawLink"}),
+                            name="Expanded URL")
+    g.if_(COND_HAS_VALUE, out(expanded))
+    g.setvar("userLink", out(expanded))
+    g.else_()
+    g.setvar("userLink", var("rawLink"))
+    g.endif()
+    g.else_()
+    g.notify("No link was received from the share sheet. Copy the page URL and share it again.")
+    g.stop()
+    g.endif()
+
+    g.close()
+    assert not g._stack, "input normalization control flow is unbalanced"
+    acts[idx:idx + 3] = [a.d for a in g.actions]
+    return True
+
+
 # --------------------------------------------------------------- facebook
 def facebook(g):
     g.comment("Facebook: video and Reels come straight from the video player; "
@@ -539,6 +615,7 @@ def main():
         raise SystemExit("refusing to build twice: fast paths already in the plist")
 
     before = len(acts)
+    patch_input_normalization(acts)
     idx = find_aggregator(acts)
     new = build()
     acts[idx:idx] = new

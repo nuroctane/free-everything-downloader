@@ -15,7 +15,7 @@
 				<string>3F0DA92D-911A-47B0-B1A6-40AB6C7DB68E</string>
 				<key>WFCommentActionText</key>
 				<string>FREE Media Downloader
-Version 1.6  (2026-09-26)
+Version 1.7  (2026-09-27)
 RoutineHub 26384. If the listing is newer than this number, update from there.
 
 Sites: YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
@@ -219,7 +219,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>1.6</string>
+										<string>1.7</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -491,11 +491,13 @@ If a post is private, the shortcut opens Threads when installed, or your default
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.detect.link</string>
+			<string>is.workflow.actions.getitemtype</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
+				<key>CustomOutputName</key>
+				<string>Input Type</string>
 				<key>UUID</key>
-				<string>90543E50-F039-4C91-A2AE-313ABC0D493F</string>
+				<string>DF5D6B9B-420B-43FF-86B6-BC3A67098D7A</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -518,9 +520,433 @@ If a post is private, the shortcut opens Threads when installed, or your default
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>BE1E463F-8281-4211-9640-39B38C85A256</string>
+				<key>UUID</key>
+				<string>AFA05D62-2674-47B3-A3B0-B84772F5D46A</string>
+				<key>WFCondition</key>
+				<integer>8</integer>
+				<key>WFConditionalActionString</key>
+				<string>Safari Web</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>OutputName</key>
+							<string>Input Type</string>
+							<key>OutputUUID</key>
+							<string>DF5D6B9B-420B-43FF-86B6-BC3A67098D7A</string>
+							<key>Type</key>
+							<string>ActionOutput</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.properties.safariwebpage</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Browser Page URL</string>
+				<key>UUID</key>
+				<string>08FDDEC7-8596-4854-A152-AD6C03582304</string>
+				<key>WFContentItemPropertyName</key>
+				<string>Page URL</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{0, 1}</key>
+							<dict>
+								<key>Type</key>
+								<string>ExtensionInput</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>￼</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.getitemfromlist</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Shared URL</string>
+				<key>UUID</key>
+				<string>19EB6120-9B6E-49D7-BFF0-CD004111D4D6</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Browser Page URL</string>
+						<key>OutputUUID</key>
+						<string>08FDDEC7-8596-4854-A152-AD6C03582304</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFItemSpecifier</key>
+				<string>First Item</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>026153B8-195A-4C77-B856-8900F2F402E6</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Shared URL</string>
+						<key>OutputUUID</key>
+						<string>19EB6120-9B6E-49D7-BFF0-CD004111D4D6</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>rawLink</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>BE1E463F-8281-4211-9640-39B38C85A256</string>
+				<key>UUID</key>
+				<string>ED90B065-A3EE-4B7C-A4A2-CB2806F110AC</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.detect.link</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Detected URLs</string>
+				<key>UUID</key>
+				<string>40F669AE-0CA8-420F-A984-7F181BE3B90E</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{0, 1}</key>
+							<dict>
+								<key>Type</key>
+								<string>ExtensionInput</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>￼</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.getitemfromlist</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Shared URL</string>
+				<key>UUID</key>
+				<string>1EE073DF-AA6D-4357-9F27-578998076053</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Detected URLs</string>
+						<key>OutputUUID</key>
+						<string>40F669AE-0CA8-420F-A984-7F181BE3B90E</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFItemSpecifier</key>
+				<string>First Item</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>17C7E133-8351-48AF-937E-C951A485AF5F</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Shared URL</string>
+						<key>OutputUUID</key>
+						<string>1EE073DF-AA6D-4357-9F27-578998076053</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>rawLink</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>BE1E463F-8281-4211-9640-39B38C85A256</string>
+				<key>UUID</key>
+				<string>1C4C3499-39F3-44BF-B276-8EB958BD4DD1</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>FA642864-790B-43B4-84D8-65E8C2462DBF</string>
+				<key>UUID</key>
+				<string>C4E53C1B-F5B9-40AA-9A60-909B2BCB85A9</string>
+				<key>WFCondition</key>
+				<integer>100</integer>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>rawLink</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>FA642864-790B-43B4-84D8-65E8C2462DBF</string>
+				<key>UUID</key>
+				<string>4A38452D-4F59-4313-9DDB-66A3F3387064</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.detect.text</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Shared Text</string>
+				<key>UUID</key>
+				<string>382429B4-571C-4C55-B88F-501ED3EC5B76</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{0, 1}</key>
+							<dict>
+								<key>Type</key>
+								<string>ExtensionInput</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>￼</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.detect.link</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Fallback URLs</string>
+				<key>UUID</key>
+				<string>E08EC5DA-8B52-4791-8124-F0C53B6B436D</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Shared Text</string>
+						<key>OutputUUID</key>
+						<string>382429B4-571C-4C55-B88F-501ED3EC5B76</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.getitemfromlist</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>Fallback URL</string>
+				<key>UUID</key>
+				<string>2B6257BF-D5C9-4092-9C52-62DCC8B0D363</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Fallback URLs</string>
+						<key>OutputUUID</key>
+						<string>E08EC5DA-8B52-4791-8124-F0C53B6B436D</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFItemSpecifier</key>
+				<string>First Item</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>91D6E26E-DFE2-4666-8CAF-D4F7D4D18FB9</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Fallback URL</string>
+						<key>OutputUUID</key>
+						<string>2B6257BF-D5C9-4092-9C52-62DCC8B0D363</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>rawLink</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>FA642864-790B-43B4-84D8-65E8C2462DBF</string>
+				<key>UUID</key>
+				<string>3BFA7381-EA19-4486-9CC6-2EAB494031A1</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>BD4B5CA5-08E0-459F-9FD0-3BA217704640</string>
+				<key>UUID</key>
+				<string>9521522F-E48D-4E27-9500-5C57F86FC21E</string>
+				<key>WFCondition</key>
+				<integer>100</integer>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>Type</key>
+							<string>Variable</string>
+							<key>VariableName</key>
+							<string>rawLink</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
 			<string>is.workflow.actions.url.expand</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
+				<key>CustomOutputName</key>
+				<string>Expanded URL</string>
 				<key>URL</key>
 				<dict>
 					<key>Value</key>
@@ -529,12 +955,10 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<dict>
 							<key>{0, 1}</key>
 							<dict>
-								<key>OutputName</key>
-								<string>URLs</string>
-								<key>OutputUUID</key>
-								<string>90543E50-F039-4C91-A2AE-313ABC0D493F</string>
 								<key>Type</key>
-								<string>ActionOutput</string>
+								<string>Variable</string>
+								<key>VariableName</key>
+								<string>rawLink</string>
 							</dict>
 						</dict>
 						<key>string</key>
@@ -544,7 +968,41 @@ If a post is private, the shortcut opens Threads when installed, or your default
 					<string>WFTextTokenString</string>
 				</dict>
 				<key>UUID</key>
-				<string>F3BC3797-8B49-489D-A1F1-1F8D90A4801B</string>
+				<string>7DCEBB66-92B7-4847-91A0-148E39324C03</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>FFDEE6BC-7770-49E2-8895-0481F54CE73F</string>
+				<key>UUID</key>
+				<string>74533071-F09D-49A4-A937-4A4C97B5ECA8</string>
+				<key>WFCondition</key>
+				<integer>100</integer>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFInput</key>
+				<dict>
+					<key>Type</key>
+					<string>Variable</string>
+					<key>Variable</key>
+					<dict>
+						<key>Value</key>
+						<dict>
+							<key>OutputName</key>
+							<string>Expanded URL</string>
+							<key>OutputUUID</key>
+							<string>7DCEBB66-92B7-4847-91A0-148E39324C03</string>
+							<key>Type</key>
+							<string>ActionOutput</string>
+						</dict>
+						<key>WFSerializationType</key>
+						<string>WFTextTokenAttachment</string>
+					</dict>
+				</dict>
 			</dict>
 		</dict>
 		<dict>
@@ -552,6 +1010,8 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<string>is.workflow.actions.setvariable</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
+				<key>UUID</key>
+				<string>1025FA42-6490-47FC-B4DC-30EE8194CFE1</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -559,7 +1019,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>Expanded URL</string>
 						<key>OutputUUID</key>
-						<string>F3BC3797-8B49-489D-A1F1-1F8D90A4801B</string>
+						<string>7DCEBB66-92B7-4847-91A0-148E39324C03</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -568,6 +1028,109 @@ If a post is private, the shortcut opens Threads when installed, or your default
 				</dict>
 				<key>WFVariableName</key>
 				<string>userLink</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>FFDEE6BC-7770-49E2-8895-0481F54CE73F</string>
+				<key>UUID</key>
+				<string>D67C4F2B-0ECC-4F17-81D0-98077352DE3E</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>B3840FC8-6D0F-4CFA-9E3A-ECADF04B472E</string>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>Type</key>
+						<string>Variable</string>
+						<key>VariableName</key>
+						<string>rawLink</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>userLink</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>FFDEE6BC-7770-49E2-8895-0481F54CE73F</string>
+				<key>UUID</key>
+				<string>C0B325E2-2191-416E-83FE-8B60CE3C4FFE</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>BD4B5CA5-08E0-459F-9FD0-3BA217704640</string>
+				<key>UUID</key>
+				<string>2E6F241F-CFC8-4C6B-9552-B307BBD4398E</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.notification</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>3D02D49C-90C7-49D2-AA4F-7DB358E467C6</string>
+				<key>WFNotificationActionBody</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>string</key>
+						<string>No link was received from the share sheet. Copy the page URL and share it again.</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.exit</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>977CF6EB-B407-49B3-A05B-F757B01858EB</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.conditional</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>BD4B5CA5-08E0-459F-9FD0-3BA217704640</string>
+				<key>UUID</key>
+				<string>D64A5768-C9D7-4FEC-8B1D-4214AEE56457</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -2951,7 +3514,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>07C3A829-8F6F-4DFA-9A3C-887C1BC20FF0</string>
+				<string>8627629C-9931-4502-9879-800BB96A48BC</string>
 				<key>WFCommentActionText</key>
 				<string>Facebook: video and Reels come straight from the video player; photos come from the public post embed. One request each, no server job, no sign-in. Anything that misses falls through to the extractor below.</string>
 			</dict>
@@ -2962,9 +3525,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>61B3FE61-F90C-400C-A913-C29D14567E1C</string>
+				<string>561752D4-B6B9-4571-B620-95B2FFB9BFE5</string>
 				<key>UUID</key>
-				<string>4D2A03C6-3825-4D1A-9A68-C42CA64E5B3A</string>
+				<string>0FB147B6-F75A-4082-A38C-2A180929C7B4</string>
 				<key>WFCondition</key>
 				<integer>8</integer>
 				<key>WFConditionalActionString</key>
@@ -2996,7 +3559,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>3A8903D8-5E5F-43E6-8299-573E6D4808D3</string>
+				<string>DC3C9B16-697D-4A80-ABBE-E2A93F88561B</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3021,9 +3584,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>5C5A946A-A902-4C25-B2CA-AA8ACE406D02</string>
+				<string>1BE54D02-23BA-4A5E-968B-8321A652FA93</string>
 				<key>UUID</key>
-				<string>5EECC460-265C-4AF0-9C52-816C3DB631CA</string>
+				<string>969DC699-BB63-47C1-A0F1-8C5765AF44E6</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3039,7 +3602,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 							<key>OutputName</key>
 							<string>FacebookVideoID</string>
 							<key>OutputUUID</key>
-							<string>3A8903D8-5E5F-43E6-8299-573E6D4808D3</string>
+							<string>DC3C9B16-697D-4A80-ABBE-E2A93F88561B</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3055,7 +3618,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>A89925D8-77A4-48CA-86CA-ED1208B1450A</string>
+				<string>ADE97D57-AAD7-4CFD-9570-83B7A95B9FFF</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3067,7 +3630,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookVideoID</string>
 						<key>OutputUUID</key>
-						<string>3A8903D8-5E5F-43E6-8299-573E6D4808D3</string>
+						<string>DC3C9B16-697D-4A80-ABBE-E2A93F88561B</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3084,7 +3647,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>DB355C6D-E94F-44DA-93FC-DF7899414CF2</string>
+				<string>B3788289-311F-46B1-AEA8-B0BAA577A1D3</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3135,7 +3698,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 									<key>OutputName</key>
 									<string>FacebookVideoNumber</string>
 									<key>OutputUUID</key>
-									<string>A89925D8-77A4-48CA-86CA-ED1208B1450A</string>
+									<string>ADE97D57-AAD7-4CFD-9570-83B7A95B9FFF</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -3157,7 +3720,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>C3B47539-EC72-4709-BFFA-05A980FF537D</string>
+				<string>BAFDF752-B330-46FE-A022-222DCD4EB1DB</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3165,7 +3728,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookPlayer</string>
 						<key>OutputUUID</key>
-						<string>DB355C6D-E94F-44DA-93FC-DF7899414CF2</string>
+						<string>B3788289-311F-46B1-AEA8-B0BAA577A1D3</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3184,9 +3747,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>B0E0F7BE-0AD5-4D17-9AA3-ACD4DB5CA6CF</string>
+				<string>30DA2C74-BB80-4533-9E4B-1B95CF4BDCCA</string>
 				<key>UUID</key>
-				<string>900C1AAA-6B18-430F-BB1D-8B063546F176</string>
+				<string>6ED86B5B-4881-4599-980C-6C51CAAF573A</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3202,7 +3765,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 							<key>OutputName</key>
 							<string>FacebookMediaURL</string>
 							<key>OutputUUID</key>
-							<string>C3B47539-EC72-4709-BFFA-05A980FF537D</string>
+							<string>BAFDF752-B330-46FE-A022-222DCD4EB1DB</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3218,7 +3781,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>000526D3-6C26-44E3-A55F-ADA7AE48C395</string>
+				<string>B80F71FF-18C8-48B2-AF8C-7C816B3063F8</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3230,7 +3793,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookMediaURL</string>
 						<key>OutputUUID</key>
-						<string>C3B47539-EC72-4709-BFFA-05A980FF537D</string>
+						<string>BAFDF752-B330-46FE-A022-222DCD4EB1DB</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3245,7 +3808,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>5A1429F4-AD9C-410F-AE97-DE5DAB6FB913</string>
+				<string>A0A57C3F-8629-4DE6-BB16-BA2109A72C20</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3253,7 +3816,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookMediaGroup</string>
 						<key>OutputUUID</key>
-						<string>000526D3-6C26-44E3-A55F-ADA7AE48C395</string>
+						<string>B80F71FF-18C8-48B2-AF8C-7C816B3063F8</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3276,7 +3839,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>FE9B8E19-70C6-435A-AF60-4A3CD5DDE2CD</string>
+				<string>0223AE5F-9E08-43FA-8B8E-A71FEFA41D4E</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3284,7 +3847,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookMediaLink</string>
 						<key>OutputUUID</key>
-						<string>5A1429F4-AD9C-410F-AE97-DE5DAB6FB913</string>
+						<string>A0A57C3F-8629-4DE6-BB16-BA2109A72C20</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3307,7 +3870,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>7FCF7262-F3BC-426B-823C-DB09FD213E3C</string>
+				<string>D0B56A29-F349-4E06-8F06-71A21EDFF10F</string>
 				<key>WFURL</key>
 				<dict>
 					<key>Value</key>
@@ -3315,7 +3878,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookMediaLink2</string>
 						<key>OutputUUID</key>
-						<string>FE9B8E19-70C6-435A-AF60-4A3CD5DDE2CD</string>
+						<string>0223AE5F-9E08-43FA-8B8E-A71FEFA41D4E</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3330,7 +3893,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>D9F65E67-0184-49FC-A959-04424BD5D82F</string>
+				<string>8C2F9070-EC84-4572-87EB-5EC1C2D83C44</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -3341,7 +3904,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>548E07D9-3614-4E9F-887E-16B308E91B31</string>
+				<string>161C7D49-1691-4D69-B316-F91C14EEC284</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -3360,7 +3923,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>3521C541-F7EE-43C3-8444-0031E1B4E738</string>
+				<string>7A83B674-4CA8-4DBC-9A27-D1F61283185C</string>
 			</dict>
 		</dict>
 		<dict>
@@ -3369,9 +3932,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>B0E0F7BE-0AD5-4D17-9AA3-ACD4DB5CA6CF</string>
+				<string>30DA2C74-BB80-4533-9E4B-1B95CF4BDCCA</string>
 				<key>UUID</key>
-				<string>1141C3E8-98E6-4368-8104-143ED182ACEC</string>
+				<string>5325ECCD-4072-42A1-AEB7-B045294E2389</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3382,9 +3945,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>5C5A946A-A902-4C25-B2CA-AA8ACE406D02</string>
+				<string>1BE54D02-23BA-4A5E-968B-8321A652FA93</string>
 				<key>UUID</key>
-				<string>C144A009-418F-4D8B-9578-A94471C8E1C4</string>
+				<string>277DCC42-2338-4C76-A717-229F8B2E4DDD</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3395,7 +3958,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>5794CB79-4453-45E2-941D-00D3044DC13D</string>
+				<string>16DFE16E-C8DD-452A-8215-85330277AE18</string>
 				<key>WFEncodeMode</key>
 				<string>Encode</string>
 				<key>WFInput</key>
@@ -3420,7 +3983,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>8958AD76-04BB-4297-871C-ABFCDE399F06</string>
+				<string>0AC0DE26-0638-4336-A777-7271C3C26DDC</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3471,7 +4034,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 									<key>OutputName</key>
 									<string>URL Encoded Text</string>
 									<key>OutputUUID</key>
-									<string>5794CB79-4453-45E2-941D-00D3044DC13D</string>
+									<string>16DFE16E-C8DD-452A-8215-85330277AE18</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -3493,7 +4056,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>EE8B69F3-CCD9-464F-9F55-FF70858C571C</string>
+				<string>94A31C79-3AF0-45C4-928F-182F65CB9C57</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3501,7 +4064,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookEmbed</string>
 						<key>OutputUUID</key>
-						<string>8958AD76-04BB-4297-871C-ABFCDE399F06</string>
+						<string>0AC0DE26-0638-4336-A777-7271C3C26DDC</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3520,9 +4083,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>C0FE0FD6-1915-4D50-AA8E-0CA991C18341</string>
+				<string>0E995845-ACE8-4A69-9AFC-21CEF75863F4</string>
 				<key>UUID</key>
-				<string>DD84B63D-9280-4F4D-B0EC-A3B6E0BCEAE9</string>
+				<string>326E8C3A-0F40-4205-8A37-F97A896ACA06</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3538,7 +4101,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 							<key>OutputName</key>
 							<string>FacebookPhotos</string>
 							<key>OutputUUID</key>
-							<string>EE8B69F3-CCD9-464F-9F55-FF70858C571C</string>
+							<string>94A31C79-3AF0-45C4-928F-182F65CB9C57</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3554,9 +4117,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>30ABB323-E433-451C-8659-1416BA9019AB</string>
+				<string>2C44F425-AB9E-43FE-8BF8-F357AD89999D</string>
 				<key>UUID</key>
-				<string>2F284626-3378-4C96-82CE-F441C70EBA96</string>
+				<string>26433C29-4516-4314-8237-30DD8F399565</string>
 				<key>WFControlFlowMode</key>
 				<integer>0</integer>
 				<key>WFInput</key>
@@ -3566,7 +4129,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookPhotos</string>
 						<key>OutputUUID</key>
-						<string>EE8B69F3-CCD9-464F-9F55-FF70858C571C</string>
+						<string>94A31C79-3AF0-45C4-928F-182F65CB9C57</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3581,7 +4144,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>0E6A4236-0F60-4322-94CD-46873840E16F</string>
+				<string>F648ECBB-4A64-4C3C-B355-FAB344D81D62</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3606,7 +4169,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>C1B224EB-13CD-452C-B3FF-59938E6B9043</string>
+				<string>C765FD9B-9F21-4D5D-A09C-6F0045F37E51</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3614,7 +4177,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookPhotoURL</string>
 						<key>OutputUUID</key>
-						<string>0E6A4236-0F60-4322-94CD-46873840E16F</string>
+						<string>F648ECBB-4A64-4C3C-B355-FAB344D81D62</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3639,7 +4202,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>6416EC44-23BA-499D-8837-03A73553B234</string>
+				<string>9FDB4306-865C-4B8F-AE11-0CACFA3ED815</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3684,7 +4247,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>FacebookPhotoLink</string>
 						<key>OutputUUID</key>
-						<string>C1B224EB-13CD-452C-B3FF-59938E6B9043</string>
+						<string>C765FD9B-9F21-4D5D-A09C-6F0045F37E51</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3699,7 +4262,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>8F11B23C-ADEB-417D-945D-E418D57704E7</string>
+				<string>345FFB2D-AFCB-426F-B3B0-451AB0B1A242</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -3710,9 +4273,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>30ABB323-E433-451C-8659-1416BA9019AB</string>
+				<string>2C44F425-AB9E-43FE-8BF8-F357AD89999D</string>
 				<key>UUID</key>
-				<string>89083CAE-6D42-40EF-9688-FAF668A20827</string>
+				<string>679A764E-7E7B-4189-A337-016EAE5C37F1</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3723,7 +4286,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>32288579-18A1-4CA6-A764-44C16DB8ED95</string>
+				<string>9B4446DB-4737-4455-B6F4-837E852C68CB</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -3742,7 +4305,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>75A6B932-73F9-4537-8FA8-B1BA554FF483</string>
+				<string>004FA262-1008-4C93-B0B0-13FF2C3E7815</string>
 			</dict>
 		</dict>
 		<dict>
@@ -3751,9 +4314,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>C0FE0FD6-1915-4D50-AA8E-0CA991C18341</string>
+				<string>0E995845-ACE8-4A69-9AFC-21CEF75863F4</string>
 				<key>UUID</key>
-				<string>FD98C6D6-4A88-44EF-908F-D40E534E8C4C</string>
+				<string>0D7CE5EE-8C32-4150-9C7A-0C17D026C263</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3764,9 +4327,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>61B3FE61-F90C-400C-A913-C29D14567E1C</string>
+				<string>561752D4-B6B9-4571-B620-95B2FFB9BFE5</string>
 				<key>UUID</key>
-				<string>102056CB-4DC6-4C3B-BDC6-210245BDEA20</string>
+				<string>033B9B52-77F4-4689-97D9-A4FFF765A799</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -3777,7 +4340,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>18EB722D-3678-4C99-94B4-C82637799D4B</string>
+				<string>31BAD06E-CCA1-419B-A299-07BFDE8F7283</string>
 				<key>WFCommentActionText</key>
 				<string>Threads: public posts use crawler-rendered page data and signed CDN URLs. Private or login-gated posts open Threads or the default browser.</string>
 			</dict>
@@ -3788,7 +4351,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>5DB8D5F5-CA58-4D33-BCCB-5F934A0ECB9E</string>
+				<string>572AD54C-C0FA-454D-A08D-F33DBC3EBC9A</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3813,9 +4376,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>9DF2DD0D-7086-4803-83E3-017711E889AD</string>
+				<string>C45C6A82-E5C1-4505-B58B-CBA616351042</string>
 				<key>UUID</key>
-				<string>F250B458-E084-4349-A6BA-5C5B8E770C6A</string>
+				<string>A2443516-0A8E-483A-B6BB-5F7B56A42654</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -3831,7 +4394,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 							<key>OutputName</key>
 							<string>ThreadsPostID</string>
 							<key>OutputUUID</key>
-							<string>5DB8D5F5-CA58-4D33-BCCB-5F934A0ECB9E</string>
+							<string>572AD54C-C0FA-454D-A08D-F33DBC3EBC9A</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -3847,7 +4410,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>D91FC193-A07F-4ED9-B8D2-E65D3F51D9C8</string>
+				<string>770A6E67-194C-49E0-A0A4-A47D8C34E42B</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -3859,7 +4422,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsPostID</string>
 						<key>OutputUUID</key>
-						<string>5DB8D5F5-CA58-4D33-BCCB-5F934A0ECB9E</string>
+						<string>572AD54C-C0FA-454D-A08D-F33DBC3EBC9A</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3876,7 +4439,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>2948EFB0-A1D3-488E-93AD-CFDB7B0E2F10</string>
+				<string>14CCD121-C073-4761-AC38-5D89B4F48F0F</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -3934,7 +4497,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>C6858070-EAE9-44B7-886E-D4AE6DDE9D72</string>
+				<string>9BBD3F02-FFFA-4C30-91FB-DF4CF7BE6BA9</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -3942,7 +4505,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsPostPage</string>
 						<key>OutputUUID</key>
-						<string>2948EFB0-A1D3-488E-93AD-CFDB7B0E2F10</string>
+						<string>14CCD121-C073-4761-AC38-5D89B4F48F0F</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -3964,7 +4527,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 									<key>OutputName</key>
 									<string>ThreadsPostCode</string>
 									<key>OutputUUID</key>
-									<string>D91FC193-A07F-4ED9-B8D2-E65D3F51D9C8</string>
+									<string>770A6E67-194C-49E0-A0A4-A47D8C34E42B</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -3986,9 +4549,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>674C384F-5841-4AAF-9989-5E68B9889718</string>
+				<string>89598155-1181-4712-9AB1-20689A65C623</string>
 				<key>UUID</key>
-				<string>3A32551B-8C58-4F15-ADA1-325AAB8B451E</string>
+				<string>38B8F0AA-AE4B-48B7-8508-46BBFD340119</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -4004,7 +4567,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 							<key>OutputName</key>
 							<string>ThreadsVideoURLs</string>
 							<key>OutputUUID</key>
-							<string>C6858070-EAE9-44B7-886E-D4AE6DDE9D72</string>
+							<string>9BBD3F02-FFFA-4C30-91FB-DF4CF7BE6BA9</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -4020,9 +4583,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>1CFF0B03-B771-405F-A415-C216F27AFDFD</string>
+				<string>6E2639C9-ED74-4517-83DC-ECAB1EA09767</string>
 				<key>UUID</key>
-				<string>75FCEBEB-B145-4FD6-A7BB-4AA13A4C26E5</string>
+				<string>61730E9C-A309-4C08-A548-C5AD0279D1A2</string>
 				<key>WFControlFlowMode</key>
 				<integer>0</integer>
 				<key>WFInput</key>
@@ -4032,7 +4595,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsVideoURLs</string>
 						<key>OutputUUID</key>
-						<string>C6858070-EAE9-44B7-886E-D4AE6DDE9D72</string>
+						<string>9BBD3F02-FFFA-4C30-91FB-DF4CF7BE6BA9</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4047,7 +4610,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>733838CE-1131-4E3D-B7AF-02E4D7F10AC9</string>
+				<string>1C448314-4576-43B3-9502-AAC12B7249B2</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -4072,7 +4635,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>8BADB25B-26A2-405D-92CA-689942CE7EA6</string>
+				<string>F57AC047-9229-4D2A-B2AD-2B4C61D074BF</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4080,7 +4643,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsVideoURL</string>
 						<key>OutputUUID</key>
-						<string>733838CE-1131-4E3D-B7AF-02E4D7F10AC9</string>
+						<string>1C448314-4576-43B3-9502-AAC12B7249B2</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4103,7 +4666,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>2E3D6800-914D-4B09-B28E-1AC61070C48C</string>
+				<string>E8F0537C-BCE4-4061-9C28-22F30C2120D7</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4111,7 +4674,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsVideoURLSlashes</string>
 						<key>OutputUUID</key>
-						<string>8BADB25B-26A2-405D-92CA-689942CE7EA6</string>
+						<string>F57AC047-9229-4D2A-B2AD-2B4C61D074BF</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4134,7 +4697,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>FAB13071-EB77-42D3-AD44-ED64F5A1C8FF</string>
+				<string>29BEFD36-FECD-458B-9984-9B6C217389BF</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4142,7 +4705,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsVideoURLUnicodeSlashes</string>
 						<key>OutputUUID</key>
-						<string>2E3D6800-914D-4B09-B28E-1AC61070C48C</string>
+						<string>E8F0537C-BCE4-4061-9C28-22F30C2120D7</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4165,7 +4728,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>600DDDF2-2A74-4452-90A5-CC9832239795</string>
+				<string>3E1EA592-12B9-4F81-8FA3-10DED073EF51</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4173,7 +4736,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsVideoURLAmpersands</string>
 						<key>OutputUUID</key>
-						<string>FAB13071-EB77-42D3-AD44-ED64F5A1C8FF</string>
+						<string>29BEFD36-FECD-458B-9984-9B6C217389BF</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4196,7 +4759,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>24ECCDC3-7999-4C6E-AC42-73A578D07B1E</string>
+				<string>1537FE1F-6E7A-439E-BA69-1953CDF57225</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4204,7 +4767,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsVideoURLEquals</string>
 						<key>OutputUUID</key>
-						<string>600DDDF2-2A74-4452-90A5-CC9832239795</string>
+						<string>3E1EA592-12B9-4F81-8FA3-10DED073EF51</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4229,7 +4792,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>E1CA8F34-85AF-4538-8AE8-21626300D91A</string>
+				<string>1D3FB28B-28C0-4706-AA91-A5C94D49E0E8</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -4272,7 +4835,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsVideoURLPercent</string>
 						<key>OutputUUID</key>
-						<string>24ECCDC3-7999-4C6E-AC42-73A578D07B1E</string>
+						<string>1537FE1F-6E7A-439E-BA69-1953CDF57225</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4287,7 +4850,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>89192389-7FC5-4F09-B053-CCFE645906C6</string>
+				<string>BCF3D7A6-B83D-4A1B-BCF1-95ABD8D6CDC8</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -4298,9 +4861,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>1CFF0B03-B771-405F-A415-C216F27AFDFD</string>
+				<string>6E2639C9-ED74-4517-83DC-ECAB1EA09767</string>
 				<key>UUID</key>
-				<string>6D7B8FB2-AE41-4C20-BDB1-905009F69A06</string>
+				<string>949E7A45-26AB-44FC-A470-51F26349E371</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -4311,7 +4874,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>B9EB2301-27F4-47AD-8D2E-1F715623D01E</string>
+				<string>30567593-B21A-44FC-AEA1-D66DC4283648</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -4330,7 +4893,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>C833F551-A5D2-4BAD-85AD-4FFD644F6650</string>
+				<string>6780507B-01B9-4FFD-B939-8B9727EB1A32</string>
 			</dict>
 		</dict>
 		<dict>
@@ -4339,9 +4902,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>674C384F-5841-4AAF-9989-5E68B9889718</string>
+				<string>89598155-1181-4712-9AB1-20689A65C623</string>
 				<key>UUID</key>
-				<string>055A63DC-D588-4FB6-A795-4A669EBC5AD0</string>
+				<string>11425467-6B58-4EAF-B0A3-68D5BEEF6140</string>
 				<key>WFControlFlowMode</key>
 				<integer>1</integer>
 			</dict>
@@ -4352,7 +4915,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>F4A4C7DC-0459-430A-9A13-DA484E09801E</string>
+				<string>4E17D858-265C-4630-B5A4-403CF492C39E</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4360,7 +4923,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsPostPage</string>
 						<key>OutputUUID</key>
-						<string>2948EFB0-A1D3-488E-93AD-CFDB7B0E2F10</string>
+						<string>14CCD121-C073-4761-AC38-5D89B4F48F0F</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4382,7 +4945,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 									<key>OutputName</key>
 									<string>ThreadsPostCode</string>
 									<key>OutputUUID</key>
-									<string>D91FC193-A07F-4ED9-B8D2-E65D3F51D9C8</string>
+									<string>770A6E67-194C-49E0-A0A4-A47D8C34E42B</string>
 									<key>Type</key>
 									<string>ActionOutput</string>
 								</dict>
@@ -4404,9 +4967,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>E5E425B0-6292-4F29-91AA-48BDBFC30436</string>
+				<string>0A223213-ECF0-41AD-91F1-101C487110B6</string>
 				<key>UUID</key>
-				<string>32BCAD84-0F13-4160-8203-D42487982C51</string>
+				<string>F0D8CF61-0A8D-41FA-A7AD-C72FE6A05854</string>
 				<key>WFCondition</key>
 				<integer>100</integer>
 				<key>WFControlFlowMode</key>
@@ -4422,7 +4985,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 							<key>OutputName</key>
 							<string>ThreadsImageURLs</string>
 							<key>OutputUUID</key>
-							<string>F4A4C7DC-0459-430A-9A13-DA484E09801E</string>
+							<string>4E17D858-265C-4630-B5A4-403CF492C39E</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -4438,9 +5001,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>2534BE85-B7DF-4728-8EBD-5E4B4F31AAE1</string>
+				<string>5694FA55-7C9D-4FAB-8F36-09000D468B9D</string>
 				<key>UUID</key>
-				<string>B9A6F35B-4EDB-487B-89DF-CD57C2062653</string>
+				<string>D9AC4EAD-548E-4A55-8933-761F1D4EC35F</string>
 				<key>WFControlFlowMode</key>
 				<integer>0</integer>
 				<key>WFInput</key>
@@ -4450,7 +5013,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsImageURLs</string>
 						<key>OutputUUID</key>
-						<string>F4A4C7DC-0459-430A-9A13-DA484E09801E</string>
+						<string>4E17D858-265C-4630-B5A4-403CF492C39E</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4465,7 +5028,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>97114EA4-1296-4B4F-B3E0-C1C93E93793E</string>
+				<string>F3A42FC1-0799-4F18-87BC-11A8FD32D05F</string>
 				<key>WFGetGroupType</key>
 				<string>Group At Index</string>
 				<key>WFGroupIndex</key>
@@ -4490,7 +5053,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>61D0A06A-AB99-47B6-B8F1-A139DC4545CF</string>
+				<string>89C7AD1E-4598-4A10-A48F-4BC4D62FAFC6</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4498,7 +5061,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsImageURL</string>
 						<key>OutputUUID</key>
-						<string>97114EA4-1296-4B4F-B3E0-C1C93E93793E</string>
+						<string>F3A42FC1-0799-4F18-87BC-11A8FD32D05F</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4521,7 +5084,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>BC6F8C7B-12DA-4763-AA5C-D03406C6282C</string>
+				<string>D4421F99-9167-468A-96E1-CA4AA6576C81</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4529,7 +5092,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsImageURLSlashes</string>
 						<key>OutputUUID</key>
-						<string>61D0A06A-AB99-47B6-B8F1-A139DC4545CF</string>
+						<string>89C7AD1E-4598-4A10-A48F-4BC4D62FAFC6</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4552,7 +5115,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>E664CF96-1A0C-4E07-98FB-71F05EF689F8</string>
+				<string>A527E33F-A923-4F64-B56D-4948FACD1FA3</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4560,7 +5123,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsImageURLUnicodeSlashes</string>
 						<key>OutputUUID</key>
-						<string>BC6F8C7B-12DA-4763-AA5C-D03406C6282C</string>
+						<string>D4421F99-9167-468A-96E1-CA4AA6576C81</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4583,7 +5146,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>7FBEFD81-8043-47B1-BD4D-5AB3B0F24379</string>
+				<string>47899D36-44C1-4F50-8C74-78C440E8DEE7</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4591,7 +5154,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsImageURLAmpersands</string>
 						<key>OutputUUID</key>
-						<string>E664CF96-1A0C-4E07-98FB-71F05EF689F8</string>
+						<string>A527E33F-A923-4F64-B56D-4948FACD1FA3</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4614,7 +5177,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>F5D12F6A-569C-4425-B33A-C39EC79429C0</string>
+				<string>B375E0C5-B412-4CD3-A9FE-6383C406F5AD</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4622,7 +5185,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsImageURLEquals</string>
 						<key>OutputUUID</key>
-						<string>7FBEFD81-8043-47B1-BD4D-5AB3B0F24379</string>
+						<string>47899D36-44C1-4F50-8C74-78C440E8DEE7</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4647,7 +5210,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 				<key>ShowHeaders</key>
 				<true/>
 				<key>UUID</key>
-				<string>007809B4-2F20-4A8B-A3C3-39B25DDC6BFA</string>
+				<string>093173D5-DC55-4C68-8A78-7CD71C6A6FC3</string>
 				<key>WFHTTPHeaders</key>
 				<dict>
 					<key>Value</key>
@@ -4690,7 +5253,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 						<key>OutputName</key>
 						<string>ThreadsImageURLPercent</string>
 						<key>OutputUUID</key>
-						<string>F5D12F6A-569C-4425-B33A-C39EC79429C0</string>
+						<string>B375E0C5-B412-4CD3-A9FE-6383C406F5AD</string>
 						<key>Type</key>
 						<string>ActionOutput</string>
 					</dict>
@@ -4705,7 +5268,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>6D4E8CA0-97F9-4717-99BF-43166C5C0796</string>
+				<string>F886D15D-99E8-4A53-B992-520A2B6554D1</string>
 				<key>WFPhotoAlbumName</key>
 				<string></string>
 			</dict>
@@ -4716,9 +5279,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>2534BE85-B7DF-4728-8EBD-5E4B4F31AAE1</string>
+				<string>5694FA55-7C9D-4FAB-8F36-09000D468B9D</string>
 				<key>UUID</key>
-				<string>4BF061A1-E547-408A-A659-F1CACF2E7FBD</string>
+				<string>42DB24BE-F3FE-4FEB-B8C9-635F77D3EA94</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -4729,7 +5292,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>285E5F97-B753-4916-9611-EE20D654172E</string>
+				<string>A5D11732-5DF7-491D-B38A-D4ABB1737A7A</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -4748,7 +5311,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>7D318CC5-B007-4C14-9D3D-9E32A545DD17</string>
+				<string>9E79701A-D65E-49FD-9EB7-6C4603B3922B</string>
 			</dict>
 		</dict>
 		<dict>
@@ -4757,9 +5320,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>E5E425B0-6292-4F29-91AA-48BDBFC30436</string>
+				<string>0A223213-ECF0-41AD-91F1-101C487110B6</string>
 				<key>UUID</key>
-				<string>A7D152BF-08C8-48B6-A0E0-993E99726455</string>
+				<string>038BFCEC-379C-40C2-8B66-08DEB289D965</string>
 				<key>WFControlFlowMode</key>
 				<integer>1</integer>
 			</dict>
@@ -4770,7 +5333,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>4E8FD829-E185-497D-B160-06C105B5C72C</string>
+				<string>0AE1CAEE-CC5F-42FB-A3CA-270A41796D96</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -4789,7 +5352,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>6A162B1C-CC7B-4355-AC15-AA36C94EF477</string>
+				<string>D8407313-32AF-48B0-817E-02FB4B9D5996</string>
 				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
@@ -4819,7 +5382,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>C4ABEA14-3CBF-47A5-BCC9-162EC8B28275</string>
+				<string>B63DE340-519A-4482-8160-7030BF4AAF13</string>
 			</dict>
 		</dict>
 		<dict>
@@ -4828,7 +5391,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>543DACF4-D927-4F5E-A992-CE7B238FEC2C</string>
+				<string>0425E095-B13D-440A-9B9B-EBB7FF1B0D02</string>
 				<key>WFNotificationActionBody</key>
 				<dict>
 					<key>Value</key>
@@ -4847,7 +5410,7 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>CBC29B90-9BE0-4556-AB62-5EA759053D43</string>
+				<string>658A5EDF-0361-47C3-A030-35DC0375BEDB</string>
 			</dict>
 		</dict>
 		<dict>
@@ -4856,9 +5419,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>E5E425B0-6292-4F29-91AA-48BDBFC30436</string>
+				<string>0A223213-ECF0-41AD-91F1-101C487110B6</string>
 				<key>UUID</key>
-				<string>197259F6-E192-4CEF-9FAB-2C144ABC104F</string>
+				<string>04111C0E-89B7-47F1-BFF8-72B5D5DF0763</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -4869,9 +5432,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>674C384F-5841-4AAF-9989-5E68B9889718</string>
+				<string>89598155-1181-4712-9AB1-20689A65C623</string>
 				<key>UUID</key>
-				<string>AB667C99-F8D5-4E27-BDBD-088D20A618C9</string>
+				<string>8A601E11-9811-4149-A723-364BEF2B2023</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -4882,9 +5445,9 @@ If a post is private, the shortcut opens Threads when installed, or your default
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
-				<string>9DF2DD0D-7086-4803-83E3-017711E889AD</string>
+				<string>C45C6A82-E5C1-4505-B58B-CBA616351042</string>
 				<key>UUID</key>
-				<string>57561A1B-718B-4837-A165-698C745F8720</string>
+				<string>77105436-37D0-4495-8E05-C5762EFA9F49</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>

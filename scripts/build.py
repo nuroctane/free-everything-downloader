@@ -87,6 +87,8 @@ def main():
                                    extras=EXTRA.get(sites[0], "") if len(sites) == 1 else "")
     new = build_sites(sites)
 
+    B.patch_input_normalization(acts)
+
     idx = B.find_aggregator(acts)
     before = len(acts)
     acts[idx:idx] = new

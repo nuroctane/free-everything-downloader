@@ -24,7 +24,7 @@ YouTube and Instagram always go through yt-dlp in a-Shell mini or full a-Shell -
 
 ## Version
 
-This build is **1.6**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
+This build is **1.6.1**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
 
 ## How to use
 

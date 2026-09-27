@@ -39,6 +39,12 @@ REQUIRED = {
         "WFVariableName": ((str,), True), "WFInput": ((dict,), True)},
     "is.workflow.actions.getvalueforkey": {
         "WFDictionaryKey": ((str,), True), "WFInput": ((dict,), True)},
+    "is.workflow.actions.getitemtype": {"WFInput": ((dict,), True)},
+    "is.workflow.actions.getitemfromlist": {
+        "WFItemSpecifier": ((str,), True), "WFInput": ((dict,), True)},
+    "is.workflow.actions.detect.text": {"WFInput": ((dict,), True)},
+    "is.workflow.actions.properties.safariwebpage": {
+        "WFContentItemPropertyName": ((str,), True), "WFInput": ((dict,), True)},
     "is.workflow.actions.conditional": {
         "WFCondition": ((int,), False), "WFControlFlowMode": ((int,), False)},
     "is.workflow.actions.repeat.each": {"WFControlFlowMode": ((int,), False)},    "is.workflow.actions.delay": {"WFDelayTime": ((int, float), True)},
@@ -122,6 +128,9 @@ def audit_structure(acts, problems, base_acts=None):
              for a in (base_acts if base_acts is not None else acts)} | {
         "is.workflow.actions.text.match", "is.workflow.actions.text.match.getgroup",
         "is.workflow.actions.text.replace",
+        "is.workflow.actions.getitemtype", "is.workflow.actions.getitemfromlist",
+        "is.workflow.actions.detect.text",
+        "is.workflow.actions.properties.safariwebpage",
         # full a-Shell fallback (same intents as mini, different bundle id)
         "AsheKube.app.a-Shell.ExecuteCommandIntent",
         "AsheKube.app.a-Shell.GetFileIntent",

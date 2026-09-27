@@ -140,6 +140,44 @@ class Graph:
         a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
         return self._push(a)
 
+    def get_type(self, src, name="Input Type"):
+        """Return the Shortcuts content type for an input item."""
+        a = Action("is.workflow.actions.getitemtype", {"WFInput": src}, name)
+        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
+        return self._push(a)
+
+    def get_item_first(self, src, name="First Item"):
+        """Take the first item from a Shortcuts list (lists are one-based)."""
+        a = Action("is.workflow.actions.getitemfromlist",
+                   {"WFItemSpecifier": "First Item", "WFInput": src}, name)
+        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
+        return self._push(a)
+
+    def detect_links(self, src, name="URLs"):
+        """Extract URL content items from text or a share-sheet item."""
+        a = Action("is.workflow.actions.detect.link", {"WFInput": src}, name)
+        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
+        return self._push(a)
+
+    def text_from_input(self, src, name="Shared Text"):
+        """Coerce a share-sheet item to text before URL detection."""
+        a = Action("is.workflow.actions.detect.text", {"WFInput": src}, name)
+        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
+        return self._push(a)
+
+    def expand_url(self, src, name="Expanded URL"):
+        """Expand a shortened URL or pass through a canonical URL."""
+        a = Action("is.workflow.actions.url.expand", {"URL": src}, name)
+        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
+        return self._push(a)
+
+    def safari_page_property(self, property_name, src, name="Page URL"):
+        """Read a property from a Safari Web Page content item."""
+        a = Action("is.workflow.actions.properties.safariwebpage",
+                   {"WFContentItemPropertyName": property_name, "WFInput": src}, name)
+        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
+        return self._push(a)
+
     def download(self, url, method=None, headers=None, name="Contents of URL"):
         params = {"WFURL": url}
         if method:

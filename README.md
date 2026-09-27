@@ -121,4 +121,9 @@ Facebook speed and photo analysis: `docs/facebook-speed.md`.
 3. Open a post → Share → FREE Media Downloader.
 4. Approve the first Photos / Files / a-Shell prompts.
 
+The share-sheet input is normalized across Safari, Brave, Chrome, Firefox, and
+other iOS browsers. Webpage shares use the page URL; URL, text, and rich-text
+shares use the first detected link. If a browser's own share extension sends no
+link, use **Copy Link** and run the shortcut from the clipboard.
+
 Paste a URL and run it from Shortcuts the same way.
