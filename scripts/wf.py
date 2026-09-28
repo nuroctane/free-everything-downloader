@@ -140,44 +140,6 @@ class Graph:
         a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
         return self._push(a)
 
-    def get_type(self, src, name="Input Type"):
-        """Return the Shortcuts content type for an input item."""
-        a = Action("is.workflow.actions.getitemtype", {"WFInput": src}, name)
-        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
-        return self._push(a)
-
-    def get_item_first(self, src, name="First Item"):
-        """Take the first item from a Shortcuts list (lists are one-based)."""
-        a = Action("is.workflow.actions.getitemfromlist",
-                   {"WFItemSpecifier": "First Item", "WFInput": src}, name)
-        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
-        return self._push(a)
-
-    def detect_links(self, src, name="URLs"):
-        """Extract URL content items from text or a share-sheet item."""
-        a = Action("is.workflow.actions.detect.link", {"WFInput": src}, name)
-        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
-        return self._push(a)
-
-    def text_from_input(self, src, name="Shared Text"):
-        """Coerce a share-sheet item to text before URL detection."""
-        a = Action("is.workflow.actions.detect.text", {"WFInput": src}, name)
-        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
-        return self._push(a)
-
-    def expand_url(self, src, name="Expanded URL"):
-        """Expand a shortened URL or pass through a canonical URL."""
-        a = Action("is.workflow.actions.url.expand", {"URL": src}, name)
-        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
-        return self._push(a)
-
-    def safari_page_property(self, property_name, src, name="Page URL"):
-        """Read a property from a Safari Web Page content item."""
-        a = Action("is.workflow.actions.properties.safariwebpage",
-                   {"WFContentItemPropertyName": property_name, "WFInput": src}, name)
-        a.d["WFWorkflowActionParameters"]["CustomOutputName"] = a.name
-        return self._push(a)
-
     def download(self, url, method=None, headers=None, name="Contents of URL"):
         params = {"WFURL": url}
         if method:
@@ -360,3 +322,81 @@ def wrap(actions, note):
     g.actions = list(actions)
     g.comment(note)
     return g
+
+
+# ------------------------------------------------------------ native actions
+# Serializations copied from actions the Shortcuts app itself wrote (the
+# user's device-built shortcuts, client 4711, and public device exports). The
+# helpers above predate that check and store some inputs under keys iOS
+# ignores: Match Text reads "text", Get Group reads "matches", Save to Photo
+# Album reads an explicit WFInput and has no WFPhotoAlbumName. A generated
+# step with an ignored input makes iOS show a blank "Text" box or stop with
+# "Please choose a value for each parameter in this action".
+TEXT_COERCION = [{"CoercionItemClass": "WFStringContentItem",
+                  "Type": "WFCoercionVariableAggrandizement"}]
+
+
+def raw(token):
+    """The bare token inside an attachment wrapper (what text fields store)."""
+    return token["Value"] if token.get("WFSerializationType") == "WFTextTokenAttachment" else token
+
+
+def native_if(g, condition, token, operand=None, as_text=True):
+    """If, with the input read as Text like the app's own site checks."""
+    t = raw(token)
+    if as_text and condition != COND_HAS_VALUE:
+        t = dict(t, Aggrandizements=TEXT_COERCION)
+    return g.if_(condition, {"Value": t, "WFSerializationType": "WFTextTokenAttachment"}, operand)
+
+
+def native_match(g, pattern, source, name="Matches", case_sensitive=False):
+    a = Action("is.workflow.actions.text.match",
+               {"WFMatchTextPattern": pattern, "text": tstr(raw(source)),
+                "WFMatchTextCaseSensitive": case_sensitive}, name)
+    return g._push(a)
+
+
+def native_group(g, matches, name="Group", index=1):
+    """Get Group <index> from a Match Text output (or the Repeat Item of one)."""
+    src = raw(matches)
+    a = Action("is.workflow.actions.text.match.getgroup",
+               {"matches": {"Value": src, "WFSerializationType": "WFTextTokenAttachment"},
+                "WFGetGroupType": "Group At Index", "WFGroupIndex": index}, name)
+    return g._push(a)
+
+
+def native_replace(g, find, repl, source, name="Replaced Text"):
+    a = Action("is.workflow.actions.text.replace",
+               {"WFInput": tstr(raw(source)), "WFReplaceTextFind": find,
+                "WFReplaceTextReplace": repl, "WFReplaceTextCaseSensitive": True,
+                "WFReplaceTextRegularExpression": False}, name)
+    return g._push(a)
+
+
+def native_get(g, url_parts, headers=None, name="Contents of URL"):
+    """Get Contents of URL (GET). url_parts: str and raw/attachment tokens."""
+    parts = [p if isinstance(p, str) else raw(p) for p in url_parts]
+    params = {"WFURL": tstr(*parts)}
+    if headers:
+        params["ShowHeaders"] = True
+        params["WFHTTPHeaders"] = dict_field(headers)
+    return g._push(Action("is.workflow.actions.downloadurl", params, name))
+
+
+def native_save(g, media):
+    return g._push(Action("is.workflow.actions.savetocameraroll",
+                          {"WFInput": {"Value": raw(media),
+                                       "WFSerializationType": "WFTextTokenAttachment"}},
+                          "Saved Photo Media"))
+
+
+def native_url(g, *parts, name="URL"):
+    """URL action: keeps a variable URL-typed (never store plain text in userLink)."""
+    parts = [p if isinstance(p, str) else raw(p) for p in parts]
+    return g._push(Action("is.workflow.actions.url", {"WFURLActionURL": tstr(*parts)}, name))
+
+
+def native_notify(g, text):
+    return g._push(Action("is.workflow.actions.notification",
+                          {"WFNotificationActionBody": text,
+                           "WFNotificationActionTitle": "FREE Media Downloader"}, "Show Notification"))

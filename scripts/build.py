@@ -60,6 +60,10 @@ def build_sites(sites):
 
 
 def main():
+    if "--i-know-this-drops-1.5.1" not in sys.argv:
+        raise SystemExit("build.py starts from the 1.4 base and drops 1.5.1's full a-Shell fallback "
+                         "(that is how 1.6 broke). Release builds: scripts/build_release.py")
+    sys.argv.remove("--i-know-this-drops-1.5.1")
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", required=True, help="plist to start from (known-good)")
     ap.add_argument("--version", required=True)
@@ -86,8 +90,6 @@ def main():
     B.NEW_COMMENT = COMMENT.format(v=a.version, d=a.date,
                                    extras=EXTRA.get(sites[0], "") if len(sites) == 1 else "")
     new = build_sites(sites)
-
-    B.patch_input_normalization(acts)
 
     idx = B.find_aggregator(acts)
     before = len(acts)

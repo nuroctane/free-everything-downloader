@@ -1,0 +1,164 @@
+{
+  "rule": "A platform the user has confirmed working on their iPhone is LOCKED. Every step a share from that platform runs must stay byte-identical to the baseline build. No agent may change, reorder, wrap, or add a step on a locked platform's path, including new If checks or comments. scripts/test_input.py enforces this for every outcome of the server download (not reached, completed, failed) and scripts/sign.py refuses to sign when it fails. Only the user can unlock a platform, by saying so in chat; record the date and their words here when they do.",
+  "baseline": "tests/fixtures/good-1.7.plist",
+  "baseline_source": "RoutineHub 1.7 (2026-09-28). The user confirmed this exact build on iPhone as iCloud a7cda658d04c446c98ade28a5664b37b ('everything works!!!! finally!!!!'), stamped 1.6.1 at the time; RoutineHub would not reuse 1.6.1 (a deleted Codex version still reserves it), so the user chose 1.7. Only the header comment and Settings.version differ from the confirmed file. X and Instagram steps are byte-identical to 1.5.1.",
+  "strict_every_outcome": [
+    "X",
+    "Instagram"
+  ],
+  "failure_path_allowance": {
+    "blocks": [
+      "Reddit share links",
+      "Mastodon posts"
+    ],
+    "why": "These blocks live in the sign-in tail of the server-failed branch. Only a share that already failed in its own section AND on the server gets there. On such an already-failed path of a locked platform, the blocks may run only side-effect-free checks (comments, If checks, Match Text, Get Group): no download, save, notification, URL open, variable change or stop. Everything else on the path must stay byte-identical. X and Instagram never reach the tail and stay strict in every outcome.",
+    "user_request": "2026-09-28: 'i need reddit back. find a way to do this without fucking with anything else'; asked to make sure Mastodon and the other platforms work.",
+    "note": "Used while building 1.6.1 (Reddit/Mastodon were new then). Both blocks are now part of the locked baseline; a future tail block would need its own entry here."
+  },
+  "locked": {
+    "X": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://x.com/SpaceX/status/1732824684683784516?s=46&t=AbCd",
+        "https://x.com/SpaceX/status/1732824684683784516",
+        "https://twitter.com/u/status/123456789/photo/1",
+        "https://twitter.com/u/status/123456789?s=20",
+        "https://x.com/i/status/123456789",
+        "https://x.com/u/status/123456789/video/1",
+        "https://mobile.twitter.com/u/status/123456789"
+      ]
+    },
+    "Instagram": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.instagram.com/reel/Cabc123/?igsh=MWQ1ZGUxMzBkMA==",
+        "https://www.instagram.com/p/Cabc123/?img_index=1",
+        "https://www.instagram.com/stories/someone/3456789012345678901/?utm_source=ig_story_item_share",
+        "https://www.instagram.com/share/reel/BAabc123/",
+        "https://instagr.am/p/Cabc123/"
+      ]
+    },
+    "Threads": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        {
+          "shared": "https://www.threads.com/@zuck/post/Ddt7cL5EfUG?xmt=AQF0abc&slof=1",
+          "expanded": "https://www.facebook.com/unsupportedbrowser"
+        },
+        {
+          "shared": "https://www.threads.net/@natgeo/post/DdzAoYVDY8o",
+          "expanded": "https://www.facebook.com/unsupportedbrowser"
+        },
+        {
+          "shared": "https://www.threads.com/t/Cabc123",
+          "expanded": "https://www.facebook.com/unsupportedbrowser"
+        }
+      ]
+    },
+    "Facebook": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        {
+          "shared": "https://www.facebook.com/share/r/1C2jJdrWiS/",
+          "expanded": "https://www.facebook.com/unsupportedbrowser"
+        },
+        {
+          "shared": "https://www.facebook.com/share/v/1JudTFVg5h/",
+          "expanded": "https://www.facebook.com/unsupportedbrowser"
+        },
+        {
+          "shared": "https://m.facebook.com/watch/?v=1591316522498163",
+          "expanded": "https://www.facebook.com/unsupportedbrowser"
+        },
+        {
+          "shared": "https://www.facebook.com/reel/1392887415271938/",
+          "expanded": "https://www.facebook.com/unsupportedbrowser"
+        }
+      ]
+    },
+    "TikTok": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.tiktok.com/@/video/7574301384833617172?_r=1&_d=secCgYIASAHKAESPgo8&u_code=eck6a4k288d7c4&share_item_id=7574301384833617172&utm_source=short_fallback",
+        "https://www.tiktok.com/@scout2015/video/6718335390845095173",
+        "https://www.tiktok.com/@hullcity/photo/7553302113757990166",
+        "https://m.tiktok.com/v/6718335390845095173.html"
+      ]
+    },
+    "Reddit": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.reddit.com/r/Whatcouldgowrong/comments/1vyouqh/robot_tries/",
+        "https://www.reddit.com/r/aviation/comments/1u7b4o7/60820266152026_a_cr/",
+        {
+          "shared": "https://www.reddit.com/r/pics/s/URdlaUpIrH",
+          "expanded": "https://www.reddit.com/r/pics/s/URdlaUpIrH"
+        }
+      ]
+    },
+    "Mastodon": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://mastodon.social/@Mastodon/116929144390213579",
+        "https://social.vivaldi.net/@Vivaldi/117326000018306833",
+        "https://mstdn.social/@stux/117337607851617408"
+      ]
+    },
+    "Bluesky": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://bsky.app/profile/washingtonpost.com/post/3mwcp6fmwtj2r"
+      ]
+    },
+    "Pinterest": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.pinterest.com/pin/400961173093248299/",
+        "https://www.pinterest.com/pin/911978993269643185/sent/?invite_code=abc&sfo=1"
+      ]
+    },
+    "LinkedIn": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.linkedin.com/posts/the-mathworks_2_what-is-mathworks-cloud-center-activity-7151241570371948544-4Gu7?utm_source=share&utm_medium=member_ios"
+      ]
+    },
+    "Snapchat": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.snapchat.com/spotlight/W7_EDlXWTBiXAEEniNoMPwAAYY2Fmem9reWFiAaDOwDnKAaDOwAtiAAAAAQ?share_id=abc&locale=en-US"
+      ]
+    },
+    "Vimeo": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://vimeo.com/76979871?share=copy"
+      ]
+    },
+    "DailyMotion": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.dailymotion.com/video/x8n4jzh"
+      ]
+    },
+    "SoundCloud": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://soundcloud.com/forss/flickermood"
+      ]
+    },
+    "YouTube": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ&feature=youtu.be",
+        "https://www.youtube.com/shorts/abc123"
+      ]
+    },
+    "YouTube Music": {
+      "confirmed": "2026-09-28 on iPhone (build shipped as RoutineHub 1.7, iCloud a7cda658; 'everything works')",
+      "links": [
+        "https://music.youtube.com/watch?v=dQw4w9WgXcQ&si=abc123"
+      ]
+    }
+  }
+}

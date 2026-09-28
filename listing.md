@@ -6,13 +6,24 @@ They ask for a key, a subscription, a speech about supporting the developer. Yad
 
 **FREE Media Downloader** isn't and won’t be that, ever 🚫, while still being maintained as long as I live :). Open the Share Sheet, or paste a URL. Video and photos land in Photos. Audio lands in Files. TikTok comes off the watermark when the source lets it. YouTube always goes through yt-dlp. Instagram is the original file, no watermark overlay. No account. No donation e-begging spam. No key file. No Pro screen. A dead link dies in place. Nothing opens a checkout. **No bs** 🚫.
 
-Public Threads videos and images resolve on-device. If a post is private or login-gated, the shortcut opens Threads when installed or your default browser. Sign in there, then share the post again.
+Threads videos and images download straight from the Threads app share. No sign-in. Text-only posts have nothing to save.
 
 If you have been paying rent on a button that literally anyone can make today with minimal effort (this took me 2 hours), stop... Lord have mercy.
 
 ## Version notes
 
-Facebook reels and videos resolve on the phone now, straight from the Facebook video player - about half a second instead of waiting on a server queue - and Facebook photos save again. Photo links used to fail with an error the shortcut read as a login wall, which is why signing in never helped. YouTube and Instagram run in either a-Shell mini or full a-Shell now. X, Bluesky, Mastodon, Pinterest and everything else behave exactly as they did in 1.4.
+**1.7**
+
+Why the jump from 1.5.1: 1.6 and 1.6.1 went out briefly, broke some downloads and were pulled. 1.7 fixes that and works across every supported app.
+
+- **Threads**: videos, photos and multi-photo posts download straight from the Threads app. No sign-in.
+- **Facebook**: reels and videos shared from the Facebook app download again.
+- **TikTok**: photo slideshows save the photos instead of the song.
+- **Reddit**: share links from the Reddit app download videos, photos and galleries.
+- **Mastodon**: posts download from any Mastodon server.
+- **Everything else** (X, Instagram, YouTube, YouTube Music, Bluesky, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud): works just like before.
+
+Share from any app or any browser, tap once, and it lands in Photos (audio in Files).
 
 ## Sites
 
@@ -20,11 +31,11 @@ Facebook reels and videos resolve on the phone now, straight from the Facebook v
 
 YouTube, YouTube Music, TikTok, Instagram, Facebook, X, Threads, Bluesky, Mastodon, Reddit, Pinterest, LinkedIn, Snapchat, Vimeo, DailyMotion, SoundCloud.
 
-YouTube and Instagram always go through yt-dlp in a-Shell mini or full a-Shell - either one works. TikTok comes off the watermark when the source lets it. Threads public videos and images resolve from the post page; private posts open Threads or your default browser. X, Bluesky, and Mastodon get a second try if the first extractor misses. The remaining sites go through the first extractor.
+YouTube and Instagram always go through yt-dlp in a-Shell mini or full a-Shell - either one works. TikTok comes off the watermark when the source lets it. Threads videos and images resolve from the post page, no sign-in. X, Bluesky, and Mastodon get a second try if the first extractor misses. The remaining sites go through the first extractor.
 
 ## Version
 
-This build is **1.6.1**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
+This build is **1.7**. Open the shortcut in the Shortcuts app. The comment at the top shows the version. If this page is newer than that number, update from here.
 
 ## How to use
 

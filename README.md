@@ -1,21 +1,16 @@
 # FREE Media Downloader
 
-> **Status 2026-09-26: RoutineHub serves 1.4.1 (the 1.4 build).**
-> 1.5 added four on-device fast paths (X, Bluesky, Mastodon, Pinterest) on top of
-> the Facebook fixes. The X one regressed share-sheet runs on device - the
-> shortcut asked for the link instead of taking the shared post - so 1.5 was
-> rolled back to the last known-good build. `shortcut/fed.unsigned.plist` in this
-> commit is the 1.4 graph; the Facebook-only candidate is reproducible with
-> `python -X utf8 scripts/build.py --base <1.4 plist> --version 1.6 --sites facebook,threads --out shortcut/fed.unsigned.plist`.
-> Anyone re-adding a fast path must test it from the share sheet on a real
-> device before it ships.
+> **Status 2026-09-28: RoutineHub serves 1.7.** `shortcut/fed.unsigned.plist` is the
+> 1.7 build. Releases are built with `scripts/build_release.py` from the last build
+> confirmed on a phone (`tests/fixtures/good-1.7.plist`); see `AGENTS.md` before
+> changing anything.
 
 
 iOS Shortcut. Share a link. Save the file. No key. No paywall. No checkout.
 
 Canonical unsigned source: `shortcut/fed.unsigned.plist`. HubSign writes the `.shortcut` to Google Drive (`H:\My Drive`). RoutineHub is a separate publish step, not this repo's ship pipeline.
 
-The working tree contains candidate **1.6** output. RoutineHub still serves 1.4.1 until a fresh device-exported iCloud link is published. Open the shortcut in the Shortcuts app to see the version in its first comment.
+Open the shortcut in the Shortcuts app to see the version in its first comment.
 
 ## What it does
 
@@ -120,10 +115,5 @@ Facebook speed and photo analysis: `docs/facebook-speed.md`.
 2. Files → Drive → My Drive → **FREE Media Downloader** → Add Shortcut.
 3. Open a post → Share → FREE Media Downloader.
 4. Approve the first Photos / Files / a-Shell prompts.
-
-The share-sheet input is normalized across Safari, Brave, Chrome, Firefox, and
-other iOS browsers. Webpage shares use the page URL; URL, text, and rich-text
-shares use the first detected link. If a browser's own share extension sends no
-link, use **Copy Link** and run the shortcut from the clipboard.
 
 Paste a URL and run it from Shortcuts the same way.

@@ -3,12 +3,17 @@
 """HubSign the unsigned plist and write Google Drive → My Drive."""
 import json
 import plistlib
+import subprocess
+import sys
 import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "FREE Media Downloader"
 DOCS = Path(r"H:\My Drive")
+
+# Never sign a build whose share-sheet input drifted from the confirmed 1.6 path.
+subprocess.run([sys.executable, "-X", "utf8", str(ROOT / "scripts" / "test_input.py")], check=True)
 
 xml = (ROOT / "shortcut" / "fed.unsigned.plist").read_bytes()
 # round-trip to prove it still parses

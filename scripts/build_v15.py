@@ -27,7 +27,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from wf import (Graph, tstr, var, out, coerce, COND_CONTAINS, COND_HAS_VALUE,  # noqa: E402
+from wf import (Graph, Action, tstr, var, out, coerce, COND_CONTAINS, COND_HAS_VALUE,  # noqa: E402
                 dict_field)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,80 +80,177 @@ def json_pairs(pairs):
     return dict_field(pairs)
 
 
-# ---------------------------------------------------------- share-sheet input
-def patch_input_normalization(acts):
-    """Normalize URL input from Safari, Brave, and other browser share sheets.
+# ------------------------------------------------------ 1.5.1 input block
+# The 1.5.1 input block (Get URLs -> Expand URL -> userLink) is the known-good
+# path for every app share. It is frozen: matched byte-for-byte here, never
+# edited. Threads redirects clients without a browser user-agent to
+# facebook.com/unsupportedbrowser, so the expanded link stops looking like
+# Threads; patch_threads_link puts the shared link back for Threads only.
+THREADS_LINK = r"^[\s\S]*?(https?://(?:www\.)?threads\.(?:net|com)/\S+)"
+INPUT_BLOCK_1_6 = [
+    {"WFWorkflowActionIdentifier": "is.workflow.actions.detect.link",
+     "WFWorkflowActionParameters": {
+         "UUID": "90543E50-F039-4C91-A2AE-313ABC0D493F",
+         "WFInput": {"Value": {"attachmentsByRange": {"{0, 1}": {"Type": "ExtensionInput"}},
+                               "string": "￼"},
+                     "WFSerializationType": "WFTextTokenString"}}},
+    {"WFWorkflowActionIdentifier": "is.workflow.actions.url.expand",
+     "WFWorkflowActionParameters": {
+         "URL": {"Value": {"attachmentsByRange": {"{0, 1}": {
+             "OutputName": "URLs", "OutputUUID": "90543E50-F039-4C91-A2AE-313ABC0D493F",
+             "Type": "ActionOutput"}}, "string": "￼"},
+             "WFSerializationType": "WFTextTokenString"},
+         "UUID": "F3BC3797-8B49-489D-A1F1-1F8D90A4801B"}},
+    {"WFWorkflowActionIdentifier": "is.workflow.actions.setvariable",
+     "WFWorkflowActionParameters": {
+         "WFInput": {"Value": {"OutputName": "Expanded URL",
+                               "OutputUUID": "F3BC3797-8B49-489D-A1F1-1F8D90A4801B",
+                               "Type": "ActionOutput"},
+                     "WFSerializationType": "WFTextTokenAttachment"},
+         "WFVariableName": "userLink"}},
+]
 
-    Browser extensions do not all send the same Shortcuts content item. Safari
-    and browsers that advertise a webpage hand over a ``Safari Web Page``
-    object; other browsers send a URL, text, or rich text containing one or
-    more URLs. The old graph passed the complete URL list straight into
-    ``Expand URL``. That is fragile when a webpage contains several links and
-    can leave yt-dlp with a list/object instead of one URL.
 
-    Prefer the page's canonical URL for webpage inputs. For every other input,
-    extract URLs and keep the first one. Expansion then runs on that scalar,
-    and an empty share item gets a useful message instead of falling through
-    to the server extractor with an empty link.
+def find_input_block(acts):
+    """Index of the untouched 1.6 input block, or SystemExit."""
+    for i in range(len(acts) - 2):
+        if acts[i:i + 3] == INPUT_BLOCK_1_6:
+            return i
+    raise SystemExit("1.5.1 share input block not found unchanged; refusing to build")
+
+
+FB_SHARE_LINK = r"^[\s\S]*?(https?://(?:[\w-]+\.)?(?:facebook\.com|fb\.watch)/\S+)"
+FB_PAGE_VIDEO_ID = r'^[\s\S]*?"video_id":"(\d+)"'
+OG_URL = r'^[\s\S]*?<meta property="og:url" content="([^"]+)"'
+
+
+def share_links_block():
+    """Share links the phone's Expand URL can't resolve. Every other link skips it.
+
+    The phone expands links without a browser user-agent. Threads and Facebook
+    answer that with facebook.com/unsupportedbrowser; Reddit /s/ links get 403.
+    Facebook's link-preview crawler user-agent resolves all of them (live-tested).
+    Only `If userLink contains "..."` checks run for any other share.
     """
-    idx = None
-    for i, a in enumerate(acts):
-        if a.get("WFWorkflowActionIdentifier") != "is.workflow.actions.detect.link":
-            continue
-        if i + 2 >= len(acts):
-            continue
-        if (acts[i + 1].get("WFWorkflowActionIdentifier") == "is.workflow.actions.url.expand"
-                and acts[i + 2].get("WFWorkflowActionIdentifier") == "is.workflow.actions.setvariable"
-                and (acts[i + 2].get("WFWorkflowActionParameters") or {}).get("WFVariableName") == "userLink"):
-            idx = i
-            break
-    if idx is None:
-        raise SystemExit("share-sheet input normalization block not found")
-
+    urls = {"OutputName": "URLs", "OutputUUID": INPUT_BLOCK_1_6[0][
+        "WFWorkflowActionParameters"]["UUID"], "Type": "ActionOutput"}
     g = Graph()
-    extension_input = tstr({"Type": "ExtensionInput"})
-
-    input_type = g.get_type(extension_input, name="Input Type")
-    g.if_(COND_CONTAINS, out(input_type), "Safari Web")
-    page_url = g.safari_page_property("Page URL", extension_input, name="Browser Page URL")
-    page_url_first = g.get_item_first(out(page_url), name="Shared URL")
-    g.setvar("rawLink", out(page_url_first))
-    g.else_()
-    urls = g.detect_links(extension_input, name="Detected URLs")
-    shared_url = g.get_item_first(out(urls), name="Shared URL")
-    g.setvar("rawLink", out(shared_url))
-    g.endif()
-
-    # Some browser extensions advertise a webpage item but leave its page URL
-    # property empty. Fall back to the same link extractor used for URL/text
-    # shares before declaring the share invalid.
-    g.if_(COND_HAS_VALUE, var("rawLink"))
-    g.else_()
-    fallback_text = g.text_from_input(extension_input, name="Shared Text")
-    fallback_urls = g.detect_links(out(fallback_text), name="Fallback URLs")
-    fallback_url = g.get_item_first(out(fallback_urls), name="Fallback URL")
-    g.setvar("rawLink", out(fallback_url))
-    g.endif()
-
-    g.if_(COND_HAS_VALUE, var("rawLink"))
-    # URL fields are text-token fields in the Shortcuts plist; wrap the scalar
-    # variable the same way the editor serializes an action-output URL.
-    expanded = g.expand_url(tstr({"Type": "Variable", "VariableName": "rawLink"}),
-                            name="Expanded URL")
-    g.if_(COND_HAS_VALUE, out(expanded))
-    g.setvar("userLink", out(expanded))
-    g.else_()
-    g.setvar("userLink", var("rawLink"))
+    g.comment("FMD+ share links: Threads, Facebook and Reddit links the phone can't expand. "
+              "Every other link skips this.")
+    g.if_(COND_CONTAINS, var("userLink"), "unsupportedbrowser")
+    links = g.text(urls, name="Shared Links")
+    g.if_(COND_CONTAINS, out(links), "threads.")
+    shared = g.match(THREADS_LINK, out(links), name="Shared Threads Link")
+    g.if_(COND_HAS_VALUE, out(shared))
+    g.setvar("userLink", out(g.group(1, out(shared), name="Threads Link")))
     g.endif()
     g.else_()
-    g.notify("No link was received from the share sheet. Copy the page URL and share it again.")
-    g.stop()
+    fb = g.match(FB_SHARE_LINK, out(links), name="Shared Facebook Link")
+    g.if_(COND_HAS_VALUE, out(fb))
+    fb_link = g.group(1, out(fb), name="Facebook Link")
+    fb_page = g.download(tstr(out(fb_link)["Value"]), method="GET",
+                         headers=[("User-Agent", CRAWLER_UA)], name="Facebook Share Page")
+    fb_vid = g.match(FB_PAGE_VIDEO_ID, out(fb_page), name="Facebook Share Video")
+    g.if_(COND_HAS_VALUE, out(fb_vid))
+    fb_num = g.group(1, out(fb_vid), name="Facebook Video Number")
+    reel = g.text("https://www.facebook.com/reel/", out(fb_num)["Value"], "/", name="Facebook Reel Link")
+    g.setvar("userLink", out(reel))
     g.endif()
-
+    g.endif()
+    g.endif()
+    g.endif()
+    g.if_(COND_CONTAINS, var("userLink"), "reddit.com/r/")
+    g.if_(COND_CONTAINS, var("userLink"), "/s/")
+    rd_page = g.download(tstr(var("userLink")["Value"]), method="GET",
+                         headers=[("User-Agent", CRAWLER_UA)], name="Reddit Share Page")
+    rd_og = g.match(OG_URL, out(rd_page), name="Reddit Post Link")
+    g.if_(COND_HAS_VALUE, out(rd_og))
+    g.setvar("userLink", out(g.group(1, out(rd_og), name="Reddit Post URL")))
+    g.endif()
+    g.endif()
+    g.endif()
+    g.comment("FMD- share links")
     g.close()
-    assert not g._stack, "input normalization control flow is unbalanced"
-    acts[idx:idx + 3] = [a.d for a in g.actions]
-    return True
+    assert not g._stack, "share-links block is unbalanced"
+    return [a.d for a in g.actions]
+
+
+def patch_share_links(acts):
+    idx = find_input_block(acts)
+    block = share_links_block()
+    acts[idx + 3:idx + 3] = block
+    return len(block)
+
+
+def patch_tiktok_photos(acts):
+    """TikTok slideshows: tikwm's hdplay is the song, so save the photos first.
+
+    Copies 1.5.1's own photo steps (If TikImages -> Repeat -> Get Contents ->
+    Save -> End Repeat -> Notify -> Stop) with fresh ids, placed before the
+    hdplay check inside the TikTok branch. Videos have no images and skip it.
+    """
+    import copy
+    import uuid
+
+    def nid():
+        return str(uuid.uuid4()).upper()
+    hd = next(i for i, a in enumerate(acts)
+              if a["WFWorkflowActionIdentifier"] == "is.workflow.actions.conditional"
+              and (a["WFWorkflowActionParameters"].get("WFInput") or {}).get("Variable", {})
+              .get("Value", {}).get("OutputName") == "HDPlay")
+    img = next(i for i in range(hd, len(acts))
+               if (acts[i]["WFWorkflowActionParameters"].get("WFInput") or {}).get("Variable", {})
+               .get("Value", {}).get("OutputName") == "TikImages")
+    src = copy.deepcopy(acts[img:img + 7])
+    kinds = [a["WFWorkflowActionIdentifier"].rsplit(".", 1)[-1] for a in src]
+    assert kinds == ["conditional", "each", "downloadurl", "savetocameraroll", "each",
+                     "notification", "exit"], kinds
+    if_gid, rep_gid, dl_uuid = nid(), nid(), nid()
+    for a in src:
+        a["WFWorkflowActionParameters"]["UUID"] = nid()
+    src[0]["WFWorkflowActionParameters"]["GroupingIdentifier"] = if_gid
+    src[1]["WFWorkflowActionParameters"]["GroupingIdentifier"] = rep_gid
+    src[4]["WFWorkflowActionParameters"]["GroupingIdentifier"] = rep_gid
+    src[2]["WFWorkflowActionParameters"]["UUID"] = dl_uuid
+    src[3]["WFWorkflowActionParameters"]["WFInput"]["Value"]["OutputUUID"] = dl_uuid
+    end = {"WFWorkflowActionIdentifier": "is.workflow.actions.conditional",
+           "WFWorkflowActionParameters": {"GroupingIdentifier": if_gid, "UUID": nid(),
+                                          "WFControlFlowMode": 2}}
+
+    def note(text):
+        return {"WFWorkflowActionIdentifier": "is.workflow.actions.comment",
+                "WFWorkflowActionParameters": {"UUID": nid(), "WFCommentActionText": text}}
+    acts[hd:hd] = ([note("FMD+ TikTok photo posts: save the photos (tikwm's hdplay is the song).")]
+                   + src + [end, note("FMD- TikTok photo posts")])
+    return len(src) + 3
+
+
+def patch_wrapped_tokens(acts):
+    """Store variables inside text fields the way iOS does (raw token).
+
+    1.5.1's Facebook video-embed and photo-embed URLs wrap the variable twice;
+    iOS can't read that and stops with "Please choose a value for each
+    parameter in this action". Only those two fields are affected.
+    """
+    fixed = 0
+
+    def walk(v):
+        nonlocal fixed
+        if isinstance(v, dict):
+            atts = v.get("attachmentsByRange")
+            if isinstance(atts, dict):
+                for k, tok in list(atts.items()):
+                    if isinstance(tok, dict) and "WFSerializationType" in tok:
+                        atts[k] = tok["Value"]
+                        fixed += 1
+            for x in v.values():
+                walk(x)
+        elif isinstance(v, list):
+            for x in v:
+                walk(x)
+    for a in acts:
+        walk(a.get("WFWorkflowActionParameters", {}))
+    return fixed
 
 
 # --------------------------------------------------------------- facebook
@@ -212,21 +309,24 @@ def facebook(g):
 def threads(g):
     """Resolve public Threads posts from Meta's crawler-rendered page data."""
     g.comment(
-        "Threads: public posts use crawler-rendered page data and signed CDN "
-        "URLs. Private or login-gated posts open Threads or the default browser."
+        "FMD+ Threads: public posts use crawler-rendered page data and signed CDN "
+        "URLs. Only links containing threads. reach this."
     )
+    # Same gate every 1.5.1 site branch uses. Without it the Match Text below ran
+    # on every share (X included) and iOS prompted for "Text" (1.6 regression).
+    g.if_(COND_CONTAINS, var("userLink"), "threads.")
     m = g.match(THREADS_ID, var("userLink"), name="ThreadsPostID")
     g.if_(COND_HAS_VALUE, out(m))
     tid = g.group(1, out(m), "ThreadsPostCode")
     page = g.download(
-        var("userLink"), method="GET",
+        tstr(var("userLink")["Value"]), method="GET",
         headers=[("User-Agent", THREADS_UA)], name="ThreadsPostPage"
     )
 
     # A post page embeds many post objects. Stop at the next code field so a
     # recommendation or reply cannot be mistaken for the shared post.
     video_pattern = tstr(
-        r'"code":"', out(tid),
+        r'"code":"', out(tid)["Value"],  # raw token: iOS cannot read a wrapped one here
         r'"(?:(?!"code":).){0,50000}?"video_versions":\[\{(?:(?!"url":).){0,500}?"url":"'
         r'(https:[^"]+?\.mp4(?:\?[^"]*)?)"'
     )
@@ -239,7 +339,7 @@ def threads(g):
     vu3 = g.replace(r"\u0026", "&", out(vu2), regex=False, name="ThreadsVideoURLAmpersands")
     vu4 = g.replace(r"\u003D", "=", out(vu3), regex=False, name="ThreadsVideoURLEquals")
     vu5 = g.replace(r"\u0025", "%", out(vu4), regex=False, name="ThreadsVideoURLPercent")
-    g.download(out(vu5), headers=[("Referer", "https://www.threads.com/")], name="ThreadsVideo")
+    g.download(tstr(out(vu5)["Value"]), headers=[("Referer", "https://www.threads.com/")], name="ThreadsVideo")
     g.save_camera_roll()
     g.endrepeat()
     g.notify("Saved from Threads.")
@@ -247,7 +347,7 @@ def threads(g):
     g.else_()
 
     image_pattern = tstr(
-        r'"code":"', out(tid),
+        r'"code":"', out(tid)["Value"],  # raw token: iOS cannot read a wrapped one here
         r'"(?:(?!"code":).){0,50000}?"image_versions2":\{"candidates":\['
         r'\{(?:(?!"url":).){0,500}?"url":"(https:[^"]+)"'
     )
@@ -260,26 +360,24 @@ def threads(g):
     iu3 = g.replace(r"\u0026", "&", out(iu2), regex=False, name="ThreadsImageURLAmpersands")
     iu4 = g.replace(r"\u003D", "=", out(iu3), regex=False, name="ThreadsImageURLEquals")
     iu5 = g.replace(r"\u0025", "%", out(iu4), regex=False, name="ThreadsImageURLPercent")
-    g.download(out(iu5), headers=[("Referer", "https://www.threads.com/")], name="ThreadsImage")
+    g.download(tstr(out(iu5)["Value"]), headers=[("Referer", "https://www.threads.com/")], name="ThreadsImage")
     g.save_camera_roll()
     g.endrepeat()
     g.notify("Saved from Threads.")
     g.stop()
     g.else_()
 
-    # Universal links route to the Threads app when installed, otherwise to
-    # the user's default browser. Safari is never assumed.
-    g.notify(
-        "Threads hid this post from public download. Opening Threads or your "
-        "default browser. Sign in if asked, then share the post again."
-    )
-    g.open_url(var("userLink", [coerce("WFURLContentItem")]))
-    g.wait_to_return()
-    g.notify("Share the visible Threads post to FREE Media Downloader again.")
+    # No sign-in detour: the shortcut cannot use the Threads app's login, and a
+    # public post with media always resolves above. What is left is a post with
+    # nothing to save (text-only, or media from a private account).
+    g.notify("No photo or video found in this Threads post. Text-only posts "
+             "have nothing to save, and private accounts can't be downloaded.")
     g.stop()
     g.endif()
     g.endif()
     g.endif()
+    g.endif()
+    g.comment("FMD- Threads")
     return g
 
 
@@ -615,7 +713,6 @@ def main():
         raise SystemExit("refusing to build twice: fast paths already in the plist")
 
     before = len(acts)
-    patch_input_normalization(acts)
     idx = find_aggregator(acts)
     new = build()
     acts[idx:idx] = new

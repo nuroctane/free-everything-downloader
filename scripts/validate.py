@@ -233,8 +233,11 @@ delays = [(a.get("WFWorkflowActionParameters") or {}).get("WFDelayTime")
 numbers = [str((a.get("WFWorkflowActionParameters") or {}).get("WFNumberActionNumber"))
            for a in actions if a.get("WFWorkflowActionIdentifier") == "is.workflow.actions.number"]
 # A string here is silently blanked by iOS, leaving Wait with no duration.
-if (len(delays) != 1 or isinstance(delays[0], bool)
-        or not isinstance(delays[0], (int, float)) or delays[0] <= 0):
+# Every Wait must hold a NUMBER: iOS blanks a string in this field and the
+# shortcut then stops to ask for input (the 1.5 regression). There is one Wait
+# in the poll loop plus the ones in the Reddit retry.
+if not delays or any(isinstance(d, bool) or not isinstance(d, (int, float)) or d <= 0
+                     for d in delays):
     bad += 1
     print("Wait duration must be a positive NUMBER, not a string:", delays)
 if "60" not in numbers:
