@@ -35,8 +35,13 @@ NO_MEDIA = ("No photo or video found in this Threads post. Text-only posts have 
             "to save, and private accounts can't be downloaded.")
 
 
-def threads_recipe(g):
-    """Threads post page -> signed CDN media -> Photos. userLink is the post URL."""
+def threads_recipe(g, on_no_media=None):
+    """Threads post page -> signed CDN media -> Photos. userLink is the post URL.
+
+    on_no_media, if given, runs instead of the "nothing to save" stop. The
+    confirmed Facebook section calls this with no argument, so that path is
+    unchanged. The server-failed tail passes a handoff that opens the post.
+    """
     post = native_match(g, B.THREADS_ID, var("userLink"), name="ThreadsPostID")
     native_if(g, COND_HAS_VALUE, out(post))
     code = native_group(g, out(post), name="ThreadsPostCode")
@@ -57,8 +62,11 @@ def threads_recipe(g):
         native_notify(g, "Saved from Threads.")
         g.stop()
         g.else_()
-    native_notify(g, NO_MEDIA)
-    g.stop()
+    if on_no_media:
+        on_no_media(g)
+    else:
+        native_notify(g, NO_MEDIA)
+        g.stop()
     g.endif()   # images
     g.endif()   # videos
     g.endif()   # post id

@@ -30,6 +30,10 @@ New in this release:
                     (reddit_tail.py)
   mastodon          posts on any Mastodon server, same place, from the
                     server's public API (reddit_tail.mastodon_block)
+  threads           an intact threads.com link skips the Facebook section, so a
+                    failed server job landed on the sign-in tail claiming a
+                    login and opening nothing. The same on-device Threads recipe
+                    now runs in that tail, gated on "threads." (threads_tail.py)
 
 1.6 was built from the 1.4 base with build.py and silently dropped 1.5.1's
 full a-Shell fallback (24 actions). Do not build releases from 1.4.
@@ -46,6 +50,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_v15 as B  # noqa: E402
 import fb_section  # noqa: E402,F401  (already in the confirmed baseline)
 import reddit_tail  # noqa: E402
+import threads_tail  # noqa: E402
+import failure_diagnostics  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = os.path.join(ROOT, "tests", "fixtures", "good-1.5.1.plist")
@@ -91,6 +97,9 @@ def main():
         reddit_tail.patch(acts)
     if "Mastodon posts" not in present:
         reddit_tail.patch_mastodon(acts)
+    if threads_tail.NAME not in present:
+        threads_tail.patch(acts)
+    failure_diagnostics.apply(acts, lock)
     B.VERSION = a.version
     B.NEW_COMMENT = COMMENT.format(v=a.version, d=a.date)
     B.patch_settings(acts)
@@ -102,7 +111,9 @@ def main():
     assert len(plistlib.load(open(tmp, "rb"))["WFWorkflowActions"]) == len(acts)
     os.replace(tmp, a.out)
     print("%s + %s -> %s (%d actions, version %s)"
-          % (lock["baseline"], ", ".join(sorted({"Reddit share links", "Mastodon posts"} - present)) or "nothing new",
+          % (lock["baseline"],
+             ", ".join(sorted({"Reddit share links", "Mastodon posts", threads_tail.NAME}
+                              - present)) or "nothing new",
              a.out, len(acts), a.version))
 
 

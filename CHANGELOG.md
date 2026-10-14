@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.7.3 (candidate, not published)
+
+- A Threads post the on-device recipe cannot save now opens a URL action, not the `userLink` variable. The notification says it is opening Threads, or the browser if Threads is not installed, and to share again after signing in.
+- A YouTube download that saves a file no longer prints the diagnostic log into a-Shell. The log is still written, and it is printed only when nothing was saved.
+
+## 1.7.2 (candidate, not published)
+
+- **A failed Threads share downloads instead of asking for a sign-in.** The Threads app shares a `threads.com` post link intact, and an intact link skips the Facebook section that holds the on-device Threads recipe — so the post went to the server extractor, and when that job failed the sign-in tail claimed a login and opened the link, which looked like nothing happening. The same on-device recipe (post page with Meta's crawler user-agent, signed CDN media, save to Photos) now also runs in that tail, gated on `threads.`. Only a share that already failed everywhere reaches it, and a successful download never does.
+- **YouTube writes its hand-back files before it can be interrupted.** `fed-kind.txt`, `fed-ext.txt` and `fed-media` were written after the helper check and pip work, so a slow or killed first-run install left them missing and the shortcut died on a raw "file can't be found" instead of its own notice. Same files, same contents, written first.
+- **A YouTube download that produces no file updates yt-dlp and retries the identical command once.** A download that works never runs the update.
+- yt-dlp's output and exit status go to `Documents/fed-youtube-last.log` (last 64 KB) inside the a-Shell that ran it, and to a-Shell's own output, so a failed video shows its reason.
+- X and Instagram steps are byte-identical to the confirmed 1.7 build; a locked-platform check verifies every locked share link, in every modeled outcome, on every build.
+
 ## 1.6 (candidate)
 
 - **Threads now has an on-device public-post path.** The shortcut fetches the crawler-rendered post data, extracts the signed video or image URL, and saves it directly to Photos without sending the post through the generic server extractor.

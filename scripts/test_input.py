@@ -31,6 +31,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_v15 as B  # noqa: E402
+import failure_diagnostics  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOCK = json.load(open(os.path.join(ROOT, "tests", "locked-platforms.json"), encoding="utf-8"))
@@ -191,7 +192,8 @@ def as_steps(actions, ran):
 
 def locked_problems(cur, good):
     fails = []
-    ca, ga = stamp_free(cur), stamp_free(good)
+    ca = stamp_free(failure_diagnostics.comparison_view(cur, good, LOCK))
+    ga = stamp_free(good)
     allow = LOCK.get("failure_path_allowance", {})
     cur_blocks, good_blocks = blocks(cur), blocks(good)
     allowed = set()
@@ -266,8 +268,9 @@ def graph_problems(cur, good):
     new_blocks = {n: ix for n, ix in blocks(cur).items() if n not in blocks(good)}
     new_idx = set().union(*new_blocks.values()) if new_blocks else set()
     rest = [a for i, a in enumerate(cur) if i not in new_idx]
-    if stamp_free(rest) != stamp_free(good):
-        a, b = stamp_free(rest), stamp_free(good)
+    reviewed = failure_diagnostics.comparison_view(rest, good, LOCK)
+    if stamp_free(reviewed) != stamp_free(good):
+        a, b = stamp_free(reviewed), stamp_free(good)
         diff = [i for i in range(min(len(a), len(b))) if a[i] != b[i]][:6]
         fails.append("outside the new blocks %s, the build differs from the confirmed build "
                      "(steps %s, %d vs %d)" % (sorted(new_blocks), diff, len(a), len(b)))
@@ -298,6 +301,21 @@ def reach_problems(cur):
         if ("/@", True) not in gates(masto, "failed") or not any(
                 "api/v1/statuses" in json.dumps(params(cur[i])) for i, _ in ran):
             fails.append("Mastodon post %s never reaches the Mastodon steps after the server fails" % masto)
+    for link in ("https://www.threads.com/@zuck/post/Ddt7cL5EfUG",
+                 "https://www.threads.net/@natgeo/post/DdzAoYVDY8o"):
+        # An intact threads.com link skips the Facebook section, so when the
+        # server job fails the on-device Threads recipe must still run.
+        ran = walk(cur, link, outcome="failed")
+        if ("threads.", True) not in gates(link, "failed"):
+            fails.append("an intact Threads link never reaches the Threads steps after "
+                         "the server fails: %s" % link)
+        elif not any("ThreadsPostPage" in json.dumps(params(cur[i])) for i, _ in ran):
+            fails.append("an intact Threads link never reaches the on-device Threads "
+                         "recipe after the server fails: %s" % link)
+    for link in ("https://www.threads.com/@zuck/post/Ddt7cL5EfUG",):
+        if any(op == "threads." for op, _ in gates(link, "completed")):
+            fails.append("the Threads tail block runs on a working (completed) "
+                         "download: %s" % link)
     for link in ("https://www.reddit.com/r/pics/comments/1abcde/title/",
                  "https://social.vivaldi.net/@Vivaldi/117326000018306833"):
         if any(op in ("reddit.com", "/@") for op, _ in gates(link, "completed")):
@@ -316,7 +334,7 @@ def main():
     n = sum(len(e["links"]) for e in LOCK["locked"].values())
     print("input: locked %s (%d share links x %d outcomes); new blocks %s: %s" % (
         ", ".join(LOCK["locked"]), n, len(OUTCOMES), new or "none",
-        "FAIL" if fails else "OK - locked paths byte-identical to the confirmed build"))
+        "FAIL" if fails else "OK - locked paths preserved except exact user-authorized fields"))
     return 1 if fails else 0
 
 

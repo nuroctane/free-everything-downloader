@@ -1,0 +1,28 @@
+{
+  "version": "1.7.3",
+  "built_from": "tests/fixtures/good-1.7.plist",
+  "source_sha256": "3483af2546c6660008e0cfdd7e38049a01bff152c765739f10dcfb84d2bd2c2f",
+  "signed_path": "H:\\My Drive\\FREE Media Downloader.shortcut",
+  "signed_sha256": "1de754fc8d1f079957ca5db5c9f21c24e61445665627f66f7945acc6a33b7da5",
+  "signed_bytes": 78116,
+  "header": "AEA1",
+  "actions": 696,
+  "new_blocks": [
+    "Threads server-failed posts"
+  ],
+  "changed_runtime_fields": 4,
+  "desktop_checks": {
+    "validation": "passed (696 actions, 0 unbalanced groups, 0 problems)",
+    "audit": "AUDIT CLEAN; 1 pre-existing Mastodon warning, identical against the baseline itself",
+    "audit_selftest": "6/6 caught",
+    "locked_paths": "40 share links x 5 modeled outcomes passed; only the exact approved fields differ",
+    "shell_and_exception_tests": "9/9 passed: no log dump on a successful download, state-file ordering, retry after a first attempt with no file, no retry on success, Threads block opens a URL action and is unreachable on a completed download",
+    "live_extractor_probes": "0 required failures, 0 other failures; Threads public video PASS"
+  },
+  "ios_execution": "pending",
+  "reported_failures_reproduced": false,
+  "published": false,
+  "release_eligible": false,
+  "failure_resolution_status": "repairs implemented, phone confirmation outstanding",
+  "release_block": "No phone test has been run on 1.7.3. Do not publish, create a RoutineHub version, or request an iCloud link until the user reports the phone test."
+}

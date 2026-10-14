@@ -1,0 +1,24 @@
+{
+  "version": "1.7.1",
+  "source_sha256": "4dc15aded8f5f2e17bd7af55f594249bdb89b854512c795e316b47ea6d1a11ed",
+  "signed_path": "H:\\My Drive\\FREE Media Downloader.shortcut",
+  "signed_sha256": "98b1dc9aea624ab17f3068f78f045d66bb9266e3b395a9081788ed72afcac66b",
+  "signed_bytes": 74710,
+  "header": "AEA1",
+  "signed_modified_utc": "2026-10-13T22:15:33.688000+00:00",
+  "approved_runtime_fields": 4,
+  "desktop_checks": {
+    "validation": "passed",
+    "audit": "passed",
+    "audit_selftest": "6/6 passed",
+    "locked_paths": "40 share links x 5 modeled outcomes passed; only exact approved fields allowed",
+    "logging_and_exception_tests": "6/6 passed, including direct X/Instagram byte comparison and bounded mock-download shell execution",
+    "live_extractor_probes": "zero required or media-fetch failures; one no-media case skipped"
+  },
+  "ios_execution": "pending",
+  "reported_failures_reproduced": false,
+  "published": false,
+  "release_eligible": false,
+  "failure_resolution_status": "unresolved",
+  "release_block": "User instruction 2026-10-13: we arent shipping shit without resolving the failures"
+}

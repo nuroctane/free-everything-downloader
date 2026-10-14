@@ -142,6 +142,28 @@ without an explicit override because it starts from 1.4.
 
 ## Testing and what you can claim
 
+- 1.7.3 is the phone-test build. It keeps the 1.7.2 repairs and adds two
+  audit fixes: the Threads no-media branch opens a URL action instead of
+  stopping with no handoff, and a successful YouTube download does not print
+  its log into a-Shell. Not confirmed on a phone. Do not publish it.
+- 1.7.2 carries the two repairs the reports needed, and nothing else:
+  `threads_tail.py` runs the on-device Threads recipe in the sign-in tail of the
+  server-failed branch (gated on `threads.`), because an intact threads.com link
+  skips the Facebook section and a failed server job there produced "log in"
+  plus an Open URL that appeared to do nothing; and the YouTube command now
+  writes the state files the shortcut reads back *before* the helper check and
+  any pip work, and retries the identical download once after updating yt-dlp
+  when it leaves no file.
+- 1.7.2 is **not confirmed on a phone yet**. Desktop checks (validate,
+  test_input, audit, live extractors, shell behavior with stubbed downloads)
+  pass, but they do not prove an iPhone share works. Do not publish it, create a
+  RoutineHub version, or request an iCloud link for shipping until the user
+  reports the result of the phone test named in the handoff. If the failures
+  survive the phone test, the next step is the user's actual error text or a
+  failing post link, not another speculative extractor change.
+- 1.7.1 was diagnostic-only and stays blocked: error logging, wording and
+  desktop passes never resolved the reported failures, and the user said so:
+  "we arent shipping shit without resolving the failures".
 - Desktop checks (validate, audit, regex, live extractor probes, signing)
   catch mistakes. They do not prove the shortcut works on an iPhone. Never say
   "tested", "verified", or "works" about the share sheet unless the user tested

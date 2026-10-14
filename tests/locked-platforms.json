@@ -9,11 +9,12 @@
   "failure_path_allowance": {
     "blocks": [
       "Reddit share links",
-      "Mastodon posts"
+      "Mastodon posts",
+      "Threads server-failed posts"
     ],
     "why": "These blocks live in the sign-in tail of the server-failed branch. Only a share that already failed in its own section AND on the server gets there. On such an already-failed path of a locked platform, the blocks may run only side-effect-free checks (comments, If checks, Match Text, Get Group): no download, save, notification, URL open, variable change or stop. Everything else on the path must stay byte-identical. X and Instagram never reach the tail and stay strict in every outcome.",
-    "user_request": "2026-09-28: 'i need reddit back. find a way to do this without fucking with anything else'; asked to make sure Mastodon and the other platforms work.",
-    "note": "Used while building 1.6.1 (Reddit/Mastodon were new then). Both blocks are now part of the locked baseline; a future tail block would need its own entry here."
+    "user_request": "2026-09-28: 'i need reddit back. find a way to do this without fucking with anything else'; asked to make sure Mastodon and the other platforms work. 2026-10-13: 'actually fix the issues ... do your absolute best to fix it without breaking or regressing anything', after RoutineHub reports that Threads shares ask for a sign-in and never open.",
+    "note": "Used while building 1.6.1 (Reddit/Mastodon were new then). Both blocks are now part of the locked baseline. The Threads entry was added on 2026-10-13: an intact threads.com link skips the Facebook section, so a failed server job reached the sign-in tail and the on-device Threads recipe never ran. It is gated on 'threads.', so on every other platform's failed path only its comments, its If and its End If execute (side-effect-free), and the locked Threads links are answered by the Facebook section before reaching it. A future tail block needs its own entry here."
   },
   "locked": {
     "X": {
@@ -159,6 +160,27 @@
       "links": [
         "https://music.youtube.com/watch?v=dQw4w9WgXcQ&si=abc123"
       ]
+    }
+  },
+  "authorized_exceptions": {
+    "2026-10-13-youtube-logging-and-failure-messages": {
+      "date": "2026-10-13",
+      "user_words": "do your absolute best to fix it without breaking or regressing anything and requiring failure reproduction",
+      "prior_user_words": "yes, go ahead and do so",
+      "authorization_context": "2026-10-13, after the diagnostic-only 1.7.1 was rejected: 'uh. we arent shipping shit without resolving the failures. what is wrong with you.' followed by 'actually fix the issues ... do your absolute best to fix it without breaking or regressing anything and requiring failure reproduction'. The earlier 'yes, go ahead and do so' authorized the YouTube error log and the failure wording.",
+      "scope": "Only the YouTube/YouTube Music command text, its failure notice, and two late shared-failure-tail notification texts. The early server-failure notice also runs on X and remains unchanged. The command writes the same state files with the same contents, writes them before the helper check instead of after it, updates yt-dlp and the JS helpers and retries the identical download once when it leaves no file, and keeps a bounded log. No dependency refresh on a successful download, no extraction/save/format/URL change, no action added, removed or reordered, no input change, no handoff change, no other platform's command.",
+      "fields": {
+        "1AD25592-D6F8-4699-ACD7-E133678DECBE": "WFTextActionText",
+        "4D12CADC-FD41-4F7B-B76F-74F5BDC9EA48": "WFNotificationActionBody",
+        "F113D37D-F272-412D-85C1-0218FA50F60E": "WFNotificationActionBody",
+        "EF2EE840-7A25-442C-8F31-7225CC482C0F": "WFNotificationActionBody"
+      }
+    },
+    "2026-10-13-threads-server-failed-download": {
+      "date": "2026-10-13",
+      "user_words": "do your absolute best to fix it without breaking or regressing anything and requiring failure reproduction",
+      "authorization_context": "RoutineHub feedback 46328 (Robust-Scorpion-2607-17457): a Threads video 'keeps asking me to log in first, and say Opening it now, but it has never been'. The creator already answered 'Yea this is the third comment with the same issue, pretty sure something broke. Will have a fix out asap.' The user then told this session to fix the reported failures.",
+      "scope": "One new block, 'Threads server-failed posts', in the sign-in tail of the server-failed branch only, gated on 'threads.'. It runs the Threads recipe the confirmed baseline already runs in the Facebook section. If that recipe finds no media, it opens a URL action of the post instead of stopping with no handoff. No step of any locked platform is edited, added, removed or reordered; on every other platform's failed path only its comments, its If and its End If execute."
     }
   }
 }
