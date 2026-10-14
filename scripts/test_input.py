@@ -254,7 +254,11 @@ def wrapped(v):
 def graph_problems(cur, good):
     fails = []
     B.find_input_block(cur)  # SystemExit if the 1.5.1 input block changed
-    if sum(a["WFWorkflowActionIdentifier"] == FULL_ASHELL for a in cur) != 3:
+    # The confirmed steps must keep exactly 1.5.1's three; a new FMD+ block may
+    # carry its own copy (YouTube original links reruns the YouTube steps).
+    new_ix = set().union(*[ix for n, ix in blocks(cur).items() if n not in blocks(good)] or [set()])
+    if sum(a["WFWorkflowActionIdentifier"] == FULL_ASHELL
+           for i, a in enumerate(cur) if i not in new_ix) != 3:
         fails.append("1.5.1 full a-Shell fallback missing (the 1.6 regression)")
     depth, loose = 0, []
     for i, a in enumerate(cur):
@@ -312,6 +316,15 @@ def reach_problems(cur):
         elif not any("ThreadsPostPage" in json.dumps(params(cur[i])) for i, _ in ran):
             fails.append("an intact Threads link never reaches the on-device Threads "
                          "recipe after the server fails: %s" % link)
+    # 2026-10-14: on the phone a shared YouTube link reached the server and its
+    # sign-in tail, so the expanded userLink had lost "youtu". The tail must run
+    # the YouTube a-Shell steps on the link as shared.
+    for shared in ("https://youtube.com/shorts/lMcdGXlFyPI?is=R7ufibXITQ_Q2Xdt",
+                   "https://youtu.be/dQw4w9WgXcQ?si=abc123"):
+        ran = walk(cur, "https://consent.google.com/ml?continue=x", shared=shared, outcome="failed")
+        if not any(kind(cur[i]).endswith("ExecuteCommandIntent") for i, _ in ran):
+            fails.append("a shared YouTube link whose expanded link lost 'youtu' never reaches "
+                         "the YouTube steps after the server fails: %s" % shared)
     for link in ("https://www.threads.com/@zuck/post/Ddt7cL5EfUG",):
         if any(op == "threads." for op, _ in gates(link, "completed")):
             fails.append("the Threads tail block runs on a working (completed) "

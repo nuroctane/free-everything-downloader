@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.5 (candidate, not published)
+
+- **YouTube links that miss the YouTube section now download through it anyway.** On the phone a YouTube Short (shared from the YouTube app, or run from the Shortcuts app off the clipboard) reached the server extractor and its sign-in tail, so the expanded link no longer contained "youtu" when the YouTube check ran. In that already-failed tail, a link that contained "youtu" as shared now runs the same 1.7 YouTube a-Shell steps on the link as shared. Gated on the shared link, so no other platform runs anything new.
+
 ## 1.7.4 (candidate, not published)
 
 - YouTube and YouTube Music are back to the confirmed 1.7 command and failure notice. On 1.7.3, YouTube Shorts failed and downloads sat in a-Shell with no output: the logged command hid yt-dlp's progress and errors and added a silent update and retry. Threads keeps the 1.7.2 server-failed download, which the user confirmed works.

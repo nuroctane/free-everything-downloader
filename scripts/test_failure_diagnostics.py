@@ -29,7 +29,7 @@ class DiagnosticsTests(unittest.TestCase):
         new_blocks = {n: ix for n, ix in I.blocks(after).items() if n not in I.blocks(before)}
         new_idx = set().union(*new_blocks.values()) if new_blocks else set()
         rest = [a for i, a in enumerate(after) if i not in new_idx]
-        self.assertEqual(sorted(new_blocks), ["Threads server-failed posts"])
+        self.assertEqual(sorted(new_blocks), ["Threads server-failed posts", "YouTube original links"])
         self.assertEqual(len(rest), len(before))
         expected = D.expected_changes(self.good)
         changed = set()
