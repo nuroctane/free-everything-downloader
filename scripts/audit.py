@@ -122,6 +122,8 @@ def audit_structure(acts, problems, base_acts=None):
              for a in (base_acts if base_acts is not None else acts)} | {
         "is.workflow.actions.text.match", "is.workflow.actions.text.match.getgroup",
         "is.workflow.actions.text.replace",
+        # YouTube shares without a link: a YouTube link on the clipboard
+        "is.workflow.actions.getclipboard",
         # full a-Shell fallback (same intents as mini, different bundle id)
         "AsheKube.app.a-Shell.ExecuteCommandIntent",
         "AsheKube.app.a-Shell.GetFileIntent",

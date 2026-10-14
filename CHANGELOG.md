@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.6 (candidate, not published)
+
+- **YouTube shares that arrive with no link.** On the phone, the YouTube app handed the shortcut only the screen's text (title, @channel, likes, comments) and sometimes a small picture, with no link, so nothing matched and the share failed on the server. After that failure, a share with no http link at all now: (1) if its text has YouTube's title + @channel layout, has yt-dlp search YouTube for that title and channel and downloads the top match with the same 1.7 YouTube steps; (2) otherwise uses a YouTube link on the clipboard (Share > Copy link) with the same steps. Shares that contain a link never run any of it.
+
 ## 1.7.5 (candidate, not published)
 
 - **YouTube links that miss the YouTube section now download through it anyway.** On the phone a YouTube Short (shared from the YouTube app, or run from the Shortcuts app off the clipboard) reached the server extractor and its sign-in tail, so the expanded link no longer contained "youtu" when the YouTube check ran. In that already-failed tail, a link that contained "youtu" as shared now runs the same 1.7 YouTube a-Shell steps on the link as shared. Gated on the shared link, so no other platform runs anything new.

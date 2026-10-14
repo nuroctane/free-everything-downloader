@@ -80,3 +80,87 @@ def patch(acts):
     steps = block(acts)
     acts[at:at] = steps
     return len(steps)
+
+
+# ------------------------------------------------------- shares with no link
+# Reported 2026-10-14 with a test shortcut on the user's phone: started on a
+# video in the YouTube app, the shortcut's input was Text (the screen's text:
+# "Open App", the title, "@CyberpunkGame", likes, comments...) and sometimes a
+# small PNG, with no link anywhere. Without a link nothing can match, so the
+# share fails on the server and lands here. The user: "It should work either
+# way". This block, only for a share whose input has no http link at all:
+#   1. the input's own YouTube screen text (a title line, then an @channel line,
+#      and YouTube's "Subscribe") -> yt-dlp searches YouTube for that exact
+#      title + channel and downloads the top match with the same 1.7 steps;
+#   2. otherwise a YouTube link on the clipboard (e.g. after Share > Copy link)
+#      -> the same 1.7 steps on that link.
+NO_LINK = "YouTube shares without a link"
+SCREEN = r"(?m)^([^\r\n]+)\r?\n@([A-Za-z0-9._\-]+?)(?:Subscribe)?[ \t]*$"
+CLIP = r"https?://[^\s\"'<>]*youtu[^\s\"'<>]*"
+SHELL_UNSAFE = r"[\"$`\\]"
+
+
+def _ext_input():
+    return {"Value": {"Type": "ExtensionInput"}, "WFSerializationType": "WFTextTokenAttachment"}
+
+
+def _on(source_token, section):
+    """The YouTube steps with the command's userLink swapped for source_token (raw)."""
+    steps = reddit_tail.clone(section)
+    cmd = steps[0]
+    assert cmd["WFWorkflowActionIdentifier"] == "is.workflow.actions.gettext"
+    rng = P(cmd)["WFTextActionText"]["Value"]["attachmentsByRange"]
+    keys = [k for k, t in rng.items() if t.get("VariableName") == "userLink"]
+    assert len(keys) == 1, "YouTube command no longer reads userLink once"
+    rng[keys[0]] = source_token
+    return steps
+
+
+def no_link_block(acts):
+    from wf import COND_HAS_VALUE, Action, native_match, native_group, native_replace, raw
+    section = youtube_section(acts)
+    links = shared_links(acts)
+    g = Graph()
+    g.comment("FMD+ %s: the share had no link (the YouTube app can hand over only the "
+              "screen's text). Search YouTube for the title and channel in that text, else "
+              "use a YouTube link on the clipboard; only an already-failed share gets here." % NO_LINK)
+    native_if(g, COND_CONTAINS, links, "http")
+    g.else_()
+    screen = native_match(g, SCREEN, _ext_input(), name="YouTube Screen Text")
+    native_if(g, COND_HAS_VALUE, out(screen))
+    native_if(g, COND_CONTAINS, _ext_input(), "Subscribe")
+    title = native_group(g, out(screen), name="YouTube Title", index=1)
+    channel = native_group(g, out(screen), name="YouTube Channel", index=2)
+    safe = native_replace(g, SHELL_UNSAFE, "", out(title), name="YouTube Search Title")
+    P(safe.d)["WFReplaceTextRegularExpression"] = True
+    query = g.text("ytsearch1:", raw(out(safe)), " ", raw(out(channel)), name="YouTube Search")
+    g.notify("No link came with this share. Searching YouTube for “", raw(out(title)),
+             "” by @", raw(out(channel)), " and downloading it.")
+    head = [a.d for a in g.actions]
+    search = _on({"OutputName": query.name, "OutputUUID": query.uuid, "Type": "ActionOutput"}, section)
+    mid = Graph()
+    mid._stack = list(g._stack)
+    mid.endif()   # Subscribe
+    mid.endif()   # screen text
+    clip = mid._push(Action("is.workflow.actions.getclipboard", {}, "Clipboard"))
+    found = native_match(mid, CLIP, out(clip), name="Clipboard YouTube Link")
+    native_if(mid, COND_HAS_VALUE, out(found))
+    link = native_url(mid, out(found), name="Clipboard YouTube URL")
+    mid.setvar("userLink", out(link))
+    middle = [a.d for a in mid.actions]
+    clipped = reddit_tail.clone(section)
+    end = Graph()
+    end._stack = list(mid._stack)
+    end.endif()   # clipboard link
+    end.endif()   # no http link
+    end.comment("FMD- %s" % NO_LINK)
+    assert not end._stack, "no-link block is unbalanced"
+    return head + search + middle + clipped + [a.d for a in end.actions]
+
+
+def patch_no_link(acts):
+    """Insert the block immediately before the sign-in tail."""
+    at = reddit_tail.locate(acts)["tail"]
+    steps = no_link_block(acts)
+    acts[at:at] = steps
+    return len(steps)

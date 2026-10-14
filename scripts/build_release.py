@@ -38,6 +38,10 @@ New in this release:
                     YouTube section and failed on the server. The same 1.7
                     YouTube steps now run in that tail on the link as shared,
                     gated on the shared link containing "youtu" (youtube_tail.py)
+  youtube no link   a share with no link at all (the YouTube app can hand over only
+                    the screen's text) searches YouTube for the title + channel in
+                    that text, else uses a YouTube link on the clipboard, then runs
+                    the same 1.7 YouTube steps (youtube_tail.no_link_block)
 
 1.6 was built from the 1.4 base with build.py and silently dropped 1.5.1's
 full a-Shell fallback (24 actions). Do not build releases from 1.4.
@@ -106,6 +110,8 @@ def main():
         threads_tail.patch(acts)
     if youtube_tail.NAME not in present:
         youtube_tail.patch(acts)
+    if youtube_tail.NO_LINK not in present:
+        youtube_tail.patch_no_link(acts)
     failure_diagnostics.apply(acts, lock)
     B.VERSION = a.version
     B.NEW_COMMENT = COMMENT.format(v=a.version, d=a.date)
@@ -120,7 +126,7 @@ def main():
     print("%s + %s -> %s (%d actions, version %s)"
           % (lock["baseline"],
              ", ".join(sorted({"Reddit share links", "Mastodon posts", threads_tail.NAME,
-                               youtube_tail.NAME}
+                               youtube_tail.NAME, youtube_tail.NO_LINK}
                               - present)) or "nothing new",
              a.out, len(acts), a.version))
 
