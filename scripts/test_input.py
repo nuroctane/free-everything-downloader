@@ -327,14 +327,16 @@ def reach_problems(cur):
                          "the YouTube steps after the server fails: %s" % shared)
     # 2026-10-14: started on a video in the YouTube app, the phone handed the
     # shortcut only the screen's text (test shortcut "TYPES: Text"), no link.
-    screen = ("Open App\n\nCyberpunk: Edgerunners 2 | Official Trailer\n@CyberpunkGame\n16K likes\n"
-              "5.1K views50 minutes ago\nmore\nSubscribeComments1.1KAh shit, Here we go again.")
-    ran = walk(cur, "", shared=screen, outcome="failed")
-    cmds = [str(params(cur[i]).get("WFTextActionText")) for i, _ in ran if kind(cur[i]) == "gettext"]
-    if not any(kind(cur[i]).endswith("ExecuteCommandIntent") for i, _ in ran):
-        fails.append("a YouTube share with only screen text never reaches the YouTube steps")
-    if not any(kind(cur[i]) == "text.replace" for i, _ in ran) or not cmds:
-        fails.append("a YouTube share with only screen text never builds the YouTube search")
+    # The text must reach the YouTube steps through the a-Shell resolver.
+    for screen in ("Open App\n\nCyberpunk: Edgerunners 2 | Official Trailer\n@CyberpunkGame\n16K likes\n"
+                   "5.1K views50 minutes ago\nmore\nSubscribeComments1.1KAh shit, Here we go again.",
+                   "@Brainfrog10\nSubscribe\nBros failing #sonion #tadc #funny #b ...\n4,191\n10"):
+        ran = walk(cur, "", shared=screen, outcome="failed")
+        cmds = [json.dumps(params(cur[i]).get("WFTextActionText")) for i, _ in ran if kind(cur[i]) == "gettext"]
+        if not any(kind(cur[i]).endswith("ExecuteCommandIntent") for i, _ in ran):
+            fails.append("a YouTube share with only screen text never reaches the YouTube steps")
+        elif not any("fed-yt-url.txt" in c for c in cmds):
+            fails.append("a YouTube share with only screen text never runs the a-Shell resolver")
     for link in ("https://www.threads.com/@zuck/post/Ddt7cL5EfUG",):
         if any(op == "threads." for op, _ in gates(link, "completed")):
             fails.append("the Threads tail block runs on a working (completed) "

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.7 (candidate, not published)
+
+- **YouTube Shorts (and videos) found from the screen when no link comes with the share.** Replaces 1.7.6's title search, which found no Shorts. The shared screen text goes to a small resolver (`scripts/yt_resolve.py`) that runs inside a-Shell with the yt-dlp it already installs: it uses a link if the text has one; otherwise it lists the @channel's Shorts and videos and picks the one whose title matches the caption on screen (a "..."-truncated caption matches as a prefix, which separates Shorts with near-identical titles); only then does it search YouTube. The same 1.7 YouTube steps download the result. The clipboard fallback is unchanged.
+
 ## 1.7.6 (candidate, not published)
 
 - **YouTube shares that arrive with no link.** On the phone, the YouTube app handed the shortcut only the screen's text (title, @channel, likes, comments) and sometimes a small picture, with no link, so nothing matched and the share failed on the server. After that failure, a share with no http link at all now: (1) if its text has YouTube's title + @channel layout, has yt-dlp search YouTube for that title and channel and downloads the top match with the same 1.7 YouTube steps; (2) otherwise uses a YouTube link on the clipboard (Share > Copy link) with the same steps. Shares that contain a link never run any of it.

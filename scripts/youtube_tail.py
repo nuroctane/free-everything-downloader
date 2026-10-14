@@ -85,63 +85,86 @@ def patch(acts):
 # ------------------------------------------------------- shares with no link
 # Reported 2026-10-14 with a test shortcut on the user's phone: started on a
 # video in the YouTube app, the shortcut's input was Text (the screen's text:
-# "Open App", the title, "@CyberpunkGame", likes, comments...) and sometimes a
-# small PNG, with no link anywhere. Without a link nothing can match, so the
-# share fails on the server and lands here. The user: "It should work either
-# way". This block, only for a share whose input has no http link at all:
-#   1. the input's own YouTube screen text (a title line, then an @channel line,
-#      and YouTube's "Subscribe") -> yt-dlp searches YouTube for that exact
-#      title + channel and downloads the top match with the same 1.7 steps;
+# the title, "@CyberpunkGame", likes, comments...) and, for a Short, sometimes
+# only a small PNG, with no link anywhere. Without a link nothing can match, so
+# the share fails on the server and lands here. The user: "It should work either
+# way" and "Do your best to get shorts to work in any condition". This block,
+# only for a share whose input has no http link at all:
+#   1. screen text with an @channel and YouTube's "Subscribe": the text goes
+#      (URL-encoded) to yt_resolve.py inside a-Shell, which lists that channel's
+#      Shorts and videos with yt-dlp and picks the one whose title matches the
+#      caption on screen (a "..."-truncated caption matches as a prefix), else
+#      searches YouTube; then the same 1.7 YouTube steps download it;
 #   2. otherwise a YouTube link on the clipboard (e.g. after Share > Copy link)
-#      -> the same 1.7 steps on that link.
+#      -> the same 1.7 YouTube steps on that link.
+import base64  # noqa: E402
+
 NO_LINK = "YouTube shares without a link"
-SCREEN = r"(?m)^([^\r\n]+)\r?\n@([A-Za-z0-9._\-]+?)(?:Subscribe)?[ \t]*$"
 CLIP = r"https?://[^\s\"'<>]*youtu[^\s\"'<>]*"
 SHELL_UNSAFE = r"[\"$`\\]"
+RESOLVER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "yt_resolve.py")
+DOWNLOAD_AT = 'rm -f "$HOME/Documents"/fed-dl.*; '
 
 
 def _ext_input():
     return {"Value": {"Type": "ExtensionInput"}, "WFSerializationType": "WFTextTokenAttachment"}
 
 
-def _on(source_token, section):
-    """The YouTube steps with the command's userLink swapped for source_token (raw)."""
+def resolve_command(command):
+    """The 1.7 YouTube command, reading U from the resolver instead of userLink.
+
+    'U="<link>"; ' becomes 'T="<encoded text>"; U=""; ' (same length up to the
+    token, so the token keeps its range), and right before the download the
+    resolver turns T into U.
+    """
+    code = open(RESOLVER, encoding="utf-8").read()
+    assert "'" not in code, "yt_resolve.py must not contain single quotes"
+    b64 = base64.b64encode(code.encode("utf-8")).decode("ascii")
+    assert command.startswith('U="\ufffc"; ') and command.count(DOWNLOAD_AT) == 1
+    out_file = '"$HOME/Documents/fed-yt-url.txt"'
+    resolve = ("python3 -c 'import base64; exec(base64.b64decode(\"%s\"))' \"$T\" > %s; "
+               "U=$(cat %s); echo \"FED: downloading $U\"; " % (b64, out_file, out_file))
+    rest = command[len('U="\ufffc"; '):].replace(DOWNLOAD_AT, resolve + DOWNLOAD_AT, 1)
+    return 'T="\ufffc"; U=""; ' + rest
+
+
+def _resolved(encoded, section):
+    """The YouTube steps with the command fed by the resolver on `encoded`."""
     steps = reddit_tail.clone(section)
     cmd = steps[0]
     assert cmd["WFWorkflowActionIdentifier"] == "is.workflow.actions.gettext"
-    rng = P(cmd)["WFTextActionText"]["Value"]["attachmentsByRange"]
+    field = P(cmd)["WFTextActionText"]["Value"]
+    rng = field["attachmentsByRange"]
     keys = [k for k, t in rng.items() if t.get("VariableName") == "userLink"]
-    assert len(keys) == 1, "YouTube command no longer reads userLink once"
-    rng[keys[0]] = source_token
+    assert keys == ["{3, 1}"], "YouTube command no longer starts with U=<userLink>"
+    rng["{3, 1}"] = {"OutputName": encoded.name, "OutputUUID": encoded.uuid, "Type": "ActionOutput"}
+    field["string"] = resolve_command(field["string"])
     return steps
 
 
 def no_link_block(acts):
-    from wf import COND_HAS_VALUE, Action, native_match, native_group, native_replace, raw
+    from wf import COND_HAS_VALUE, Action, native_match, native_replace, native_notify, raw, tstr
     section = youtube_section(acts)
     links = shared_links(acts)
     g = Graph()
     g.comment("FMD+ %s: the share had no link (the YouTube app can hand over only the "
-              "screen's text). Search YouTube for the title and channel in that text, else "
+              "screen's text). Find the video from the @channel and caption on screen, else "
               "use a YouTube link on the clipboard; only an already-failed share gets here." % NO_LINK)
     native_if(g, COND_CONTAINS, links, "http")
     g.else_()
-    screen = native_match(g, SCREEN, _ext_input(), name="YouTube Screen Text")
-    native_if(g, COND_HAS_VALUE, out(screen))
+    native_if(g, COND_CONTAINS, _ext_input(), "@")
     native_if(g, COND_CONTAINS, _ext_input(), "Subscribe")
-    title = native_group(g, out(screen), name="YouTube Title", index=1)
-    channel = native_group(g, out(screen), name="YouTube Channel", index=2)
-    safe = native_replace(g, SHELL_UNSAFE, "", out(title), name="YouTube Search Title")
+    safe = native_replace(g, SHELL_UNSAFE, "", _ext_input(), name="YouTube Screen Text")
     P(safe.d)["WFReplaceTextRegularExpression"] = True
-    query = g.text("ytsearch1:", raw(out(safe)), " ", raw(out(channel)), name="YouTube Search")
-    g.notify("No link came with this share. Searching YouTube for “", raw(out(title)),
-             "” by @", raw(out(channel)), " and downloading it.")
+    encoded = g.urlencode(tstr(raw(out(safe))), name="YouTube Screen Text Encoded")
+    native_notify(g, "No link came with this share. Finding this video on YouTube from what "
+                     "was on screen, then downloading it in a-Shell.")
     head = [a.d for a in g.actions]
-    search = _on({"OutputName": query.name, "OutputUUID": query.uuid, "Type": "ActionOutput"}, section)
+    found_on_screen = _resolved(encoded, section)
     mid = Graph()
     mid._stack = list(g._stack)
     mid.endif()   # Subscribe
-    mid.endif()   # screen text
+    mid.endif()   # @
     clip = mid._push(Action("is.workflow.actions.getclipboard", {}, "Clipboard"))
     found = native_match(mid, CLIP, out(clip), name="Clipboard YouTube Link")
     native_if(mid, COND_HAS_VALUE, out(found))
@@ -155,7 +178,7 @@ def no_link_block(acts):
     end.endif()   # no http link
     end.comment("FMD- %s" % NO_LINK)
     assert not end._stack, "no-link block is unbalanced"
-    return head + search + middle + clipped + [a.d for a in end.actions]
+    return head + found_on_screen + middle + clipped + [a.d for a in end.actions]
 
 
 def patch_no_link(acts):
