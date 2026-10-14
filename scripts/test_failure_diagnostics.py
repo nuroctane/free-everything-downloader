@@ -1,14 +1,10 @@
-"""Small local tests: shell behavior with stubbed downloads, and exception scope.
+"""Small local tests: exception scope, the Threads tail block, and YouTube back on 1.7.
 
 No network, installs, real user folders or iOS apps are used by these tests.
 """
 import copy
 import json
-import os
 import plistlib
-import subprocess
-import sys
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -16,7 +12,6 @@ import failure_diagnostics as D
 import test_input as I
 
 ROOT = Path(__file__).resolve().parents[1]
-BASH = Path(r"C:\Program Files\Git\bin\bash.exe")
 
 
 class DiagnosticsTests(unittest.TestCase):
@@ -111,97 +106,17 @@ class DiagnosticsTests(unittest.TestCase):
         self.assertEqual(src.get("Type"), "ActionOutput")
         self.assertNotEqual(src.get("VariableName"), "userLink")
 
-    def run_shell(self, result):
-        if not BASH.exists():
-            self.skipTest("Git Bash unavailable; shell execution was not performed")
-        command = next(a["WFWorkflowActionParameters"]["WFTextActionText"]["Value"]["string"]
-                       for a in self.cur if a["WFWorkflowActionParameters"].get("UUID") == D.COMMAND_UUID)
-        # Substitute only the supplied URL and isolate all filesystem writes.
-        command = command.replace("\ufffc", "https://www.youtube.com/watch?v=control")
-        command = command.replace("$HOME", "$FED_TEST_ROOT")
-        stubs = r'''
-pip() { printf 'test package metadata\n'; }
-ffmpeg() { return 0; }
-open() { return 0; }
-sleep() { return 0; }
-python3() { "$FED_TEST_PYTHON" "$@"; }
-yt-dlp() {
-  if [ "$FED_TEST_RESULT" = retry-success ]; then
-    if [ -f "$FED_TEST_ROOT/.attempted" ]; then
-      printf media-payload > "$FED_TEST_ROOT/Documents/fed-dl.mp4"
-      return 0
-    fi
-    : > "$FED_TEST_ROOT/.attempted"
-    printf 'CONTROL ERROR: first attempt failed\n' >&2
-    return 23
-  fi
-  if [ "$FED_TEST_RESULT" = success ]; then
-    printf media-payload > "$FED_TEST_ROOT/Documents/fed-dl.mp4"
-    return 0
-  fi
-  if [ "$FED_TEST_RESULT" = large-error ]; then
-    "$FED_TEST_PYTHON" -c 'import sys; sys.stderr.write("x"*100000+"\nCONTROL ERROR\n")'
-  else
-    printf 'CONTROL ERROR: requested format unavailable\n' >&2
-  fi
-  return 23
-}
-'''
-        with tempfile.TemporaryDirectory(prefix="fed-diagnostic-test-") as tmp:
-            root = Path(tmp)
-            (root / "Documents").mkdir()
-            env = dict(os.environ, FED_TEST_ROOT=root.as_posix(),
-                       FED_TEST_PYTHON=Path(sys.executable).as_posix(),
-                       FED_TEST_RESULT=result, SHORTCUTS=(root / "shared").as_posix())
-            proc = subprocess.run([str(BASH), "--noprofile", "--norc", "-c", stubs + command],
-                                  env=env, capture_output=True, timeout=30)
-            self.assertEqual(proc.returncode, 0, proc.stderr.decode(errors="replace")[:500])
-            log = (root / "Documents/fed-youtube-last.log").read_bytes()
-            self.assertLessEqual(len(log), 65536)
-            if result == "retry-success":
-                # First attempt leaves no file, so FED updates yt-dlp and reruns
-                # the identical command; the shortcut still gets its media.
-                self.assertIn(b"retrying once", log)
-                self.assertIn(b"CONTROL ERROR: first attempt failed", log)
-                self.assertIn(b"yt-dlp exit status: 0", log)
-                self.assertEqual((root / "shared/fed-kind.txt").read_text(), "photo")
-                self.assertEqual((root / "shared/fed-media").read_bytes(), b"media-payload")
-                self.assertEqual((root / "shared/fed-ext.txt").read_text(), "mp4")
-                return
-            self.assertIn(b"yt-dlp exit status: " + (b"0" if result == "success" else b"23"), log)
-            self.assertEqual((root / "shared/fed-kind.txt").read_text(), "photo" if result == "success" else "missing")
-            if result == "success":
-                # A download that works must not pay for an update, and must not
-                # dump the diagnostic log into a-Shell.
-                self.assertNotIn(b"retrying once", log)
-                self.assertNotIn(b"FED YouTube diagnostic", proc.stdout)
-                self.assertEqual((root / "shared/fed-media").read_bytes(), b"media-payload")
-                self.assertEqual((root / "shared/fed-ext.txt").read_text(), "mp4")
-            else:
-                self.assertIn(b"CONTROL ERROR", log)
-                self.assertIn(b"CONTROL ERROR", proc.stdout)
-
-    def test_state_files_are_written_before_the_helper_check(self):
-        # The shortcut reads fed-kind.txt back with GetFileIntent the moment the
-        # command returns. A slow or killed first-run install must not leave it
-        # missing, which is what produced "the file can't be found".
-        command = self.text_of(self.cur, D.COMMAND_UUID)
-        for name in ("fed-kind.txt", "fed-ext.txt", "fed-media"):
-            self.assertLess(command.index(name), command.index("pip show"),
-                            "%s is written after the helper check" % name)
-
-    def test_success_still_produces_same_media_handoff(self):
-        self.run_shell("success")
-
-    def test_a_failed_attempt_is_retried_once_with_updated_yt_dlp(self):
-        self.run_shell("retry-success")
-
-    def test_failure_retains_error_and_exit_status(self):
-        self.run_shell("failure")
-
-    def test_log_is_bounded(self):
-        self.run_shell("large-error")
-
+    def test_youtube_is_back_to_the_confirmed_1_7_command(self):
+        # 2026-10-14: the logged 1.7.3 command hid yt-dlp's output and looked
+        # like a hang on the phone. YouTube's command and failure notice must be
+        # the confirmed 1.7 text again, byte for byte.
+        notice = "4D12CADC-FD41-4F7B-B76F-74F5BDC9EA48"
+        self.assertNotIn(D.COMMAND_UUID, D.FIELDS)
+        self.assertNotIn(notice, D.FIELDS)
+        for uuid, field in ((D.COMMAND_UUID, "WFTextActionText"),
+                            (notice, "WFNotificationActionBody")):
+            self.assertEqual(self.action(self.cur, uuid)["WFWorkflowActionParameters"][field],
+                             self.action(self.good, uuid)["WFWorkflowActionParameters"][field])
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

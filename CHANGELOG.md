@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.4 (candidate, not published)
+
+- YouTube and YouTube Music are back to the confirmed 1.7 command and failure notice. On 1.7.3, YouTube Shorts failed and downloads sat in a-Shell with no output: the logged command hid yt-dlp's progress and errors and added a silent update and retry. Threads keeps the 1.7.2 server-failed download, which the user confirmed works.
+
 ## 1.7.3 (candidate, not published)
 
 - A Threads post the on-device recipe cannot save now opens a URL action, not the `userLink` variable. The notification says it is opening Threads, or the browser if Threads is not installed, and to share again after signing in.

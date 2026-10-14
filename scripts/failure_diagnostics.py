@@ -1,4 +1,4 @@
-"""The four fields the user explicitly authorized changing on 2026-10-13.
+"""The fields the user explicitly authorized changing on 2026-10-13.
 
 No actions, groups, URLs, formats, app intents or save destinations are added
 or replaced. The original 1.7 fixture remains the immutable comparison base.
@@ -18,14 +18,17 @@ USER_WORDS = ("do your absolute best to fix it without breaking or regressing an
               "and requiring failure reproduction")
 COMMAND_UUID = "1AD25592-D6F8-4699-ACD7-E133678DECBE"
 MESSAGES = {
-    "4D12CADC-FD41-4F7B-B76F-74F5BDC9EA48":
-        "YouTube download failed. The error was saved in fed-youtube-last.log in a-Shell's Documents folder.",
     "F113D37D-F272-412D-85C1-0218FA50F60E":
         "Download failed. Attempting to open the original post so you can check whether it is available.",
     "EF2EE840-7A25-442C-8F31-7225CC482C0F":
         "If the post is public and still cannot be downloaded, please report the failure.",
 }
-FIELDS = {COMMAND_UUID: "WFTextActionText", **{u: "WFNotificationActionBody" for u in MESSAGES}}
+# 2026-10-14: on 1.7.3 the user reported YouTube Shorts failing and downloads that
+# "simply hang and dont complete with no error". The logged command hid yt-dlp's
+# live output in a-Shell and added a silent pip update + retry, so YouTube's
+# command and its failure notice are back to the confirmed 1.7 text (no longer
+# in FIELDS). logged_command() below is kept for reference only; nothing calls it.
+FIELDS = {u: "WFNotificationActionBody" for u in MESSAGES}
 
 
 START = 'U="\ufffc"; '

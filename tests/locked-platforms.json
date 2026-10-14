@@ -170,11 +170,10 @@
       "authorization_context": "2026-10-13, after the diagnostic-only 1.7.1 was rejected: 'uh. we arent shipping shit without resolving the failures. what is wrong with you.' followed by 'actually fix the issues ... do your absolute best to fix it without breaking or regressing anything and requiring failure reproduction'. The earlier 'yes, go ahead and do so' authorized the YouTube error log and the failure wording.",
       "scope": "Only the YouTube/YouTube Music command text, its failure notice, and two late shared-failure-tail notification texts. The early server-failure notice also runs on X and remains unchanged. The command writes the same state files with the same contents, writes them before the helper check instead of after it, updates yt-dlp and the JS helpers and retries the identical download once when it leaves no file, and keeps a bounded log. No dependency refresh on a successful download, no extraction/save/format/URL change, no action added, removed or reordered, no input change, no handoff change, no other platform's command.",
       "fields": {
-        "1AD25592-D6F8-4699-ACD7-E133678DECBE": "WFTextActionText",
-        "4D12CADC-FD41-4F7B-B76F-74F5BDC9EA48": "WFNotificationActionBody",
         "F113D37D-F272-412D-85C1-0218FA50F60E": "WFNotificationActionBody",
         "EF2EE840-7A25-442C-8F31-7225CC482C0F": "WFNotificationActionBody"
-      }
+      },
+      "reverted": "2026-10-14: user on 1.7.3 (a-Shell mini): 'youtube shorts downloads still doont work' and 'sometimes the download simply hangs and doesnt complete with no error'. The YouTube command and its failure notice are back to the confirmed 1.7 text; only the two shared-failure-tail notification texts remain changed."
     },
     "2026-10-13-threads-server-failed-download": {
       "date": "2026-10-13",
