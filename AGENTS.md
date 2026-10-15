@@ -142,6 +142,12 @@ without an explicit override because it starts from 1.4.
 
 ## Testing and what you can claim
 
+- 1.7.4 to 1.7.7 (branch `claude/intelligent-cerf-j5dbv2`, none confirmed on a
+  phone): YouTube back on the 1.7 command, then tail blocks for YouTube shares
+  that arrive without a link. Measured on the phone with probe shortcuts: the
+  YouTube app handed the shortcut only a 4 KB PNG and/or the screen's text, never
+  a link, so YouTube never reached the YouTube section. Read
+  `docs/youtube-findings-2026-10-14.md` before touching YouTube input again.
 - 1.7.3 is the phone-test build. It keeps the 1.7.2 repairs and adds two
   audit fixes: the Threads no-media branch opens a URL action instead of
   stopping with no handoff, and a successful YouTube download does not print
